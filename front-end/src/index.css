@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background: #ebebeb;
+}
+
+.customer-body{
+  width: 90%;
+  margin: auto;
+}
+
+
+
+/* tailwind.css (or your existing stylesheet) */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-enter {
+  opacity: 0;
+}
+
+.fade-enter-active {
+  animation: fadeIn 500ms ease-in-out;
+}
+
+
+.ordering {
+  color: #084106;
+}
+
+.food-image {
+  width: 35vw;
+  height: 35vw;
+}
+
+.nav-avtive {
+  color: #ffea2a;
+}
+
+.profile-content-field {
+  background: #ffffff;
+  padding: 4px;
+  border-radius: 2px;
+  width: 400px;
+}
+
+.count {
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.btn {
+  @apply bg-gray-800 hover:bg-gray-700 text-gray-100 font-medium px-7 py-1.5 rounded;
+}
+
+.register input{
+  border-radius: 4px;
+  border-color: #007de4;
+}
