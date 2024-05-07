@@ -15,7 +15,7 @@ const AdminWelcome = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/admin/login",
+        "http://localhost:5000/staff/login",
         formData
       );
       console.log(response.data);
@@ -32,7 +32,7 @@ const AdminWelcome = () => {
         MOJU Restaurant <RiAdminLine />
       </div>
       <div>
-        <div className="mt-10 flex justify-center font-semibold text-2xl">Sign in as Admin</div>
+        <div className="mt-10 flex justify-center font-semibold text-2xl">Sign in as Staff</div>
         <div className="max-w-md mx-auto mt-8 p-6 border rounded bg-white">
           <form onSubmit={handleSignIn}>
             <div className="mb-4">

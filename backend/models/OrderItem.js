@@ -1,43 +1,33 @@
-import sequelize from "../config/db";
+import sequelize from "../config/db.js";
 import { DataTypes } from "sequelize";
 
-const OrderItem = sequelize.define(
-  "order_item",
-  {
-    orderId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    itemId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    quantity: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-  },
-  {
+const OrderItem = sequelize.define("order_item", {
+  orderItemId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
     primaryKey: true,
-    uniqueKeys: {
-      orderItemUnique: {
-        fields: ["orderId", "itemId"],
-      },
-    },
-  }
-);
+    autoIncrement: true,
+  },
+  orderId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
 
-OrderItem.associate = (models) => {
-  OrderItem.belongsTo(models.Order, { foreignKey: "orderId" });
-  OrderItem.belongsTo(models.Item, { foreignKey: "itemId" });
-};
-
+  itemId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  quantity: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+});
 OrderItem.sync()
   .then(() => {
-    console.log("OrderItem table synced successfully!");
+    console.log("Order Item table synced successfully!");
   })
-  .catch((err) => {
-    console.error("OrderItem error in syncing:", err);
+  .catch((error) => {
+    throw new Error("Error syncing Order table: " + error.message);
   });
 
 export default OrderItem;

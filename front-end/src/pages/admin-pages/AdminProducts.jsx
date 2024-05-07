@@ -1,5 +1,4 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "layouts/AdminLayouts";
 import { FaSearch } from "react-icons/fa";
 import { IoMdAdd } from "react-icons/io";
@@ -8,17 +7,97 @@ import axios from "axios";
 
 const AdminProduct = () => {
   const [items, setItems] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [editItemId, setEditItemId] = useState(null);
+  const [editedItemName, setEditedItemName] = useState("");
+  const [editedItemPrice, setEditedItemPrice] = useState("");
+  const [editedItemCategory, setEditedItemCategory] = useState("");
+  const [editedItemStatus, setEditedItemStatus] = useState(false);
 
   useEffect(() => {
+    // Fetch items when the component mounts
+    fetchItems();
+  }, []);
+
+  const fetchItems = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/admin/items");
+      setItems(response.data);
+    } catch (error) {
+      console.error("Error fetching items:", error);
+    }
+  };
+
+  // Fetch categories from the API
+  useEffect(() => {
+    // Replace 'API_ENDPOINT' with the actual endpoint URL
     axios
-      .get("http://localhost:5000/admin/items")
+      .get("http://localhost:5000/admin/categories")
       .then((response) => {
-        setItems(response.data);
+        setCategories(response.data);
       })
       .catch((error) => {
-        console.error("Error fetching items:", error);
+        console.error("Error fetching categories:", error);
       });
   }, []);
+
+  const deleteItem = async (itemId) => {
+    try {
+      await axios.delete(`http://localhost:5000/admin/items/${itemId}`);
+      // Remove the deleted item from the items state
+      setItems(items.filter((item) => item.itemId !== itemId));
+      console.log("Item deleted successfully");
+    } catch (error) {
+      console.error("Error deleting item:", error);
+    }
+  };
+
+  const handleEdit = (
+    itemId,
+    itemName,
+    itemPrice,
+    itemCategory,
+    itemStatus
+  ) => {
+    setEditItemId(itemId);
+    setEditedItemName(itemName);
+    setEditedItemPrice(itemPrice);
+    setEditedItemCategory(itemCategory);
+    setEditedItemStatus(itemStatus);
+  };
+
+  const handleSaveEdit = async () => {
+    try {
+      await axios.put(`http://localhost:5000/admin/items/${editItemId}`, {
+        itemName: editedItemName,
+        itemPrice: editedItemPrice,
+        categoryId: editedItemCategory,
+        itemStatus: editedItemStatus,
+      });
+      // Update items state after successful edit
+      const updatedItems = items.map((item) => {
+        if (item.itemId === editItemId) {
+          return {
+            ...item,
+            itemName: editedItemName,
+            itemPrice: editedItemPrice,
+            categoryId: editedItemCategory,
+            itemStatus: editedItemStatus,
+          };
+        }
+        return item;
+      });
+      setItems(updatedItems);
+      setEditItemId(null); // Reset editItemId
+      setEditedItemName(""); // Reset editedItemName
+      setEditedItemPrice(""); // Reset editedItemPrice
+      setEditedItemCategory(""); // Reset editedItemCategory
+      setEditedItemStatus(false); // Reset editedItemStatus
+      console.log("Item edited successfully");
+    } catch (error) {
+      console.error("Error editing item:", error);
+    }
+  };
 
   return (
     <Layout>
@@ -64,28 +143,99 @@ const AdminProduct = () => {
                   </td>
                   <td className="p-2 border text-center align-middle">
                     <img
-                      src={item.itemPicURL} // Updated prop name for photo URL
+                      src={item.itemPicURL}
                       alt={item.itemName}
                       className="w-12 h-12 object-cover rounded"
                     />
                   </td>
                   <td className="p-2 border text-center align-middle">
-                    {item.itemName}
+                    {editItemId === item.itemId ? (
+                      <input
+                        type="text"
+                        value={editedItemName}
+                        onChange={(e) => setEditedItemName(e.target.value)}
+                        className="border rounded p-2 w-full"
+                      />
+                    ) : (
+                      item.itemName
+                    )}
                   </td>
                   <td className="p-2 border text-center align-middle">
-                    {item.category.categoryName} {/* Display category name */}
+                    {editItemId === item.itemId ? (
+                      <select
+                        value={editedItemCategory}
+                        onChange={(e) => setEditedItemCategory(e.target.value)}
+                        className="border rounded p-2 w-full"
+                      >
+                        {categories.map((category) => (
+                          <option
+                            key={category.categoryId}
+                            value={category.categoryId}
+                          >
+                            {category.categoryName.toUpperCase()}
+                          </option>
+                        ))}
+                      </select>
+                    ) : (
+                      item.category.categoryName
+                    )}
                   </td>
                   <td className="p-2 border text-center align-middle">
-                    {item.itemPrice}
+                    {editItemId === item.itemId ? (
+                      <input
+                        type="number"
+                        value={editedItemPrice}
+                        onChange={(e) => setEditedItemPrice(e.target.value)}
+                        className="border rounded p-2 w-full"
+                      />
+                    ) : (
+                      item.itemPrice
+                    )}
                   </td>
                   <td className="p-2 border text-center align-middle">
-                    {item.itemStatus ? "Available" : "Unavailable"}
+                    {editItemId === item.itemId ? (
+                      <select
+                        value={editedItemStatus}
+                        onChange={(e) => setEditedItemStatus(e.target.value)}
+                        className="border rounded p-2 w-full"
+                      >
+                        <option value={true}>Available</option>
+                        <option value={false}>Unavailable</option>
+                      </select>
+                    ) : item.itemStatus ? (
+                      "Available"
+                    ) : (
+                      "Unavailable"
+                    )}
                   </td>
                   <td className="p-2 border text-center align-middle">
-                    <button className="bg-blue-500 text-white p-2 rounded mr-2">
-                      Edit
-                    </button>
-                    <button className="bg-red-500 text-white p-2 rounded">
+                    {editItemId === item.itemId ? (
+                      <button
+                        onClick={handleSaveEdit}
+                        className="bg-blue-500 text-white p-2 rounded mr-2"
+                      >
+                        Save
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() =>
+                          handleEdit(
+                            item.itemId,
+                            item.itemName,
+                            item.itemPrice,
+                            item.categoryId,
+                            item.itemStatus
+                          )
+                        }
+                        className="bg-blue-500 text-white p-2 rounded mr-2"
+                      >
+                        Edit
+                      </button>
+                    )}
+                    <button
+                      className="bg-red-500 text-white p-2 rounded"
+                      onClick={() => deleteItem(item.itemId)}
+                    >
                       Delete
                     </button>
                   </td>

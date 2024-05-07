@@ -1,32 +1,46 @@
-import sequelize from "../config/db";
-import { DataTypes } from "sequelize";
-import Customer from "./Customer";
+import sequelize from "../config/db.js";
+import { DataTypes, Sequelize } from "sequelize";
+import Customer from "./Customer.js";
+import OrderStatus from "./OrderStatus.js";
+import OrderItem from "./OrderItem.js";
 
-const Order = sequelize.deffine("order", {
-  OrderId: {
+const Order = sequelize.define("order", {
+  orderId: {
     type: DataTypes.INTEGER,
     allowNull: false,
     primaryKey: true,
+    autoIncrement: true,
   },
-  OrderTotal: {
+  orderTotal: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  OrderDate: {
+  orderDate: {
     type: DataTypes.DATE,
     allowNull: false,
-    defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+    defaultValue: Sequelize.literal("CURRENT_TIMESTAMP(3)"),
+  },
+  orderStatus: {
+    type: DataTypes.STRING,
+  },
+  deliveryAddress: {
+    type: DataTypes.STRING,
+  },
+  paymentMethod: {
+    type: DataTypes.STRING,
   },
 });
 
+Order.hasMany(OrderItem, { foreignKey: "orderId" });
 Order.belongsTo(Customer, { foreignKey: "customerId" });
+Order.hasOne(OrderStatus, { foreignKey: "orderId" });
 
 Order.sync()
   .then(() => {
-    console.log("Order table synced successfuly!");
+    console.log("Order table synced successfully!");
   })
-  .catch(() => {
-    console.log("Order table is not synced");
+  .catch((error) => {
+    throw new Error("Error syncing Order table: " + error.message);
   });
 
 export default Order;

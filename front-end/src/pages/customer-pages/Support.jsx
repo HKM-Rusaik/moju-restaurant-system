@@ -8,7 +8,7 @@ const Support = () => {
     <Layout>
       <div className="fade-enter-active">
         <ContactUs />
-        <RestaurantAddress />
+        <RestaurantAddress />{" "}
       </div>
     </Layout>
   );

@@ -3,8 +3,8 @@ const router = express.Router();
 import {
   createCategory,
   deleteCategory,
-  getCategory,
-  updateCategory,
+  getCategories,
+  editCategory,
 } from "../controllers/admin/CategoryController.js";
 
 import {
@@ -14,8 +14,8 @@ import {
 } from "../controllers/admin/ItemController.js";
 
 router.post("/categories", createCategory);
-router.get("/categories", getCategory);
-router.patch("/categories/:id", updateCategory);
+router.get("/categories", getCategories);
+router.patch("/categories/:id", editCategory);
 router.delete("/categories/:id", deleteCategory);
 
 router.post("/items", createItem);

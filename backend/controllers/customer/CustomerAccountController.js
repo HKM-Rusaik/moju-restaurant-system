@@ -50,7 +50,7 @@ export const loginCustomer = async (req, res) => {
     if (!passwordMatch)
       return res.status(401).json({ error: "Incorrect email or password" });
 
-    res.status(200).json({ message: "Login successful" });
+    res.status(200).json({ message: "Login successful", customer });
   } catch (error) {
     console.error("Error logging in:", error);
     res.status(500).json({ error: "Server Error" });

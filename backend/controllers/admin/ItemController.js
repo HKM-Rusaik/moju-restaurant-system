@@ -1,5 +1,5 @@
 import Item from "../../models/Item.js";
-import Category from "../../models/Category.js";
+import Category from "../../models/category.js";
 
 export const createItem = async (req, res) => {
   const { itemName, itemPrice, itemPicURL, itemStatus, categoryId } = req.body;
@@ -60,5 +60,34 @@ export const deleteItem = async (req, res) => {
   } catch (error) {
     console.error("Error deleting item: ", error);
     res.status(500).json({ error: "Error deleting item" });
+  }
+};
+
+//new one has to be checked carefully
+export const updateItem = async (req, res) => {
+  try {
+    const itemId = req.params.id;
+    const { itemName, itemPrice, itemPicURL, itemStatus, categoryId } =
+      req.body;
+
+    const itemToUpdate = await Item.findByPk(itemId);
+
+    if (!itemToUpdate) {
+      return res.status(404).json({ error: "Item not found" });
+    }
+
+    // Update the item with the new values
+    await itemToUpdate.update({
+      itemName: itemName,
+      itemPrice: itemPrice,
+      itemPicURL: itemPicURL,
+      itemStatus: itemStatus,
+      categoryId: categoryId,
+    });
+
+    return res.status(200).json({ message: "Item Updated Successfully!" });
+  } catch (error) {
+    console.error("Error updating item: ", error);
+    res.status(500).json({ error: "Error updating item" });
   }
 };

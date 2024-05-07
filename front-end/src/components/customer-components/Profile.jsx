@@ -2,9 +2,12 @@ import React from "react";
 import DumImage from "../../assets/Images/Profile-dum.png";
 import { FaRegEdit as EditIcon } from "react-icons/fa";
 import { IoLogOut } from "react-icons/io5";
+import { useSelector } from "react-redux";
 
 function Profile(props) {
+  const customer = useSelector((state) => state.customer.customer);
   const profileImage = props.profile || DumImage;
+
   return (
     <div>
       <h1 className="text-center font-bold text-3xl mt-10">My Profile</h1>
@@ -17,20 +20,20 @@ function Profile(props) {
         <div className="bg-gray-300 p-4 rounded">
           <div className="firstName flex items-center mb-2">
             <p className="mr-16 font-bold">First Name </p>
-            <span className="profile-content-field">{props.firstName}wwww</span>
+            <span className="profile-content-field">{props.firstName}</span>
             <EditIcon className="text-2xl ml-2 hover:cursor-pointer hover:text-white active:text-black" />
           </div>
 
           <div className="lastName flex items-center mb-2">
             <p className="mr-16 font-bold">Last Name</p>
-            <span className="profile-content-field">{props.lastName}www</span>
+            <span className="profile-content-field">{props.lastName}</span>
             <EditIcon className="text-2xl ml-2 hover:cursor-pointer hover:text-white active:text-black" />
           </div>
 
           <div className="email flex items-center mb-2">
             <p className="mr-24 font-bold">Email</p>
             <span className="profile-content-field ml-2">
-              {props.email}wwwe
+              {props.email}
             </span>
             <EditIcon className="text-2xl ml-2 hover:cursor-pointer hover:text-white active:text-black" />
           </div>
@@ -38,7 +41,7 @@ function Profile(props) {
           <div className="deliveryAddress flex items-center mb-2">
             <p className="mr-2 font-bold">Delivery Address</p>
             <span className="profile-content-field ml-1">
-              {props.address} assdfd
+              {props.address}
             </span>
             <EditIcon className="text-2xl ml-2 hover:cursor-pointer hover:text-white active:text-black" />
           </div>

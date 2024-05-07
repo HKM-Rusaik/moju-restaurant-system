@@ -10,18 +10,20 @@ const Category = sequelize.define("category", {
   categoryName: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true, // Ensure category names are unique
+    unique: true, 
   },
 });
 
-// Synchronize the model with the database
-Category.sync()
-  .then(() => {
+// Sync the Category table and return the promise
+const syncCategoryTable = async () => {
+  try {
+    await Category.sync();
     console.log("Category Table synced successfully!");
-  })
-  .catch(() => {
-    console.log("Category Table is not synced!");
-  });
-
+  } catch (error) {
+    console.error("Error syncing Category Table:", error);
+    throw error; // Re-throw the error for handling in the calling code
+  }
+};
 
 export default Category;
+export { syncCategoryTable };

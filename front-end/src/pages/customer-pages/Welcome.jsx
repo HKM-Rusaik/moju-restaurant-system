@@ -3,25 +3,10 @@ import SignInForm from "components/customer-components/SignInForm";
 import MojuFRontImage from "assets/Images/moju.jpg";
 import DeliverImage from "assets/Images/delivery-boy-red-yellow.jpg";
 import Layout from "layouts/CustomerLayout";
-// import Carousel from "../../components/customer-components/Carousel";
-
-// const slides = [
-//   "https://i.ibb.co/ncrXc2V/1.png",
-//   "https://i.ibb.co/B3s7v4h/2.png",
-//   "https://i.ibb.co/XXR8kzF/3.png",
-//   "https://i.ibb.co/yg7BSdM/4.png",
-// ];
 
 const Welcome = () => {
   return (
     <Layout>
-      {/* <div className="max-w-lg">
-        <Carousel autoSlide={true}>
-          {slides.map((s) => (
-            <img src={s} alt="" />
-          ))}
-        </Carousel>
-      </div> */}
       <div className="fade-enter-active">
         <div className="text-center p-1 mx-auto flex justify-end mt-5 ">
           <div className="border-black flex justify-around rounded border-2 ">

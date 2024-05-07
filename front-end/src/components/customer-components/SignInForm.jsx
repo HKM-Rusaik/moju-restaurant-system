@@ -2,7 +2,11 @@ import axios from "axios";
 import React, { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { setCustomer } from "slices/customerSlice";
+import { useDispatch } from "react-redux";
+
 const SignInForm = () => {
+  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
@@ -19,6 +23,7 @@ const SignInForm = () => {
         formData
       );
       console.log(response.data);
+      dispatch(setCustomer(response.data.customer));
       navigate("/menu");
 
       alert(response.data.message);

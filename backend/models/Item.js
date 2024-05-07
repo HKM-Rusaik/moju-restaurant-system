@@ -1,6 +1,6 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
-import Category from "./Category.js";
+import Category from "./category.js";
 
 const Item = sequelize.define("item", {
   itemId: {
@@ -31,7 +31,7 @@ const Item = sequelize.define("item", {
   },
 });
 
-Item.belongsTo(Category, { foreignKey: "categoryId"});
+Item.belongsTo(Category, { foreignKey: "categoryId" });
 
 Item.sync()
   .then(() => {

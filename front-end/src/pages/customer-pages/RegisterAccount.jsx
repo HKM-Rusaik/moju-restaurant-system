@@ -98,10 +98,12 @@ const RegisterAccount = () => {
         </div>
         <div className="flex justify-center mt-12">
           <form onSubmit={handleSubmit} className="register">
-            <div className="flex flex-row items-center mb-2">
-              <label htmlFor="firstName" className="font-bold basis-1/2">
-                First Name
-              </label>
+            <div className="form-group">
+              <div>
+                <label htmlFor="firstName" className="">
+                  First Name <span className="text-red-500">*</span>
+                </label>
+              </div>
               <input
                 type="text"
                 name="firstName"
@@ -113,10 +115,12 @@ const RegisterAccount = () => {
                 <p className="text-red-500">{errors.firstName}</p>
               )}
             </div>
-            <div className=" flex flex-row items-center mb-2">
-              <label htmlFor="lastName" className="basis-1/2">
-                Last Name
-              </label>
+            <div className=" form-group mt-3">
+              <div>
+                <label htmlFor="lastName" className="basis-1/2">
+                  Last Name <span className="text-red-500">*</span>
+                </label>
+              </div>
               <input
                 type="text"
                 name="lastName"
@@ -128,10 +132,12 @@ const RegisterAccount = () => {
                 <p className="text-red-500">{errors.lastName}</p>
               )}
             </div>
-            <div className="flex flex-row items-center mb-2">
-              <label htmlFor="street" className="basis-1/2">
-                Street
-              </label>
+            <div className="form-group mt-3">
+              <div>
+                <label htmlFor="street" className="basis-1/2">
+                  Street <span className="text-red-500">*</span>
+                </label>
+              </div>
               <input
                 type="text"
                 name="street"
@@ -140,10 +146,12 @@ const RegisterAccount = () => {
                 onChange={handleChange}
               />
             </div>
-            <div className="flex flex-row items-center mb-2">
-              <label htmlFor="city" className="basis-1/2">
-                City
-              </label>
+            <div className="form-group mt-3">
+              <div>
+                <label htmlFor="city" className="basis-1/2">
+                  City <span className="text-red-500">*</span>
+                </label>
+              </div>
               <input
                 type="text"
                 name="city"
@@ -152,10 +160,12 @@ const RegisterAccount = () => {
                 onChange={handleChange}
               />
             </div>
-            <div className="flex flex-row items-center mb-2">
-              <label htmlFor="phoneNumber" className="basis-1/2">
-                Phone Number
-              </label>
+            <div className="form-group mt-3">
+              <div>
+                <label htmlFor="phoneNumber" className="basis-1/2">
+                  Phone Number <span className="text-red-500">*</span>
+                </label>
+              </div>
               <input
                 type="tel"
                 name="phoneNumber"
@@ -164,10 +174,12 @@ const RegisterAccount = () => {
                 onChange={handleChange}
               />
             </div>
-            <div className="flex flex-row items-center mb-2">
-              <label htmlFor="email" className="basis-1/2">
-                Email
-              </label>
+            <div className="form-group mt-3">
+              <div>
+                <label htmlFor="email" className="basis-1/2">
+                  Email <span className="text-red-500">*</span>
+                </label>
+              </div>
               <input
                 type="email"
                 name="email"
@@ -177,10 +189,12 @@ const RegisterAccount = () => {
               />
               {errors.email && <p className="text-red-500">{errors.email}</p>}
             </div>
-            <div className="flex flex-row items-center mb-2">
-              <label htmlFor="password" className="basis-1/2">
-                Password
-              </label>
+            <div className="form-group mt-3">
+              <div>
+                <label htmlFor="password" className="basis-1/2">
+                  Password <span className="text-red-500">*</span>
+                </label>
+              </div>
               <input
                 type="password"
                 name="password"
@@ -192,10 +206,12 @@ const RegisterAccount = () => {
                 <p className="text-red-500">{errors.password}</p>
               )}
             </div>
-            <div className="flex flex-row items-center mb-2">
-              <label htmlFor="confirmPassword" className="basis-1/2">
-                Confirm Password
-              </label>
+            <div className="form-group mt-3">
+              <div>
+                <label htmlFor="confirmPassword" className="basis-1/2">
+                  Confirm Password <span className="text-red-500">*</span>
+                </label>
+              </div>
               <input
                 type="password"
                 name="confirmPassword"
@@ -209,7 +225,7 @@ const RegisterAccount = () => {
             </div>
             <button
               type="submit"
-              className="bg-blue-500 p-2 rounded text-white shadow-md hover:bg-blue-700"
+              className="mt-3 bg-blue-500 p-2 rounded text-white shadow-md hover:bg-blue-700"
             >
               Register Your Account
             </button>

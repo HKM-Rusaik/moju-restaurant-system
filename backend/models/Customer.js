@@ -39,7 +39,7 @@ const Customer = sequelize.define("customer", {
 
 Customer.sync()
   .then(() => {
-    console.log("Table and model synced successfully!");
+    console.log("Customer table synced successfully!");
   })
   .catch((err) => {
     console.log("Error in syncing:", err);

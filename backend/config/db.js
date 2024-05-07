@@ -1,5 +1,6 @@
 import Sequelize from "sequelize";
 
+console.log("Before syncing db");
 const sequelize = new Sequelize("moju_restaurant_db", "postgres", "123456", {
   host: "localhost",
   dialect: "postgres",
@@ -8,6 +9,7 @@ const sequelize = new Sequelize("moju_restaurant_db", "postgres", "123456", {
     timestamps: false,
   },
 });
+console.log("verified credentials");
 
 sequelize
   .authenticate()
