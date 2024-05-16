@@ -22,6 +22,8 @@ import EmployeeDetails from "pages/admin-pages/EmployeeDetails";
 import Attendence from "pages/admin-pages/Attendence";
 import Report from "pages/admin-pages/Report";
 import Bill from "pages/admin-pages/Bill";
+import Offers from "pages/admin-pages/Offers";
+import AdminReservation from "pages/admin-pages/Reservation";
 import { Provider } from "react-redux";
 import { store } from "store";
 
@@ -35,7 +37,7 @@ function App() {
       <Provider store={store}>
         <Routes>
           <Route path="/" element={<Welcome />} />
-          <Route path="registration" element={<RegisterAccount />} />
+          <Route path="account/registration" element={<RegisterAccount />} />
           <Route path="menu" element={<Menu />} />
           <Route path="menu/cart" element={<MyCart />} />
           <Route path="menu/cart/checkout" element={<Checkout />} />
@@ -56,6 +58,8 @@ function App() {
           <Route path="/admin/attendance-record" element={<Attendence />} />
           <Route path="/admin/bill" element={<Bill />} />
           <Route path="/admin/reports" element={<Report />} />
+          <Route path="/admin/offers" element={<Offers />} />
+          <Route path="/admin/reservation" element={<AdminReservation />} />
 
           <Route path="/staff" element={<Login />} />
           <Route path="/staff/deliver-order" element={<Home />} />

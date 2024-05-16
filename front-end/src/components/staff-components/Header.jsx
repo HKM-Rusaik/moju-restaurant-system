@@ -10,7 +10,7 @@ const Header = () => {
             <li>MOJU</li>
           </div>
           <div className="flex items-center text-white text-2xl pr-4 font-bold">
-            <li>Kitchen Interface</li>
+            <li>Staff Interface</li>
           </div>
           <div className="flex items-center text-white text-xl border-l pl-4 cursor-pointer hover:text-yellow-500">
             <div className="mr-2">Sign out</div>

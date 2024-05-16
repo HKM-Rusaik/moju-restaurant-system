@@ -1,12 +1,12 @@
 import React from "react";
 import Layout from "layouts/AdminLayouts";
 
-const Bill = () => {
+const AdminReservation = () => {
   return (
     <Layout>
-      <div className="text-2xl font-bold m-2">Orders Management</div>
+      <div>Reservation</div>
     </Layout>
   );
 };
 
-export default Bill;
+export default AdminReservation;

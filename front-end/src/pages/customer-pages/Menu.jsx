@@ -6,7 +6,7 @@ import Cart from "components/customer-components/Cart";
 import { Link } from "react-router-dom";
 import Layout from "layouts/CustomerLayout";
 import { IoSearchCircleSharp } from "react-icons/io5";
-import DeliveryMessage from "components/customer-components/DeliveryMessage";
+import Marquee from "react-fast-marquee";
 
 const Menu = () => {
   const [categories, setCategories] = useState([]);
@@ -18,7 +18,7 @@ const Menu = () => {
       .get("http://localhost:5000/admin/categories")
       .then((response) => {
         setCategories(response.data);
-        console.log("hello")
+        console.log("hello");
       })
       .catch((error) => {
         console.error("Error fetching categories:", error);
@@ -56,11 +56,20 @@ const Menu = () => {
         <Link to="/menu/cart">
           <Cart textColor="text-yellow-500" bgColor="bg-black" />
         </Link>
-        <p className="antialiased text-center text-2xl font-bold mb-10">
+        <p className="antialiased text-center text-2xl font-bold mb-4">
           Menu Items
         </p>
-        {/* <DeliveryMessage /> */}
-        <div className="flex items-center justify-end mb-8">
+        <Marquee>
+          <div className=" text-red-500 p-2 rounded">
+            Hello! Foodies, Make order on or above Rs.4000 and get free home
+            delivery::{" "}
+            <span className="bg-yellow-400 text-black px-2 rounded">
+              5% off to Silver Members | 10% off to Golden Members | 20% off to
+              Platenium Members
+            </span>
+          </div>
+        </Marquee>
+        <div className="flex items-center justify-end my-8">
           <IoSearchCircleSharp className="text-3xl text-yellow-500" />
           <input
             type="text"
@@ -82,6 +91,7 @@ const Menu = () => {
                       name={item.itemName}
                       price={item.itemPrice}
                       itemId={item.itemId}
+                      itemImage={item.itemPicURL}
                     />
                   </div>
                 ))}

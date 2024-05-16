@@ -7,6 +7,7 @@ const Support = () => {
   return (
     <Layout>
       <div className="fade-enter-active">
+        <div className="text-center font-bold text-2xl mt-8">Support</div>
         <ContactUs />
         <RestaurantAddress />{" "}
       </div>

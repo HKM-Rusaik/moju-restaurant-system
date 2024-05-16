@@ -24,9 +24,42 @@ const SignInForm = () => {
       );
       console.log(response.data);
       dispatch(setCustomer(response.data.customer));
-      navigate("/menu");
 
       alert(response.data.message);
+
+      // Fetch orders
+      const customerId = response.data.customer.customerId;
+      const ordersResponse = await axios.get(
+        `http://localhost:5000/customer/orders/${customerId}`
+      );
+      const orders = ordersResponse.data.orders;
+
+      // Calculate total order amount
+      const totalAmount = orders.reduce(
+        (acc, order) => acc + order.orderTotal,
+        0
+      );
+
+      console.log(totalAmount);
+      // Update membership status based on total amount
+      let membershipStatus = "newCustomer";
+      if (totalAmount > 50000) {
+        membershipStatus = "Platinum";
+      } else if (totalAmount > 25000) {
+        membershipStatus = "Golden";
+      } else if (totalAmount > 10000) {
+        membershipStatus = "Silver";
+      }
+
+      // Update customer's membership status
+      const updateMembershipResponse = await axios.put(
+        `http://localhost:5000/customer/${customerId}`,
+        { membership: membershipStatus }
+      );
+
+      console.log(updateMembershipResponse.data);
+
+      navigate("/menu");
     } catch (error) {
       console.log("Error when sign", error);
     }
@@ -35,6 +68,7 @@ const SignInForm = () => {
   const handleRegister = () => {
     // Add your registration logic here
     console.log("Redirecting to registration page...");
+    navigate("/account/registration");
   };
 
   return (
@@ -97,16 +131,14 @@ const SignInForm = () => {
         <div>
           <p>Do not have an account?</p>
         </div>
-        <Link to="registration">
-          <button
-            type="button"
-            className="transition delay-150 duration-300 ease-in-out hover:scale-110 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-            onClick={handleRegister}
-          >
-            Register
-          </button>
-        </Link>
-        <Outlet />
+
+        <button
+          type="button"
+          className="transition delay-150 duration-300 ease-in-out hover:scale-110 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+          onClick={handleRegister}
+        >
+          Register
+        </button>
       </form>
     </div>
   );

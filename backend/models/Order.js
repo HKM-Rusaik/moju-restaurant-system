@@ -26,7 +26,13 @@ const Order = sequelize.define("order", {
   deliveryAddress: {
     type: DataTypes.STRING,
   },
+  orderType: {
+    type: DataTypes.STRING,
+  },
   paymentMethod: {
+    type: DataTypes.STRING,
+  },
+  billUrl: {
     type: DataTypes.STRING,
   },
 });

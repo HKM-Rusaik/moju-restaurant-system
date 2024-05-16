@@ -12,11 +12,13 @@ const Account = () => {
       <div className="fade-enter-active">
         {customer ? (
           <Profile
-            name={customer.firstName}
+            name={customer.firstName + " " + customer.lastName}
             firstName={customer.firstName}
             lastName={customer.lastName}
             email={customer.email}
+            phoneNumber={customer.phoneNumber}
             address={customer.streetName}
+            image="helloee"
           />
         ) : (
           <SignInForm />

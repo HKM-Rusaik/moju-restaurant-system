@@ -2,6 +2,7 @@ import { where } from "sequelize";
 import Order from "../../models/Order.js";
 import OrderItem from "../../models/OrderItem.js";
 import OrderStatus from "../../models/OrderStatus.js";
+import Item from "../../models/Item.js";
 
 export const createOrder = async (req, res) => {
   const {
@@ -12,16 +13,18 @@ export const createOrder = async (req, res) => {
     paymentMethod,
     orderStatus,
     selectedItems,
+    pdfUrl,
   } = req.body;
   console.log("hello");
   try {
     const newOrder = await Order.create({
       customerId,
       deliveryAddress,
-      deliveryMethod,
+      orderType: deliveryMethod,
       orderTotal,
       paymentMethod,
       orderStatus,
+      billUrl: pdfUrl,
     });
     console.log("hello");
     await Promise.all(
@@ -41,7 +44,7 @@ export const createOrder = async (req, res) => {
       delivered: false,
     });
 
-    res.status(200).json({ message: "successfully order inserted!" });
+    res.status(200).json({ message: "successfully order inserted!", newOrder });
   } catch (error) {
     res.status(500).json({ error: "server error" });
   }
@@ -89,16 +92,37 @@ export const updateOrderStatus = async (req, res) => {
     if (!order) {
       return res.status(404).json({ error: "Order not found" });
     }
-    // Update order status
+
     order.orderStatus = orderStatus;
 
-    // Save the updated order
     await order.save();
 
-    // Respond with the updated order
     res.status(200).json(order);
   } catch (err) {
     console.error("Error updating order status:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+export const getItemsOfOrder = async (req, res) => {
+  const { orderId } = req.params;
+
+  try {
+    const items = await OrderItem.findAll({
+      where: { orderId },
+      attributes: ["quantity"],
+      include: [{ model: Item, attributes: ["itemName"] }],
+    });
+
+    if (!items) {
+      return res
+        .status(404)
+        .json({ error: "Items not found for the order ID" });
+    }
+
+    return res.status(200).json(items);
+  } catch (err) {
+    console.error("Error fetching items:", err);
     res.status(500).json({ error: "Server error" });
   }
 };

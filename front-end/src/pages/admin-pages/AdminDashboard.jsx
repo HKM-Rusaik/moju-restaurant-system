@@ -2,7 +2,6 @@ import React from "react";
 import Layout from "../../layouts/AdminLayouts";
 import { IoMailUnreadOutline } from "react-icons/io5";
 import { FaRegUserCircle } from "react-icons/fa";
-import DailyEarning from "components/admin-components/DailyEarning";
 
 const AdminDashboard = () => {
   return (
@@ -13,7 +12,20 @@ const AdminDashboard = () => {
           <IoMailUnreadOutline className="mr-4" /> <FaRegUserCircle />
         </div>
         <span className="font-bold text-xl  ml-2">Management Dashboard</span>
-        <DailyEarning />
+        <div className="">
+          <div className=" ml-2 mt-4 bg-gray-500 w-[200px] h-[200px] flex justify-center items-end pb-8 text-white rounded">
+            Today Earnings
+          </div>
+          <div className=" ml-2 mt-4 bg-gray-500 w-[200px] h-[200px] flex justify-center items-end pb-8 text-white rounded">
+            Employee Attendance
+          </div>
+          <div className=" ml-2 mt-4 bg-gray-500 w-[200px] h-[200px] flex justify-center items-end pb-8 text-white rounded">
+            Today Orders
+          </div>
+          <div className=" ml-2 mt-4 bg-gray-500 w-[200px] h-[200px] flex justify-center items-end pb-8 text-white rounded">
+            Orders Completed
+          </div>
+        </div>
       </div>
     </Layout>
   );

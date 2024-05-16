@@ -11,24 +11,40 @@ import { addItemsTotalPrice } from "slices/cartItem";
 const MyCart = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [deliveryFee, setDeliveryFee] = useState(200); // Default delivery fee
+  const [deliveryFee, setDeliveryFee] = useState(200);
 
   const cartItems = useSelector((state) => state.selectedItems.cartItems);
+  const customerMembership = useSelector(
+    (state) => state.customer.customer.membership
+  ).toLowerCase();
+
+  let discountPercentage = 0;
+
+  if (customerMembership === "silver") discountPercentage = 5;
+  if (customerMembership === "golden") discountPercentage = 10;
+  if (customerMembership === "platenium") discountPercentage = 20;
+
   const itemsTotal = cartItems.reduce(
     (acc, curr) => acc + curr.price * curr.quantity,
     0
   );
 
-  // Calculate total price when cartItems change
   useEffect(() => {
-    dispatch(addItemsTotalPrice(itemsTotal));
-    // Update delivery fee based on items total
     if (itemsTotal > 4000) {
       setDeliveryFee(0);
     } else {
-      setDeliveryFee(200); // Default delivery fee
+      setDeliveryFee(200);
     }
-  }, [cartItems, dispatch, itemsTotal]);
+  }, [itemsTotal]);
+
+  const discountAmount =
+    (itemsTotal + deliveryFee) * (discountPercentage / 100);
+
+  const grandTotal = itemsTotal + deliveryFee - discountAmount;
+
+  useEffect(() => {
+    dispatch(addItemsTotalPrice(grandTotal));
+  }, [cartItems, dispatch, grandTotal]);
 
   const handleShopMoreClick = () => {
     // Navigate to the main page when ShopMore button is clicked
@@ -62,6 +78,7 @@ const MyCart = () => {
             {itemsTotal}
           </div>
         </div>
+
         <div className="flex w-4/5 mx-auto border-t-2 pt-2 text-red-500">
           <div className="flex w-3/4 justify-end font-bold ">
             {" "}
@@ -71,10 +88,23 @@ const MyCart = () => {
             {deliveryFee}
           </div>
         </div>
+
+        <div className="flex w-4/5 mx-auto border-t-2 pt-2">
+          <div className="flex w-3/4 justify-end font-bold">
+            {" "}
+            {customerMembership !== "newcustomer"
+              ? `${customerMembership} Membership Discount`
+              : null}
+            {/* {customerMembership + " Membership "}Discount{" "} */}
+          </div>
+          <div className="flex w-1/4 justify-center font-bold">
+            {customerMembership !== "newcustomer" ? `${discountAmount}` : null}
+          </div>
+        </div>
         <div className="flex w-4/5 mx-auto border-t-2 pt-2 text-green-500">
           <div className="flex w-3/4 justify-end font-bold"> Grand Total: </div>
           <div className="flex w-1/4 justify-center font-bold">
-            {itemsTotal + deliveryFee}
+            {grandTotal}
           </div>
         </div>
         <div className="flex w-4/5 mx-auto text-white pt-4">

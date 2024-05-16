@@ -29,7 +29,7 @@ OrderStatus.sync()
     console.log("Order Status table synced successfully!");
   })
   .catch((error) => {
-    throw new Error("Error syncing Order table: " + error.message);
+    throw new Error("Error syncing Order_status table: " + error.message);
   });
 
 export default OrderStatus;

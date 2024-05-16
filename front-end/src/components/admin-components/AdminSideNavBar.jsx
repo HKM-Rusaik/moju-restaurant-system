@@ -20,7 +20,11 @@ const AdminSideNavBar = () => {
       </div>
       <div className="flex justify-center">
         <ul className="text-lg">
-          <li className={`p-4 ${location.pathname === "/admin/dashboard" && "text-yellow-500"}`}>
+          <li
+            className={`p-4 ${
+              location.pathname === "/admin/dashboard" && "text-yellow-500"
+            }`}
+          >
             <Link to="/admin/dashboard" className="block hover:text-[#FFEA2A]">
               <div className="flex items-center">
                 Dashboard
@@ -28,47 +32,97 @@ const AdminSideNavBar = () => {
               </div>
             </Link>
           </li>
-          <li className={`p-4 ${location.pathname === "/admin/bill" && "text-yellow-500"}`}>
+          <li
+            className={`p-4 ${
+              location.pathname === "/admin/bill" && "text-yellow-500"
+            }`}
+          >
             <Link to="/admin/bill" className="block hover:text-[#FFEA2A]">
               <div className="flex items-center">
                 Bill <FaRegMoneyBillAlt className="ml-2" />
               </div>
             </Link>
           </li>
-          <li className={`p-4 ${location.pathname === "/admin/products" && "text-yellow-500"}`}>
+          <li
+            className={`p-4 ${
+              location.pathname === "/admin/products" && "text-yellow-500"
+            }`}
+          >
             <Link to="/admin/products" className="block hover:text-[#FFEA2A]">
               <div className="flex items-center">
                 Products <MdInventory className="ml-2" />
               </div>
             </Link>
           </li>
-          <li className={`p-4 ${location.pathname === "/admin/categories" && "text-yellow-500"}`}>
+          <li
+            className={`p-4 ${
+              location.pathname === "/admin/categories" && "text-yellow-500"
+            }`}
+          >
             <Link to="/admin/categories" className="block hover:text-[#FFEA2A]">
               <div className="flex items-center">
                 Categories <BiCategory className="ml-2" />
               </div>
             </Link>
           </li>
-          <li className={`p-4 ${location.pathname === "/admin/employee-details" && "text-yellow-500"}`}>
-            <Link to="/admin/employee-details" className="block hover:text-[#FFEA2A]">
+          <li
+            className={`p-4 ${
+              location.pathname === "/admin/employee-details" &&
+              "text-yellow-500"
+            }`}
+          >
+            <Link
+              to="/admin/employee-details"
+              className="block hover:text-[#FFEA2A]"
+            >
               <div className="flex items-center">
                 Employee Details <CgDetailsMore className="ml-2" />
               </div>
             </Link>
           </li>
-          <li className={`p-4 ${location.pathname === "/admin/attendance-record" && "text-yellow-500"}`}>
-            <Link to="/admin/attendance-record" className="block hover:text-[#FFEA2A]">
+          <li
+            className={`p-4 ${
+              location.pathname === "/admin/attendance-record" &&
+              "text-yellow-500"
+            }`}
+          >
+            <Link
+              to="/admin/attendance-record"
+              className="block hover:text-[#FFEA2A]"
+            >
               <div className="flex items-center">
                 Attendance Record <GrUserWorker className="ml-2" />
               </div>
             </Link>
           </li>
-          <li className={`p-4 ${location.pathname === "/admin/inventory" && "text-yellow-500"}`}>
-            <Link to="/admin/inventory" className="block hover:text-[#FFEA2A]">
-              Inventory
+          <li
+            className={`p-4 ${
+              location.pathname === "/admin/offers" && "text-yellow-500"
+            }`}
+          >
+            <Link to="/admin/offers" className="block hover:text-[#FFEA2A]">
+              Offers
             </Link>
           </li>
-          <li className={`p-4 ${location.pathname === "/admin/reports" && "text-yellow-500"}`}>
+          <li
+            className={`p-4 ${
+              location.pathname === "/admin/reservation" && "text-yellow-500"
+            }`}
+          >
+            <Link
+              to="/admin/reservation"
+              className="block hover:text-[#FFEA2A]"
+            >
+              <div className="flex items-center">
+                Reservations <BiSolidReport className="ml-2" />
+              </div>
+            </Link>
+          </li>
+          <li
+            className={`p-4 ${
+              location.pathname === "/admin/reports" && "text-yellow-500"
+            }`}
+          >
             <Link to="/admin/reports" className="block hover:text-[#FFEA2A]">
               <div className="flex items-center">
                 Reports <BiSolidReport className="ml-2" />

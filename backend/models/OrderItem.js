@@ -1,5 +1,6 @@
 import sequelize from "../config/db.js";
 import { DataTypes } from "sequelize";
+import Item from "./Item.js";
 
 const OrderItem = sequelize.define("order_item", {
   orderItemId: {
@@ -22,6 +23,9 @@ const OrderItem = sequelize.define("order_item", {
     allowNull: false,
   },
 });
+
+OrderItem.belongsTo(Item, { foreignKey: "itemId" });
+
 OrderItem.sync()
   .then(() => {
     console.log("Order Item table synced successfully!");

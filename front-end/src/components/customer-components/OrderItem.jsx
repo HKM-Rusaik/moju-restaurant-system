@@ -1,16 +1,22 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { addOrders } from "slices/ordersSlice";
+import ItemList from "./ItemList";
 
-const OrderItem = () => {
+const OrderItem = (props) => {
   const [orders, setOrders] = useState([]);
   const customerId = useSelector((state) => state.customer.customer.customerId);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     axios
       .get(`http://localhost:5000/customer/orders/${customerId}`)
       .then((response) => {
-        setOrders(response.data.orders);
+        const ordersData = response.data.orders;
+        setOrders(ordersData);
+        dispatch(addOrders(ordersData)); // Dispatch addOrders after setting ordersData
       })
       .catch((err) => {
         console.error("Error fetching orders:", err);
@@ -21,16 +27,17 @@ const OrderItem = () => {
     const updateOrderStatus = async (orderId) => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/customer/order/${orderId}`
+          `http://localhost:5000/customer/order-order-status/${orderId}`
         );
 
         // Debugging: Log response data
         console.log(orderId);
+        console.log(response);
 
         let orderStatus = "processing";
-        if (response.order.prepared) {
-          if (response.order.picked) {
-            if (response.order.delivered) {
+        if (response.data.order.prepared) {
+          if (response.data.order.picked) {
+            if (response.data.order.delivered) {
               orderStatus = "delivered";
             } else {
               orderStatus = "picked";
@@ -59,8 +66,18 @@ const OrderItem = () => {
     });
   }, [orders]);
 
+  let finishedOrders = [];
+  let pendingOrders = [];
+  orders.forEach((order) => {
+    if (order.orderStatus === "delivered") {
+      finishedOrders.push(order);
+    } else {
+      pendingOrders.push(order);
+    }
+  });
+
   return (
-    <table className="mt-8 table-auto border-collapse w-full">
+    <table className="mt-8 table-auto border-collapse w-[80%] mx-auto">
       <thead>
         <tr className="bg-gray-100">
           <th className="border border-gray-300 px-4 py-2">Order ID</th>
@@ -71,22 +88,39 @@ const OrderItem = () => {
       </thead>
 
       <tbody>
-        {orders.map((order) => (
-          <tr key={order.orderId}>
-            <td className="border border-gray-300 px-4 py-2 text-center">
-              {order.orderId}
-            </td>
-            <td className="border border-gray-300 px-4 py-2 text-center">
-              item details here
-            </td>
-            <td className="border border-gray-300 px-4 py-2 text-center">
-              {order.orderTotal}
-            </td>
-            <td className="border border-gray-300 px-4 py-2 text-center">
-              {order.OrderStatus}
-            </td>
-          </tr>
-        ))}
+        {props.isReceived
+          ? pendingOrders.map((order) => (
+              <tr key={order.orderId}>
+                <td className="border border-gray-300 px-4 py-2 text-center">
+                  {order.orderId}
+                </td>
+                <td className="border border-gray-300 px-4 py-2 text-center">
+                  <ItemList orderId={order.orderId} />
+                </td>
+                <td className="border border-gray-300 px-4 py-2 text-center">
+                  {order.orderTotal}
+                </td>
+                <td className="border border-gray-300 px-4 py-2 text-center">
+                  {order.orderStatus}
+                </td>
+              </tr>
+            ))
+          : finishedOrders.map((order) => (
+              <tr key={order.orderId}>
+                <td className="border border-gray-300 px-4 py-2 text-center">
+                  {order.orderId}
+                </td>
+                <td className="border border-gray-300 px-4 py-2 text-center">
+                  <ItemList orderId={order.orderId} />
+                </td>
+                <td className="border border-gray-300 px-4 py-2 text-center">
+                  {order.orderTotal}
+                </td>
+                <td className="border border-gray-300 px-4 py-2 text-center">
+                  {order.orderStatus}
+                </td>
+              </tr>
+            ))}
       </tbody>
     </table>
   );

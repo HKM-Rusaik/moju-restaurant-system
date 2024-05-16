@@ -2,6 +2,9 @@ import Layout from "layouts/AdminLayouts";
 import { useState, useEffect } from "react";
 import React from "react";
 import axios from "axios";
+import { storage } from "firebase.js";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage"; // Import getDownloadURL
+import { v4 } from "uuid";
 
 const AddProducts = () => {
   const [productName, setProductName] = useState("");
@@ -10,13 +13,14 @@ const AddProducts = () => {
   const [productImage, setProductImage] = useState(null);
   const [price, setPrice] = useState("");
   const [availability, setAvailability] = useState("available");
+  const [imageURL, setImageURL] = useState(""); // State to store image URL
 
   const itemStatus = availability === "available" ? true : false;
 
   const formData = {
     itemName: productName,
     itemPrice: price,
-    itemPicURL: productImage,
+    itemPicURL: imageURL,
     itemStatus: itemStatus,
     categoryId: selectedCategory,
   };
@@ -59,11 +63,11 @@ const AddProducts = () => {
   };
   const getSelectClassName = () => {
     if (availability === "available") {
-      return "bg-green-500"; // Green border for "Available"
+      return "bg-green-500";
     } else if (availability === "unavailable") {
-      return "bg-red-500"; // Red border for "Unavailable"
+      return "bg-red-500";
     } else {
-      return ""; // Default case, no additional class
+      return "";
     }
   };
 
@@ -77,16 +81,45 @@ const AddProducts = () => {
       return;
     }
 
+    if (productImage == null) return;
+
+    const imageRef = ref(storage, `images/${productImage.name + v4()}`);
+
     try {
-      // Make POST request to save the product data
+      await uploadBytes(imageRef, productImage);
+
+      // Once uploaded, get the download URL
+      const url = await getDownloadURL(imageRef);
+
+      // Set the URL to state
+      setImageURL(url);
+
+      // Now you can proceed with form submission using the updated imageURL
+      const formData = {
+        itemName: productName,
+        itemPrice: price,
+        itemPicURL: url, // Use the URL obtained from Firebase
+        itemStatus: itemStatus,
+        categoryId: selectedCategory,
+      };
+
       await axios.post("http://localhost:5000/admin/items", formData);
+
       alert("Product added successfully!");
-      // Optionally, you can reset the form fields here
+
+      // Reset form fields
+      setProductName("");
+      setSelectedCategory("");
+      setProductImage(null);
+      setPrice("");
+      setAvailability("available");
+      setImageURL("");
     } catch (error) {
-      console.error("Error saving product:", error);
+      console.error("Error during image upload or product save:", error);
       alert("An error occurred while saving the product. Please try again.");
     }
   };
+
   return (
     <Layout>
       <div className="p-2">
@@ -197,7 +230,7 @@ const AddProducts = () => {
             <div className="mt-4 ml-4">
               <button
                 type="submit"
-                className="bg-green-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+                className="bg-green-500 hover:bg-blue-600 active:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               >
                 Add Item
               </button>

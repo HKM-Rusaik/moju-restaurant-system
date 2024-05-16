@@ -6,52 +6,90 @@ import { useSelector } from "react-redux";
 
 function Profile(props) {
   const customer = useSelector((state) => state.customer.customer);
+  const customerMembership = useSelector((state) => {
+    const customer = state.customer.customer;
+    return customer ? customer.membership.toLowerCase() : "";
+  });
+
+  let borderColor = "border-black";
+
+  if (customerMembership === "silver") borderColor = "border-[#C0C0C0]";
+  if (customerMembership === "golden") borderColor = "border-[#FFD700]";
+  if (customerMembership === "platenium") borderColor = "border-[#E5E4E2]";
+
   const profileImage = props.profile || DumImage;
 
   return (
     <div>
       <h1 className="text-center font-bold text-3xl mt-10">My Profile</h1>
       <div className="flex items-center justify-center mt-8">
-        <div className="profile-pic">
-          <img src={profileImage} alt="" />
-          <p>{props.name}</p>
+        <div className="profile-pic mr-4">
+          <div
+            className={`w-[200px] h-[200px] rounded-full border-8 ${borderColor} bg-white overflow-hidden`}
+          >
+            <img src={props.image} alt="profile im" />
+          </div>
+          <p className="text-center text-xl font-semibold text-yellow-700">
+            {" "}
+            {props.name}
+          </p>
         </div>
 
         <div className="bg-gray-300 p-4 rounded">
-          <div className="firstName flex items-center mb-2">
-            <p className="mr-16 font-bold">First Name </p>
-            <span className="profile-content-field">{props.firstName}</span>
-            <EditIcon className="text-2xl ml-2 hover:cursor-pointer hover:text-white active:text-black" />
+          <div className="flex">
+            <div className="labels flex flex-col justify-between">
+              <div className="firstName flex items-center mb-2">
+                <p className="mr-16 font-bold">First Name:</p>
+              </div>
+              <div className="lastName flex items-center mb-2">
+                <p className="mr-16 font-bold">Last Name:</p>
+              </div>
+              <div className="email flex items-center mb-2">
+                <p className="mr-24 font-bold">Email:</p>
+              </div>
+              <div className="phoneNumber flex items-center mb-2">
+                <p className="mr-24 font-bold">Phone Number:</p>
+              </div>
+              <div className="deliveryAddress flex items-center mb-2">
+                <p className="mr-2 font-bold">Delivery Address:</p>
+              </div>
+              <div className="newPassword flex items-center mb-2">
+                <p className="mr-8 font-bold">New Password:</p>
+              </div>
+            </div>
+            <div className="fields">
+              <div className="firstName flex items-center mb-2">
+                <span className="profile-content-field">{props.firstName}</span>
+                <EditIcon className="text-2xl ml-2 hover:cursor-pointer hover:text-white active:text-black" />
+              </div>
+              <div className="lastName flex items-center mb-2">
+                <span className="profile-content-field">{props.lastName}</span>
+                <EditIcon className="text-2xl ml-2 hover:cursor-pointer hover:text-white active:text-black" />
+              </div>
+              <div className="lastName flex items-center mb-2">
+                <span className="profile-content-field">{props.email}</span>
+                <EditIcon className="text-2xl ml-2 hover:cursor-pointer hover:text-white active:text-black" />
+              </div>
+              <div className="lastName flex items-center mb-2">
+                <span className="profile-content-field">
+                  {props.phoneNumber}
+                </span>
+                <EditIcon className="text-2xl ml-2 hover:cursor-pointer hover:text-white active:text-black" />
+              </div>
+              <div className="lastName flex items-center mb-2">
+                <span className="profile-content-field">{props.address}</span>
+                <EditIcon className="text-2xl ml-2 hover:cursor-pointer hover:text-white active:text-black" />
+              </div>
+              <div className="newPassword flex items-center mb-2">
+                <span className="profile-content-field">
+                  Enter New Password
+                </span>
+                <EditIcon className="text-2xl ml-2 hover:cursor-pointer hover:text-white active:text-black" />
+              </div>
+            </div>
           </div>
 
-          <div className="lastName flex items-center mb-2">
-            <p className="mr-16 font-bold">Last Name</p>
-            <span className="profile-content-field">{props.lastName}</span>
-            <EditIcon className="text-2xl ml-2 hover:cursor-pointer hover:text-white active:text-black" />
-          </div>
-
-          <div className="email flex items-center mb-2">
-            <p className="mr-24 font-bold">Email</p>
-            <span className="profile-content-field ml-2">
-              {props.email}
-            </span>
-            <EditIcon className="text-2xl ml-2 hover:cursor-pointer hover:text-white active:text-black" />
-          </div>
-
-          <div className="deliveryAddress flex items-center mb-2">
-            <p className="mr-2 font-bold">Delivery Address</p>
-            <span className="profile-content-field ml-1">
-              {props.address}
-            </span>
-            <EditIcon className="text-2xl ml-2 hover:cursor-pointer hover:text-white active:text-black" />
-          </div>
-
-          <div className="newPassword flex items-center mb-2">
-            <p className="mr-8 font-bold">New Password</p>
-            <span className="profile-content-field">Enter New Password</span>
-            <EditIcon className="text-2xl ml-2 hover:cursor-pointer hover:text-white active:text-black" />
-          </div>
-          <button className="bg-blue-800 flex items-center  hover:bg-blue-400 active:bg-blue-800 p-2 rounded text-white">
+          <button className="bg-blue-800 flex items-center mt-2 hover:bg-blue-400 active:bg-blue-800 p-2 rounded text-white">
             <IoLogOut />
             Logout
           </button>

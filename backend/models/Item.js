@@ -33,6 +33,7 @@ const Item = sequelize.define("item", {
 
 Item.belongsTo(Category, { foreignKey: "categoryId" });
 
+
 Item.sync()
   .then(() => {
     console.log("Item Table synced successfully!");

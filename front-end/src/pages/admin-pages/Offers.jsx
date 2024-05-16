@@ -1,12 +1,12 @@
 import React from "react";
 import Layout from "layouts/AdminLayouts";
 
-const Bill = () => {
+const Offers = () => {
   return (
     <Layout>
-      <div className="text-2xl font-bold m-2">Orders Management</div>
+      <div>Offers</div>
     </Layout>
   );
 };
 
-export default Bill;
+export default Offers;

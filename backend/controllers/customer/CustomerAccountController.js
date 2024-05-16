@@ -1,5 +1,6 @@
 import Customer from "../../models/Customer.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const saltRounds = 10;
 
@@ -27,6 +28,7 @@ export const createCustomer = async (req, res) => {
       phoneNumber: phoneNumber,
       email: email,
       passwordHash: hashedPassword,
+      membership: "new",
     });
 
     res.status(201).json(newCustomer);
@@ -54,5 +56,31 @@ export const loginCustomer = async (req, res) => {
   } catch (error) {
     console.error("Error logging in:", error);
     res.status(500).json({ error: "Server Error" });
+  }
+};
+
+export const updateMembership = async (req, res) => {
+  const { customerId } = req.params;
+
+  try {
+    // Retrieve the customer record from the database
+    const customer = await Customer.findByPk(customerId);
+
+    if (!customer) {
+      return res.status(404).json({ message: "Customer not found" });
+    }
+
+    const { membership } = req.body;
+
+    // Update the membership status of the customer
+    customer.membership = membership;
+
+    // Save changes to the database
+    await customer.save();
+
+    return res.status(200).json({ message: "Membership updated successfully" });
+  } catch (error) {
+    console.error("Error updating membership:", error);
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
