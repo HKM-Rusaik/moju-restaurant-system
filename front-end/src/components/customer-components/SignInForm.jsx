@@ -1,9 +1,9 @@
-import axios from "axios";
+// import axios from "axios";
 import React, { useState } from "react";
-import { Link, Outlet } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { setCustomer } from "slices/customerSlice";
+import { setCustomer, setToken } from "slices/customerSlice";
 import { useDispatch } from "react-redux";
+import axios from "axios.js";
 
 const SignInForm = () => {
   const dispatch = useDispatch();
@@ -13,51 +13,20 @@ const SignInForm = () => {
   const navigate = useNavigate();
   const formData = { email: email, password: password };
 
+  console.log(axios);
+
   const handleSignIn = async (e) => {
     e.preventDefault();
     // Add your sign-in logic here
 
     try {
-      const response = await axios.post(
-        "http://localhost:5000/customer/login",
-        formData
-      );
+      const response = await axios.post("/customer/login", formData);
+      localStorage.setItem("token", response.data.token);
       console.log(response.data);
+      dispatch(setToken(response.data.token));
       dispatch(setCustomer(response.data.customer));
 
-      alert(response.data.message);
-
-      // Fetch orders
-      const customerId = response.data.customer.customerId;
-      const ordersResponse = await axios.get(
-        `http://localhost:5000/customer/orders/${customerId}`
-      );
-      const orders = ordersResponse.data.orders;
-
-      // Calculate total order amount
-      const totalAmount = orders.reduce(
-        (acc, order) => acc + order.orderTotal,
-        0
-      );
-
-      console.log(totalAmount);
-      // Update membership status based on total amount
-      let membershipStatus = "newCustomer";
-      if (totalAmount > 50000) {
-        membershipStatus = "Platinum";
-      } else if (totalAmount > 25000) {
-        membershipStatus = "Golden";
-      } else if (totalAmount > 10000) {
-        membershipStatus = "Silver";
-      }
-
-      // Update customer's membership status
-      const updateMembershipResponse = await axios.put(
-        `http://localhost:5000/customer/${customerId}`,
-        { membership: membershipStatus }
-      );
-
-      console.log(updateMembershipResponse.data);
+      alert(response.data.message); 
 
       navigate("/menu");
     } catch (error) {

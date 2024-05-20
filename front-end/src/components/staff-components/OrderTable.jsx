@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { MdCheckCircle, MdCancel } from "react-icons/md"; // Import icons from react-icons library
+import { MdCheckCircle, MdCancel } from "react-icons/md";
+import ItemList from "components/customer-components/ItemList";
 
 const OrdersTable = () => {
   const [orders, setOrders] = useState([]);
@@ -50,6 +51,7 @@ const OrdersTable = () => {
             <th className="border border-gray-800 px-4 py-2">Customer Name</th>
             <th className="border border-gray-800 px-4 py-2">Order Details</th>
             <th className="border border-gray-800 px-4 py-2">Payment Method</th>
+            <th className="border border-gray-800 px-4 py-2">Order Type</th>
             <th className="border border-gray-800 px-4 py-2">
               Delivery Address
             </th>
@@ -68,10 +70,13 @@ const OrdersTable = () => {
                 {order["customer.firstName"]} {order["customer.lastName"]}
               </td>
               <td className="border border-gray-800 px-4 py-2 text-center">
-                {order.orderDetails}
+                <ItemList orderId={order.orderId} />
               </td>
               <td className="border border-gray-800 px-4 py-2 text-center">
                 {order.paymentMethod.toUpperCase()}
+              </td>
+              <td className="border border-gray-800 px-4 py-2 text-center">
+                {order.orderType}
               </td>
               <td className="border border-gray-800 px-4 py-2 text-center">
                 {order.deliveryAddress}

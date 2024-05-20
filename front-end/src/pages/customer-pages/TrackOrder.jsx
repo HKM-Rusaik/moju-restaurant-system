@@ -22,7 +22,7 @@ const TrackOrder = () => {
         <div className="mt-8 flex justify-around bg-white text-black rounded">
           <div
             className={`hover:cursor-pointer text-center hover:bg-gray-600 hover:font-bold ${
-              isToReceive ? "bg-gray-600 font-bold" : ""
+              isToReceive ? "bg-gray-600 font-bold text-white" : ""
             } w-full rounded`}
             onClick={handleToReceiveClick}
           >
@@ -30,7 +30,7 @@ const TrackOrder = () => {
           </div>
           <div
             className={`hover:cursor-pointer text-center hover:bg-gray-600 hover:font-bold ${
-              isCompleted ? "bg-gray-600 font-bold" : ""
+              isCompleted ? "bg-gray-600 font-bold text-white" : ""
             } w-full rounded`}
             onClick={handleCompletedClick}
           >

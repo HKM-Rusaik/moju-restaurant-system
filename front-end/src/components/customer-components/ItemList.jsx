@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { toPascalCase } from "utils.js";
 
 const ItemList = ({ orderId }) => {
   const [items, setItems] = useState([]);
@@ -24,7 +25,7 @@ const ItemList = ({ orderId }) => {
       <ul>
         {items.map((item) => (
           <li key={item.itemId}>
-            {item.item.itemName} - Quantity: {item.quantity}
+            {toPascalCase(item.item.itemName)} - Quantity: {item.quantity}
           </li>
         ))}
       </ul>

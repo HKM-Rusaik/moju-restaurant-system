@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { addOrders } from "slices/ordersSlice";
 import ItemList from "./ItemList";
+import Order from "./Order";
 
 const OrderItem = (props) => {
   const [orders, setOrders] = useState([]);
@@ -45,8 +46,6 @@ const OrderItem = (props) => {
           } else {
             orderStatus = "prepared";
           }
-        } else {
-          orderStatus = "processing";
         }
 
         console.log("Before putting. Order ID:", orderId);
@@ -77,52 +76,63 @@ const OrderItem = (props) => {
   });
 
   return (
-    <table className="mt-8 table-auto border-collapse w-[80%] mx-auto">
-      <thead>
+    <div className="mt-8 table-auto border-collapse w-[80%] mx-auto">
+      {/* <thead>
         <tr className="bg-gray-100">
           <th className="border border-gray-300 px-4 py-2">Order ID</th>
           <th className="border border-gray-300 px-4 py-2">Item Details</th>
           <th className="border border-gray-300 px-4 py-2">Total Amount</th>
           <th className="border border-gray-300 px-4 py-2">Order Status</th>
         </tr>
-      </thead>
+      </thead> */}
 
-      <tbody>
-        {props.isReceived
-          ? pendingOrders.map((order) => (
-              <tr key={order.orderId}>
-                <td className="border border-gray-300 px-4 py-2 text-center">
-                  {order.orderId}
-                </td>
-                <td className="border border-gray-300 px-4 py-2 text-center">
-                  <ItemList orderId={order.orderId} />
-                </td>
-                <td className="border border-gray-300 px-4 py-2 text-center">
-                  {order.orderTotal}
-                </td>
-                <td className="border border-gray-300 px-4 py-2 text-center">
-                  {order.orderStatus}
-                </td>
-              </tr>
-            ))
-          : finishedOrders.map((order) => (
-              <tr key={order.orderId}>
-                <td className="border border-gray-300 px-4 py-2 text-center">
-                  {order.orderId}
-                </td>
-                <td className="border border-gray-300 px-4 py-2 text-center">
-                  <ItemList orderId={order.orderId} />
-                </td>
-                <td className="border border-gray-300 px-4 py-2 text-center">
-                  {order.orderTotal}
-                </td>
-                <td className="border border-gray-300 px-4 py-2 text-center">
-                  {order.orderStatus}
-                </td>
-              </tr>
-            ))}
-      </tbody>
-    </table>
+      {props.isReceived
+        ? pendingOrders.map((order) => (
+            <Order
+              key={order.orderId}
+              orderId={order.orderId}
+              orderTotal={order.orderTotal}
+              orderStatus={order.orderStatus}
+            />
+            // <tr key={order.orderId}>
+            //   <td className="border border-gray-300 px-4 py-2 text-center">
+            //     {order.orderId}
+            //   </td>
+            //   <td className="border border-gray-300 px-4 py-2 text-center">
+            //     <ItemList orderId={order.orderId} />
+            //   </td>
+            //   <td className="border border-gray-300 px-4 py-2 text-center">
+            //     {order.orderTotal}
+            //   </td>
+            //   <td className="border border-gray-300 px-4 py-2 text-center">
+            //     {order.orderStatus}
+            //   </td>
+            // </tr>
+          ))
+        : finishedOrders.map((order) => (
+            <Order
+              key={order.orderId}
+              orderId={order.orderId}
+              orderTotal={order.orderTotal}
+              orderStatus={order.orderStatus}
+            />
+
+            // <tr key={order.orderId}>
+            //   <td className="border border-gray-300 px-4 py-2 text-center">
+            //     {order.orderId}
+            //   </td>
+            //   <td className="border border-gray-300 px-4 py-2 text-center">
+            //     <ItemList orderId={order.orderId} />
+            //   </td>
+            //   <td className="border border-gray-300 px-4 py-2 text-center">
+            //     {order.orderTotal}
+            //   </td>
+            //   <td className="border border-gray-300 px-4 py-2 text-center">
+            //     {order.orderStatus}
+            //   </td>
+            // </tr>
+          ))}
+    </div>
   );
 };
 

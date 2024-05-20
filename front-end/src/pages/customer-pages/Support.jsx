@@ -3,6 +3,7 @@ import ContactUs from "components/customer-components/ContactUs";
 import RestaurantAddress from "components/customer-components/RestaurantAddress";
 import Layout from "layouts/CustomerLayout";
 
+
 const Support = () => {
   return (
     <Layout>

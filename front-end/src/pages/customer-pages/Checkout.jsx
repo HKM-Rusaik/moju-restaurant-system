@@ -11,7 +11,6 @@ import { storage } from "firebase.js";
 import { pdf } from "@react-pdf/renderer";
 
 const Checkout = () => {
-  //upload and get the url of pdf in firebase
   const uploadPDFToFirebase = async (pdfBlob) => {
     const pdfRef = ref(storage, `orders/${Date.now()}.pdf`);
     await uploadBytes(pdfRef, pdfBlob);
@@ -30,8 +29,8 @@ const Checkout = () => {
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [deliveryFee, setDeliveryFee] = useState(200);
   const [isEditingAddress, setIsEditingAddress] = useState(false);
+  const [atRestaurant, setAtRestaurant] = useState(null); // State to track if the customer is at the restaurant or outside
   const dispatch = useDispatch();
-
   const navigate = useNavigate();
 
   let address = useSelector(
@@ -96,6 +95,7 @@ const Checkout = () => {
     setDeliveryMethod(selectedMethod);
     setShowDeliveryDetails(selectedMethod === "delivery");
     setShowTableNumber(selectedMethod === "dine-in");
+    setAtRestaurant(null); // Reset the dine-in sub-option when delivery method changes
   };
 
   const handlePaymentMethodChange = (event) => {
@@ -104,7 +104,6 @@ const Checkout = () => {
   };
 
   const handlePlaceOrder = async () => {
-    // Generate the PDF as a blob
     const pdfBlob = await pdf(
       <BillPDF
         order=""
@@ -117,25 +116,22 @@ const Checkout = () => {
       />
     ).toBlob();
 
-    // Upload PDF to Firebase and get the download URL
     const pdfUrl = await uploadPDFToFirebase(pdfBlob);
 
     const order = {
       customerId,
       deliveryMethod,
       orderTotal,
-      deliveryAddress: deliveryMethod === "delivery" ? deliveryAddress : "",
+      deliveryAddress:
+        showTableNumber && atRestaurant ? tableNumber : deliveryAddress,
       paymentMethod,
       selectedItems,
       pdfUrl,
     };
 
-    console.log(deliveryMethod);
-
     axios
       .post("http://localhost:5000/customer/orders", order)
       .then((response) => {
-        console.log("Order placed successfully:", response.data);
         setShowSuccessPopup(true);
         dispatch(removeAllItems());
       })
@@ -160,6 +156,13 @@ const Checkout = () => {
     setIsEditingAddress(false);
   };
 
+  const handleAtRestaurantChange = (event) => {
+    setAtRestaurant(event.target.value === "at-restaurant");
+    if (!atRestaurant && showTableNumber) {
+      setDeliveryAddress("Call to make sure the dine-in");
+    }
+  };
+
   return (
     <Layout>
       <div>
@@ -170,7 +173,7 @@ const Checkout = () => {
         <div className="mx-[5%] mt-8">
           <div className="flex flex-col sm:flex-row items-center mb-4">
             <label htmlFor="customerName" className="mr-2 mb-2 w-[20%] sm:mb-0">
-              Customer Name
+              Customer Name <span className="text-red-500">*</span>
             </label>
             <input
               readOnly
@@ -188,7 +191,7 @@ const Checkout = () => {
               htmlFor="deliveryMethod"
               className="mr-2 mb-2 w-[20%] sm:mb-0"
             >
-              Delivery Method
+              Delivery Method <span className="text-red-500">*</span>
             </label>
             <select
               id="deliveryMethod"
@@ -204,50 +207,81 @@ const Checkout = () => {
               <option value="delivery">Delivery</option>
             </select>
           </div>
-          {showDeliveryDetails && (
-            <div>
-              <div className="flex flex-col sm:flex-row items-center mb-4">
-                <label
-                  htmlFor="deliveryAddress"
-                  className="mr-2 mb-2 w-[20%] sm:mb-0"
-                >
-                  Delivery Address
+          {deliveryMethod === "dine-in" && (
+            <div className="flex flex-col sm:flex-row items-center mb-4">
+              <label
+                htmlFor="atRestaurant"
+                className="mr-2 mb-2 w-[20%] sm:mb-0"
+              >
+                Are you at the restaurant?{" "}
+                <span className="text-red-500">*</span>
+              </label>
+              <div className="flex items-center">
+                <input
+                  type="radio"
+                  id="atRestaurant"
+                  name="dineInOption"
+                  value="at-restaurant"
+                  onChange={handleAtRestaurantChange}
+                  className="mr-2"
+                />
+                <label htmlFor="atRestaurant" className="mr-4">
+                  Yes
                 </label>
-                <div className="flex items-center">
-                  <input
-                    type="text"
-                    id="deliveryAddress"
-                    value={deliveryAddress}
-                    readOnly={!isEditingAddress}
-                    onChange={handleAddressChange}
-                    className="w-64 rounded border-gray-300 shadow-sm focus:border-yellow-500 focus:ring focus:ring-yellow-500 focus:ring-opacity-50"
-                  />
-                  {isEditingAddress ? (
-                    <button
-                      className="ml-2 bg-blue-500 text-white py-1 px-2 rounded"
-                      onClick={handleAddressSave}
-                    >
-                      Save
-                    </button>
-                  ) : (
-                    <button
-                      className="ml-2 bg-yellow-500 text-white py-1 px-2 rounded"
-                      onClick={handleEditAddress}
-                    >
-                      Change
-                    </button>
-                  )}
-                </div>
+                <input
+                  type="radio"
+                  id="outsideRestaurant"
+                  name="dineInOption"
+                  value="outside-restaurant"
+                  onChange={handleAtRestaurantChange}
+                  className="mr-2"
+                />
+                <label htmlFor="outsideRestaurant">No</label>
               </div>
             </div>
           )}
-          {showTableNumber && (
+          {showDeliveryDetails && (
+            <div className="flex flex-col sm:flex-row items-center mb-4">
+              <label
+                htmlFor="deliveryAddress"
+                className="mr-2 mb-2 w-[20%] sm:mb-0"
+              >
+                Delivery Address <span className="text-red-500">*</span>
+              </label>
+              <div className="flex items-center">
+                <input
+                  type="text"
+                  id="deliveryAddress"
+                  value={deliveryAddress}
+                  readOnly={!isEditingAddress}
+                  onChange={handleAddressChange}
+                  className="w-64 rounded border-gray-300 shadow-sm focus:border-yellow-500 focus:ring focus:ring-yellow-500 focus:ring-opacity-50"
+                />
+                {isEditingAddress ? (
+                  <button
+                    className="ml-2 bg-blue-500 text-white py-1 px-2 rounded"
+                    onClick={handleAddressSave}
+                  >
+                    Save
+                  </button>
+                ) : (
+                  <button
+                    className="ml-2 bg-yellow-500 text-white py-1 px-2 rounded"
+                    onClick={handleEditAddress}
+                  >
+                    Change
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
+          {atRestaurant && showTableNumber && (
             <div className="flex flex-col sm:flex-row items-center mb-4">
               <label
                 htmlFor="tableNumber"
                 className="mr-2 mb-2 w-[20%] sm:mb-0"
               >
-                Table Number
+                Table Number <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
@@ -262,7 +296,7 @@ const Checkout = () => {
               htmlFor="paymentMethod"
               className="mr-2 mb-2 w-[20%] sm:mb-0"
             >
-              Payment Method
+              Payment Method <span className="text-red-500">*</span>
             </label>
             <select
               id="paymentMethod"
@@ -311,7 +345,6 @@ const Checkout = () => {
             Place Order
           </button>
 
-          {/* Success Popup */}
           {showSuccessPopup && (
             <div className="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-50 flex items-center justify-center">
               <div className="bg-white p-8 rounded shadow-md max-w-md">
@@ -321,7 +354,7 @@ const Checkout = () => {
                 <p>Your order has been successfully placed.</p>
                 <div className="mt-4 flex justify-end">
                   <button
-                    className="bg-green-500  text-white py-2 px-4 rounded"
+                    className="bg-green-500 text-white py-2 px-4 rounded"
                     onClick={handleNavigateToMenu}
                   >
                     OK

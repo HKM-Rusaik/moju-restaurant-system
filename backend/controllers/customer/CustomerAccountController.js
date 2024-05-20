@@ -4,6 +4,9 @@ import jwt from "jsonwebtoken";
 
 const saltRounds = 10;
 
+// Secret key for JWT
+const jwtSecret = "your_jwt_secret"; // Store this in environment variables in production
+
 export const createCustomer = async (req, res) => {
   const { firstName, lastName, street, city, phoneNumber, email, password } =
     req.body;
@@ -13,25 +16,32 @@ export const createCustomer = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     // Check if email already exists
-    const countEmailUsers = await Customer.count({ where: { email: email } });
+    const countEmailUsers = await Customer.count({ where: { email } });
 
     if (countEmailUsers > 0) {
-      return res.send("Email already exists. Try logging in.");
+      return res
+        .status(400)
+        .json({ error: "Email already exists. Try logging in." });
     }
 
     // Create new customer
     const newCustomer = await Customer.create({
-      firstName: firstName,
-      lastName: lastName,
+      firstName,
+      lastName,
       streetName: street,
       cityName: city,
-      phoneNumber: phoneNumber,
-      email: email,
+      phoneNumber,
+      email,
       passwordHash: hashedPassword,
       membership: "new",
     });
 
-    res.status(201).json(newCustomer);
+    // Generate JWT
+    const token = jwt.sign({ id: newCustomer.id }, jwtSecret, {
+      expiresIn: "1h",
+    });
+
+    res.status(201).json({ token, customer: newCustomer });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Server Error" });
@@ -52,7 +62,14 @@ export const loginCustomer = async (req, res) => {
     if (!passwordMatch)
       return res.status(401).json({ error: "Incorrect email or password" });
 
-    res.status(200).json({ message: "Login successful", customer });
+    // Generate JWT
+    const token = jwt.sign({ customerId: customer.customerId }, jwtSecret, {
+      expiresIn: "1h",
+    });
+
+    res
+      .status(200)
+      .json({ token, customer, message: "successfully logged in" });
   } catch (error) {
     console.error("Error logging in:", error);
     res.status(500).json({ error: "Server Error" });

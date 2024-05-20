@@ -8,10 +8,8 @@ const CategoryBox = (props) => {
   const handleDeleteCategory = async () => {
     try {
       await axios.delete(`http://localhost:5000/admin/categories/${props.id}`);
-      // Optionally, you can perform some action after successful deletion, like updating the UI
       console.log("Category deleted successfully");
     } catch (error) {
-      // Handle errors if any
       console.error("Error deleting category: ", error);
     }
   };
@@ -21,18 +19,15 @@ const CategoryBox = (props) => {
       const updatedCategory = {
         id: props.id,
         categoryName: editedName,
-        // Add other fields you may want to update
       };
 
       await axios.patch(
         `http://localhost:5000/admin/categories/${props.id}`,
         updatedCategory
       );
-      // Optionally, you can perform some action after successful update, like updating the UI
       console.log("Category updated successfully");
       setEditMode(false); // Exit edit mode after successful update
     } catch (error) {
-      // Handle errors if any
       console.error("Error updating category: ", error);
     }
   };

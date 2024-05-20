@@ -1,10 +1,15 @@
 import React from "react";
-import DumImage from "../../assets/Images/Profile-dum.png";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { FaRegEdit as EditIcon } from "react-icons/fa";
 import { IoLogOut } from "react-icons/io5";
 import { useSelector } from "react-redux";
+import DumImage from "../../assets/Images/Profile-dum.png";
+import { setCustomer, setToken } from "slices/customerSlice";
 
 function Profile(props) {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const customer = useSelector((state) => state.customer.customer);
   const customerMembership = useSelector((state) => {
     const customer = state.customer.customer;
@@ -18,6 +23,20 @@ function Profile(props) {
   if (customerMembership === "platenium") borderColor = "border-[#E5E4E2]";
 
   const profileImage = props.profile || DumImage;
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    dispatch(setCustomer(null));
+    dispatch(setToken(null));
+    navigate("/account");
+  };
+
+  const confirmLogout = () => {
+    const confirmed = window.confirm("Are you sure you want to logout?");
+    if (confirmed) {
+      handleLogout();
+    }
+  };
 
   return (
     <div>
@@ -89,7 +108,10 @@ function Profile(props) {
             </div>
           </div>
 
-          <button className="bg-blue-800 flex items-center mt-2 hover:bg-blue-400 active:bg-blue-800 p-2 rounded text-white">
+          <button
+            onClick={confirmLogout}
+            className="bg-blue-800 flex items-center mt-2 hover:bg-blue-400 active:bg-blue-800 p-2 rounded text-white"
+          >
             <IoLogOut />
             Logout
           </button>

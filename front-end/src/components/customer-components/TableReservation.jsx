@@ -1,10 +1,15 @@
 import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import axios from "axios.js";
+import { useSelector } from "react-redux";
 
 const TableReservation = () => {
   const [guestCount, setGuestCount] = useState(1);
   const [selectedDate, setSelectedDate] = useState(null);
+  const [note, setNote] = useState("");
+
+  const customerId = useSelector((state) => state.customer.customerId);
 
   const decreaseGuestCount = () => {
     if (guestCount > 1) {
@@ -19,6 +24,40 @@ const TableReservation = () => {
   const handleDateChange = (date) => {
     setSelectedDate(date);
     console.log(date);
+  };
+
+  const handleNoteChange = (event) => {
+    setNote(event.target.value);
+  };
+
+  const handleBookTable = async () => {
+    if (!selectedDate) {
+      alert("Please select a date and time.");
+      return;
+    }
+
+    const reservationData = {
+      customerId,
+      noOfGuests: guestCount,
+      reservationDate: selectedDate,
+      note,
+    };
+
+    try {
+      const response = await axios.post(
+        "/customer/reservation",
+        reservationData
+      );
+      console.log("Reservation successful:", response.data);
+      alert("Table reserved successfully!");
+
+      setGuestCount(1);
+      setNote("");
+      setSelectedDate("");
+    } catch (error) {
+      console.error("Error making reservation:", error);
+      alert("There was an error making the reservation. Please try again.");
+    }
   };
 
   return (
@@ -69,18 +108,27 @@ const TableReservation = () => {
               placeholderText="Select a date"
               showTimeSelect
               minDate={new Date()}
-              minTime={new Date().setHours(12, 0, 0, 0)}
-              maxTime={new Date().setHours(22, 0, 0, 0)}
+              minTime={new Date(new Date().setHours(12, 0, 0, 0))}
+              maxTime={new Date(new Date().setHours(22, 0, 0, 0))}
             />
           </div>
           <div className="flex items-center">
-            <input className="rounded drop-shadow w-64" type="text" />
+            <input
+              className="rounded drop-shadow w-64"
+              type="text"
+              value={note}
+              onChange={handleNoteChange}
+              placeholder="Add a note (optional)"
+            />
           </div>
         </div>
       </div>
 
       <div className="flex justify-center mt-2">
-        <button className="bg-blue-800 p-2 rounded text-white hover:bg-blue-500 active:bg-blue-800">
+        <button
+          className="bg-blue-800 p-2 rounded text-white hover:bg-blue-500 active:bg-blue-800"
+          onClick={handleBookTable}
+        >
           Book Table
         </button>
       </div>

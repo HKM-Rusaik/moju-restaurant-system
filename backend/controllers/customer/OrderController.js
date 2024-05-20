@@ -23,7 +23,7 @@ export const createOrder = async (req, res) => {
       orderType: deliveryMethod,
       orderTotal,
       paymentMethod,
-      orderStatus,
+      orderStatus: "ready to prepare",
       billUrl: pdfUrl,
     });
     console.log("hello");

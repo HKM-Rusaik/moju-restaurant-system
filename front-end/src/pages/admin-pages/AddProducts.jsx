@@ -14,16 +14,16 @@ const AddProducts = () => {
   const [price, setPrice] = useState("");
   const [availability, setAvailability] = useState("available");
   const [imageURL, setImageURL] = useState(""); // State to store image URL
+  const [description, setDescription] = useState(""); // New state for description
 
-  const itemStatus = availability === "available" ? true : false;
-
-  const formData = {
-    itemName: productName,
-    itemPrice: price,
-    itemPicURL: imageURL,
-    itemStatus: itemStatus,
-    categoryId: selectedCategory,
-  };
+  // const formData = {
+  //   itemName: productName,
+  //   itemPrice: price,
+  //   itemPicURL: imageURL,
+  //   itemStatus: availability === "available",
+  //   categoryId: selectedCategory,
+  //   itemDescription: description,
+  // };
 
   // Fetch categories from the API
   useEffect(() => {
@@ -44,7 +44,7 @@ const AddProducts = () => {
   }, []);
 
   const handleAvailabilityChange = (event) => {
-    setAvailability(event.target.value === "available" ? true : false);
+    setAvailability(event.target.value);
   };
 
   const handleCategoryChange = (event) => {
@@ -60,6 +60,10 @@ const AddProducts = () => {
 
   const handleProductImageChange = (event) => {
     setProductImage(event.target.files[0]);
+  };
+
+  const handleDescriptionChange = (event) => {
+    setDescription(event.target.value);
   };
   const getSelectClassName = () => {
     if (availability === "available") {
@@ -99,8 +103,9 @@ const AddProducts = () => {
         itemName: productName,
         itemPrice: price,
         itemPicURL: url, // Use the URL obtained from Firebase
-        itemStatus: itemStatus,
+        itemStatus: availability === "available",
         categoryId: selectedCategory,
+        itemDescription: description,
       };
 
       await axios.post("http://localhost:5000/admin/items", formData);
@@ -114,6 +119,7 @@ const AddProducts = () => {
       setPrice("");
       setAvailability("available");
       setImageURL("");
+      setDescription("");
     } catch (error) {
       console.error("Error during image upload or product save:", error);
       alert("An error occurred while saving the product. Please try again.");
@@ -133,7 +139,9 @@ const AddProducts = () => {
               <tbody>
                 <tr>
                   <td>
-                    <label htmlFor="product-name">Product Name</label>
+                    <label htmlFor="product-name">
+                      Product Name <span className="text-red-500">*</span>
+                    </label>
                   </td>
                   <td>
                     <input
@@ -148,9 +156,29 @@ const AddProducts = () => {
                   </td>
                 </tr>{" "}
                 <br />
+                <tr>
+                  <td>
+                    <label htmlFor="description">
+                      Description <span className="text-red-500">*</span>
+                    </label>
+                  </td>
+                  <td>
+                    <textarea
+                      name="description"
+                      id="description"
+                      placeholder="Enter description..."
+                      value={description}
+                      onChange={handleDescriptionChange}
+                      className="border rounded p-2 w-full"
+                    />
+                  </td>
+                </tr>
+                <br />
                 <tr className="my-4">
                   <td>
-                    <label htmlFor="category">Category</label>
+                    <label htmlFor="category">
+                      Category <span className="text-red-500">*</span>
+                    </label>
                   </td>
                   <td>
                     <select
@@ -161,7 +189,8 @@ const AddProducts = () => {
                       className="border rounded p-2 w-full"
                     >
                       <option value="" disabled>
-                        Select a category
+                        Select a category{" "}
+                        <span className="text-red-500">*</span>
                       </option>
                       {categories.map((category) => (
                         <option
@@ -177,7 +206,9 @@ const AddProducts = () => {
                 <br />
                 <tr className="my-4">
                   <td>
-                    <label htmlFor="product-image">Photo</label>
+                    <label htmlFor="product-image">
+                      Photo <span className="text-red-500">*</span>
+                    </label>
                   </td>
                   <td>
                     <input
@@ -192,7 +223,9 @@ const AddProducts = () => {
                 <br />
                 <tr className="my-4">
                   <td>
-                    <label htmlFor="price">Price Rs.</label>
+                    <label htmlFor="price">
+                      Price Rs. <span className="text-red-500">*</span>
+                    </label>
                   </td>
                   <td>
                     <input
@@ -209,7 +242,9 @@ const AddProducts = () => {
                 <br />
                 <tr className="my-4">
                   <td>
-                    <label htmlFor="status">Status</label>
+                    <label htmlFor="status">
+                      Status <span className="text-red-500">*</span>
+                    </label>
                   </td>
                   <td>
                     <select
