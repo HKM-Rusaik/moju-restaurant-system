@@ -14,6 +14,11 @@ const Item = sequelize.define("item", {
     allowNull: false,
   },
 
+  itemDescription: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+
   itemPrice: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -32,7 +37,6 @@ const Item = sequelize.define("item", {
 });
 
 Item.belongsTo(Category, { foreignKey: "categoryId" });
-
 
 Item.sync()
   .then(() => {

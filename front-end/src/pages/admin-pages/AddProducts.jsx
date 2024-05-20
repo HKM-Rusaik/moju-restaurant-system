@@ -13,7 +13,7 @@ const AddProducts = () => {
   const [productImage, setProductImage] = useState(null);
   const [price, setPrice] = useState("");
   const [availability, setAvailability] = useState("available");
-  const [imageURL, setImageURL] = useState(""); // State to store image URL
+  const [imageURL, setImageURL] = useState(""); 
   const [description, setDescription] = useState(""); // New state for description
 
   // const formData = {

@@ -23,7 +23,6 @@ import EmployeeDetails from "pages/admin-pages/EmployeeDetails";
 import Attendence from "pages/admin-pages/Attendence";
 import Report from "pages/admin-pages/Report";
 import Bill from "pages/admin-pages/Bill";
-import Offers from "pages/admin-pages/Offers";
 import AdminReservation from "pages/admin-pages/Reservation";
 
 //staff pages
@@ -89,7 +88,6 @@ function App() {
           <Route path="/admin/attendance-record" element={<Attendence />} />
           <Route path="/admin/bill" element={<Bill />} />
           <Route path="/admin/reports" element={<Report />} />
-          <Route path="/admin/offers" element={<Offers />} />
           <Route path="/admin/reservation" element={<AdminReservation />} />
 
           <Route path="/staff" element={<Login />} />

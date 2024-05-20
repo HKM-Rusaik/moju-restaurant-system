@@ -18,6 +18,8 @@ import {
   getStaffs,
 } from "../controllers/admin/StaffController.js";
 
+import { getTotalEarnings } from "../controllers/admin/AdminOrderController.js";
+
 router.post("/categories", createCategory);
 router.get("/categories", getCategories);
 router.patch("/categories/:id", editCategory);
@@ -29,6 +31,8 @@ router.delete("/items/:id", deleteItem);
 
 router.post("/staff", createStaff);
 router.get("/staffs", getStaffs);
+
+router.get("/orders/today-earnings", getTotalEarnings);
 
 // router.post()
 

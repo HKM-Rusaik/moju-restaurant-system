@@ -14,14 +14,25 @@ function ItemBox(props) {
     setIsClicked(true);
   };
 
+  const truncateDescription = (description, maxLength) => {
+    if (description.length > maxLength) {
+      return description.slice(0, maxLength);
+    }
+    return description;
+  };
   return (
     <div
       key={props.itemId}
-      className="w-48 mx-32 bg-gray-100 drop-shadow-lg p-2 rounded-lg"
+      className="w-56 h-88 mx-32 bg-gray-100 drop-shadow-lg p-2 rounded-lg"
     >
-      <img src={props.itemImage} alt="" />
+      <img
+        src={props.itemImage}
+        className="h-40 flex flex-col justify-center w-full"
+        alt=""
+      />
       <p className="font-bold mt-2">{toPascalCase(props.name)}</p>
-      <div className="flex flex-col items-center mt-4">
+      <p className="h-16">{truncateDescription(props.itemDescription, 25)}</p>
+      <div className="flex flex-col items-center justify-end mt-4">
         <p>Rs. {props.price}</p>
         <FaCartPlus
           className={`bg-red-500 p-1 rounded-md w-16 cursor-pointer hover:text-black active:text-gray-500 text-2xl ${

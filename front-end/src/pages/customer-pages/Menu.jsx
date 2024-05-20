@@ -34,6 +34,7 @@ const Menu = () => {
       .get("http://localhost:5000/admin/items")
       .then((response) => {
         setItems(response.data);
+        console.log(items);
       })
       .catch((error) => {
         console.error("Error fetching items:", error);
@@ -114,7 +115,8 @@ const Menu = () => {
                 onClick={handlePromotionsClick}
                 className="mt-4 text-red-500 font-bold cursor-pointer hover:text-white active:text-black flex items-center w-fit p-2 rounded"
               >
-                <FaRegHandPointRight className="text-red-500 mr-2" /> PROMOTIONS 🎉
+                <FaRegHandPointRight className="text-red-500 mr-2" /> PROMOTIONS
+                🎉
               </button>
             )}
           </div>
@@ -148,6 +150,7 @@ const Menu = () => {
                           price={item.itemPrice}
                           itemId={item.itemId}
                           itemImage={item.itemPicURL}
+                          itemDescription={item.itemDescription}
                         />
                       </div>
                     ))}
@@ -162,6 +165,7 @@ const Menu = () => {
                     price={item.itemPrice}
                     itemId={item.itemId}
                     itemImage={item.itemPicURL}
+                    itemDescription={item.itemDescription}
                   />
                 </div>
               ))}
@@ -181,6 +185,7 @@ const Menu = () => {
                         price={item.itemPrice}
                         itemId={item.itemId}
                         itemImage={item.itemPicURL}
+                        itemDescription={item.itemDescription} // Add this line
                       />
                     </div>
                   ))}

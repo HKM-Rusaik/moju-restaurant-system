@@ -2,7 +2,14 @@ import Item from "../../models/Item.js";
 import Category from "../../models/category.js";
 
 export const createItem = async (req, res) => {
-  const { itemName, itemPrice, itemPicURL, itemStatus, categoryId } = req.body;
+  const {
+    itemName,
+    itemPrice,
+    itemPicURL,
+    itemStatus,
+    categoryId,
+    itemDescription,
+  } = req.body;
 
   try {
     const countItem = await Item.count({ where: { itemName: itemName } });
@@ -17,6 +24,7 @@ export const createItem = async (req, res) => {
       itemPicURL: itemPicURL,
       itemStatus: itemStatus,
       categoryId: categoryId,
+      itemDescription: itemDescription, 
     });
 
     res.status(201).json(newItem);

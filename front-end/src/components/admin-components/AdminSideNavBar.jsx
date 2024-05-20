@@ -97,15 +97,6 @@ const AdminSideNavBar = () => {
           </li>
           <li
             className={`p-4 ${
-              location.pathname === "/admin/offers" && "text-yellow-500"
-            }`}
-          >
-            <Link to="/admin/offers" className="block hover:text-[#FFEA2A]">
-              Offers
-            </Link>
-          </li>
-          <li
-            className={`p-4 ${
               location.pathname === "/admin/reservation" && "text-yellow-500"
             }`}
           >
