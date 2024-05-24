@@ -77,15 +77,6 @@ const OrderItem = (props) => {
 
   return (
     <div className="mt-8 table-auto border-collapse w-[80%] mx-auto">
-      {/* <thead>
-        <tr className="bg-gray-100">
-          <th className="border border-gray-300 px-4 py-2">Order ID</th>
-          <th className="border border-gray-300 px-4 py-2">Item Details</th>
-          <th className="border border-gray-300 px-4 py-2">Total Amount</th>
-          <th className="border border-gray-300 px-4 py-2">Order Status</th>
-        </tr>
-      </thead> */}
-
       {props.isReceived
         ? pendingOrders.map((order) => (
             <Order
@@ -93,21 +84,8 @@ const OrderItem = (props) => {
               orderId={order.orderId}
               orderTotal={order.orderTotal}
               orderStatus={order.orderStatus}
+              billUrl={order.billUrl}
             />
-            // <tr key={order.orderId}>
-            //   <td className="border border-gray-300 px-4 py-2 text-center">
-            //     {order.orderId}
-            //   </td>
-            //   <td className="border border-gray-300 px-4 py-2 text-center">
-            //     <ItemList orderId={order.orderId} />
-            //   </td>
-            //   <td className="border border-gray-300 px-4 py-2 text-center">
-            //     {order.orderTotal}
-            //   </td>
-            //   <td className="border border-gray-300 px-4 py-2 text-center">
-            //     {order.orderStatus}
-            //   </td>
-            // </tr>
           ))
         : finishedOrders.map((order) => (
             <Order
@@ -116,21 +94,6 @@ const OrderItem = (props) => {
               orderTotal={order.orderTotal}
               orderStatus={order.orderStatus}
             />
-
-            // <tr key={order.orderId}>
-            //   <td className="border border-gray-300 px-4 py-2 text-center">
-            //     {order.orderId}
-            //   </td>
-            //   <td className="border border-gray-300 px-4 py-2 text-center">
-            //     <ItemList orderId={order.orderId} />
-            //   </td>
-            //   <td className="border border-gray-300 px-4 py-2 text-center">
-            //     {order.orderTotal}
-            //   </td>
-            //   <td className="border border-gray-300 px-4 py-2 text-center">
-            //     {order.orderStatus}
-            //   </td>
-            // </tr>
           ))}
     </div>
   );

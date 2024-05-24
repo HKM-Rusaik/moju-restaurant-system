@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { PieChart, Pie, Sector, Cell, Legend } from "recharts";
+import { PieChart, Pie, Cell, Legend } from "recharts";
 import axios from "axios.js";
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
@@ -33,6 +33,7 @@ const renderCustomizedLabel = ({
 
 export default function OrderTypePieChart() {
   const [ordersByType, setOrdersByType] = useState([]);
+
   useEffect(() => {
     const getOrdersByType = async () => {
       const response = await axios.get("/admin/order-counts-by-type");
@@ -40,35 +41,41 @@ export default function OrderTypePieChart() {
     };
 
     getOrdersByType();
-    console.log(ordersByType);
   }, []);
+
   return (
-    <PieChart width={400} height={400}>
-      <Pie
-        data={ordersByType}
-        cx="50%"
-        cy="50%"
-        labelLine={false}
-        label={renderCustomizedLabel}
-        outerRadius={80}
-        fill="#8884d8"
-        dataKey="value"
-      >
-        {ordersByType.map((entry, index) => (
-          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-        ))}
-      </Pie>
-      <Legend
-        payload={ordersByType.map((entry, index) => ({
-          id: entry.name,
-          type: "square",
-          value: entry.name,
-          color: COLORS[index % COLORS.length],
-        }))}
-        layout="horizontal"
-        align="center"
-        verticalAlign="bottom"
-      />
-    </PieChart>
+    <div className="text-center">
+      <div className="bg-black  mb-2 rounded-md px-2 mx-auto w-fit flex justify-center">
+        <h1 className=" text-yellow-500">Orders Made in Each Category</h1>
+      </div>
+
+      <PieChart width={400} height={300}>
+        <Pie
+          data={ordersByType}
+          cx="50%"
+          cy="40%"
+          labelLine={false}
+          label={renderCustomizedLabel}
+          outerRadius={80}
+          fill="#8884d8"
+          dataKey="value"
+        >
+          {ordersByType.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+          ))}
+        </Pie>
+        <Legend
+          payload={ordersByType.map((entry, index) => ({
+            id: entry.name,
+            type: "square",
+            value: entry.name,
+            color: COLORS[index % COLORS.length],
+          }))}
+          layout="horizontal"
+          align="center"
+          verticalAlign="bottom"
+        />
+      </PieChart>
+    </div>
   );
 }

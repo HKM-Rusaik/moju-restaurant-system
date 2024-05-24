@@ -25,7 +25,7 @@ const ItemList = ({ orderId }) => {
       <ul>
         {items.map((item) => (
           <li key={item.itemId}>
-            {toPascalCase(item.item.itemName)} - Quantity: {item.quantity}
+            {toPascalCase(item.item.itemName)} -{item.quantity}
           </li>
         ))}
       </ul>

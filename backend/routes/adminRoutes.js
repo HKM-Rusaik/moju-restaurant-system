@@ -18,14 +18,18 @@ import {
   getStaffs,
 } from "../controllers/admin/StaffController.js";
 
-import { getTotalEarnings } from "../controllers/admin/AdminOrderController.js";
+import {
+  getTotalEarnings,
+  getDailyTotalOrders,
+  getOrderCountsByType,
+} from "../controllers/admin/AdminOrderController.js";
 
 import {
   createDailyAttendanceRecords,
   getAttendance,
   updateAttendance,
 } from "../controllers/admin/AttendanceController.js";
-import { getDailyTotalOrders, getOrderCountsByType } from "../controllers/customer/OrderController.js";
+import { getReservations } from "../controllers/admin/AdminReservationController.js";
 
 router.post("/categories", createCategory);
 router.get("/categories", getCategories);
@@ -40,11 +44,13 @@ router.post("/staff", createStaff);
 router.get("/staffs", getStaffs);
 
 router.get("/orders/today-earnings", getTotalEarnings);
-router.get('/daily-total-orders', getDailyTotalOrders);
-router.get('/order-counts-by-type', getOrderCountsByType);
+router.get("/daily-total-orders", getDailyTotalOrders);
+router.get("/order-counts-by-type", getOrderCountsByType);
 
 router.post("/attendance/create-daily", createDailyAttendanceRecords);
 router.post("/update-attendance", updateAttendance);
 router.get("/attendance", getAttendance);
+
+router.get("/customer-reservations", getReservations)
 
 export default router;

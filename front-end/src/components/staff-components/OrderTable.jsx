@@ -44,9 +44,9 @@ const OrdersTable = () => {
 
   return (
     <div className="overflow-x-auto">
-      <table className="w-full table-auto border-collapse rounded border border-gray-800">
+      <table className="w-full mx-auto mt-8 border-collapse rounded-lg shadow-lg overflow-hidden">
         <thead>
-          <tr className="bg-gray-200">
+          <tr className="bg-gray-700 text-white">
             <th className="border border-gray-800 px-4 py-2">Order ID</th>
             <th className="border border-gray-800 px-4 py-2">Customer Name</th>
             <th className="border border-gray-800 px-4 py-2">Order Details</th>
@@ -60,28 +60,22 @@ const OrdersTable = () => {
             <th className="border border-gray-800 px-4 py-2">Delivered</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="bg-white divide-y divide-gray-800">
           {orders.map((order) => (
             <tr key={order.orderId}>
-              <td className="border border-gray-800 px-4 py-2 text-center">
-                {order.orderId}
-              </td>
-              <td className="border border-gray-800 px-4 py-2 text-center">
+              <td className="text-center py-3">{order.orderId}</td>
+              <td className="text-center py-3">
                 {order["customer.firstName"]} {order["customer.lastName"]}
               </td>
-              <td className="border border-gray-800 px-4 py-2 text-center">
+              <td className="text-center py-3">
                 <ItemList orderId={order.orderId} />
               </td>
-              <td className="border border-gray-800 px-4 py-2 text-center">
+              <td className="text-center py-3">
                 {order.paymentMethod.toUpperCase()}
               </td>
-              <td className="border border-gray-800 px-4 py-2 text-center">
-                {order.orderType}
-              </td>
-              <td className="border border-gray-800 px-4 py-2 text-center">
-                {order.deliveryAddress}
-              </td>
-              <td className="border border-gray-800 px-4 py-2 text-center">
+              <td className="text-center py-3">{order.orderType}</td>
+              <td className="text-center py-3">{order.deliveryAddress}</td>
+              <td className="text-center py-3">
                 <button
                   className={`${
                     order["order_status.prepared"]
@@ -97,7 +91,7 @@ const OrdersTable = () => {
                   )}
                 </button>
               </td>
-              <td className="border border-gray-800 px-4 py-2 text-center">
+              <td className="text-center py-3">
                 <button
                   className={`${
                     order["order_status.picked"] ? "bg-green-500" : "bg-red-500"
@@ -111,7 +105,7 @@ const OrdersTable = () => {
                   )}
                 </button>
               </td>
-              <td className="border border-gray-800 px-4 py-2 text-center">
+              <td className="text-center py-3">
                 <button
                   className={`${
                     order["order_status.delivered"]

@@ -22,35 +22,40 @@ export default function OrderBarChart() {
   }, []);
 
   return (
-    <BarChart
-      width={500}
-      height={300}
-      data={dailyTotals}
-      margin={{
-        top: 5,
-        right: 30,
-        left: 40,
-        bottom: 5,
-      }}
-    >
-      <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="orderDate" />
-      <YAxis
-        label={{
-          value: "Daily Earning Amount",
-          angle: -90,
-          // position: "insideLeft",
-          dx: -40, // Horizontal adjustment
-          style: { fontWeight: "bold" },
+    <div className="text-center">
+      <div className="bg-black  mb-2 rounded-md px-2 mx-auto w-fit flex justify-center">
+        <h1 className=" text-yellow-500">Daily Business Total</h1>
+      </div>
+      <BarChart
+        width={500}
+        height={300}
+        data={dailyTotals}
+        margin={{
+          top: 5,
+          right: 30,
+          left: 40,
+          bottom: 5,
         }}
-      />
-      <Tooltip />
-      <Legend />
-      <Bar
-        dataKey="totalOrderAmount"
-        name="Total Order Amount"
-        fill="#8884d8"
-      />
-    </BarChart>
+      >
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="orderDate" />
+        <YAxis
+          label={{
+            value: "Daily Earning Amount",
+            angle: -90,
+            // position: "insideLeft",
+            dx: -40, // Horizontal adjustment
+            style: { fontWeight: "bold" },
+          }}
+        />
+        <Tooltip />
+        <Legend />
+        <Bar
+          dataKey="totalOrderAmount"
+          name="Total Order Amount"
+          fill="#8884d8"
+        />
+      </BarChart>
+    </div>
   );
 }

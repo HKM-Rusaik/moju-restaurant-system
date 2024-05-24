@@ -1,5 +1,6 @@
 import React from "react";
 import ItemList from "./ItemList";
+import { FaLink } from "react-icons/fa6";
 
 const Order = (props) => {
   return (
@@ -12,6 +13,13 @@ const Order = (props) => {
       <div className="bg-gray-200 rounded p-1">
         Status :{" "}
         <span className="font-bold text-green-700">{props.orderStatus}</span>
+        <span className="">
+          <a href={props.billUrl} target="_blank" rel="noopener noreferrer">
+            <div className="flex items-center text-blue-500 hover:text-white">
+              Bill <FaLink />
+            </div>
+          </a>
+        </span>
       </div>
     </div>
   );

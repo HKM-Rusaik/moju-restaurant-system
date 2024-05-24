@@ -77,7 +77,7 @@ const AdminDashboard = () => {
           </div>
         </div>
       </div>
-      <div className="mt-8">
+      <div className="mt-16">
         <div className="flex items-center justify-between">
           <Mychart />
           <div className="">
