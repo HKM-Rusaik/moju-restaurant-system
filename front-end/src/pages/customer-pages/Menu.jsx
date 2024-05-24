@@ -185,7 +185,7 @@ const Menu = () => {
                         price={item.itemPrice}
                         itemId={item.itemId}
                         itemImage={item.itemPicURL}
-                        itemDescription={item.itemDescription} // Add this line
+                        itemDescription={item.itemDescription}
                       />
                     </div>
                   ))}

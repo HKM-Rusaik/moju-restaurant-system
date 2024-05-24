@@ -22,15 +22,19 @@ const Order = sequelize.define("order", {
   },
   orderStatus: {
     type: DataTypes.STRING,
+    allowNull: false,
   },
   deliveryAddress: {
     type: DataTypes.STRING,
+    allowNull: false,
   },
   orderType: {
     type: DataTypes.STRING,
+    allowNull: false,
   },
   paymentMethod: {
     type: DataTypes.STRING,
+    allowNull: false,
   },
   billUrl: {
     type: DataTypes.STRING,

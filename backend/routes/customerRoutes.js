@@ -12,7 +12,9 @@ import {
   getOrderStatus,
   updateOrderStatus,
   getItemsOfOrder,
+  updateBillUrl,
 } from "../controllers/customer/OrderController.js";
+
 
 import { updateMembership } from "../controllers/customer/CustomerAccountController.js";
 import auth from "../middlewares/auth.js";
@@ -43,6 +45,7 @@ router.put("/:customerId", auth, updateMembership);
 
 router.post("/orders", createOrder);
 router.get("/order/:orderId", getOrderByOrderId);
+router.put("/order/:orderId", updateBillUrl);
 router.get("/orders/:customerId", getOrders);
 router.get("/order/:orderId/items", getItemsOfOrder);
 

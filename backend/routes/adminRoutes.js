@@ -20,6 +20,13 @@ import {
 
 import { getTotalEarnings } from "../controllers/admin/AdminOrderController.js";
 
+import {
+  createDailyAttendanceRecords,
+  getAttendance,
+  updateAttendance,
+} from "../controllers/admin/AttendanceController.js";
+import { getDailyTotalOrders, getOrderCountsByType } from "../controllers/customer/OrderController.js";
+
 router.post("/categories", createCategory);
 router.get("/categories", getCategories);
 router.patch("/categories/:id", editCategory);
@@ -33,7 +40,11 @@ router.post("/staff", createStaff);
 router.get("/staffs", getStaffs);
 
 router.get("/orders/today-earnings", getTotalEarnings);
+router.get('/daily-total-orders', getDailyTotalOrders);
+router.get('/order-counts-by-type', getOrderCountsByType);
 
-// router.post()
+router.post("/attendance/create-daily", createDailyAttendanceRecords);
+router.post("/update-attendance", updateAttendance);
+router.get("/attendance", getAttendance);
 
 export default router;

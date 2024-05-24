@@ -3,6 +3,7 @@ import Order from "../../models/Order.js";
 import OrderItem from "../../models/OrderItem.js";
 import OrderStatus from "../../models/OrderStatus.js";
 import Item from "../../models/Item.js";
+import { Sequelize } from "sequelize";
 
 export const createOrder = async (req, res) => {
   const {
@@ -123,6 +124,88 @@ export const getItemsOfOrder = async (req, res) => {
     return res.status(200).json(items);
   } catch (err) {
     console.error("Error fetching items:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+export const updateBillUrl = async (req, res) => {
+  const { orderId } = req.params;
+  const { pdfUrl } = req.body;
+
+  try {
+    // Find the order by its ID
+    let order = await Order.findOne({ where: { orderId } });
+
+    if (!order) {
+      return res.status(404).json({ error: "Order not found" });
+    }
+
+    // Update the billUrl attribute of the order
+    order.billUrl = pdfUrl;
+
+    // Save the changes to the database
+    await order.save();
+
+    return res
+      .status(200)
+      .json({ message: "Bill URL updated successfully", order });
+  } catch (error) {
+    console.error("Error updating bill URL:", error);
+    return res.status(500).json({ error: "Server error" });
+  }
+};
+
+export const getDailyTotalOrders = async (req, res) => {
+  try {
+    const dailyTotals = await Order.findAll({
+      attributes: [
+        [Sequelize.fn("DATE", Sequelize.col("orderDate")), "orderDate"],
+        [Sequelize.fn("SUM", Sequelize.col("orderTotal")), "totalOrderAmount"],
+      ],
+      group: [Sequelize.fn("DATE", Sequelize.col("orderDate"))],
+      order: [[Sequelize.fn("DATE", Sequelize.col("orderDate")), "ASC"]],
+    });
+
+    const formattedResults = dailyTotals.map((record) => ({
+      orderDate: record.getDataValue("orderDate"),
+      totalOrderAmount: record.getDataValue("totalOrderAmount"),
+    }));
+
+    res.status(200).json(formattedResults);
+  } catch (error) {
+    console.error("Error fetching daily total orders:", error);
+    res.status(500).json({ error: "Could not fetch daily total orders." });
+  }
+};
+
+export const getOrderCountsByType = async (req, res) => {
+  try {
+    // Fetch all orders
+    const orders = await Order.findAll();
+
+    // Process data to count orders by type
+    const orderCountsByType = orders.reduce((acc, order) => {
+      const orderType = order.orderType;
+      if (acc[orderType]) {
+        acc[orderType] += 1;
+      } else {
+        acc[orderType] = 1;
+      }
+      return acc;
+    }, {});
+
+    // Transform the orderCountsByType object into an array of objects with name and value
+    const orderCountsArray = Object.keys(orderCountsByType).map(
+      (orderType) => ({
+        name: orderType,
+        value: orderCountsByType[orderType],
+      })
+    );
+
+    res.status(200).json(orderCountsArray);
+    console.log(orderCountsArray);
+  } catch (error) {
+    console.error("Error fetching order counts by type:", error);
     res.status(500).json({ error: "Server error" });
   }
 };

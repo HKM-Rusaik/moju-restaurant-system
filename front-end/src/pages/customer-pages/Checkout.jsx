@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "axios.js";
 import Cart from "components/customer-components/Cart";
 import Layout from "layouts/CustomerLayout";
 import { useDispatch, useSelector } from "react-redux";
@@ -104,21 +104,7 @@ const Checkout = () => {
   };
 
   const handlePlaceOrder = async () => {
-    const pdfBlob = await pdf(
-      <BillPDF
-        order=""
-        itemTotal={itemsTotal}
-        cartItems={cartItems}
-        deliveryFee={deliveryFee}
-        discountAmount={discountAmount}
-        grandTotal={grandTotal}
-        customer={customer}
-      />
-    ).toBlob();
-
-    const pdfUrl = await uploadPDFToFirebase(pdfBlob);
-
-    const order = {
+    const newOrder = {
       customerId,
       deliveryMethod,
       orderTotal,
@@ -126,18 +112,40 @@ const Checkout = () => {
         showTableNumber && atRestaurant ? tableNumber : deliveryAddress,
       paymentMethod,
       selectedItems,
-      pdfUrl,
     };
 
-    axios
-      .post("http://localhost:5000/customer/orders", order)
-      .then((response) => {
-        setShowSuccessPopup(true);
-        dispatch(removeAllItems());
-      })
-      .catch((error) => {
-        console.error("Error placing order:", error);
+    try {
+      const response = await axios.post("customer/orders", newOrder);
+      const createdOrder = response.data.newOrder;
+      console.log(newOrder);
+      const orderId = createdOrder.orderId; // Assuming the order ID is returned in the response
+
+      // Generate the PDF with the order ID included
+      const pdfBlob = await pdf(
+        <BillPDF
+          order={createdOrder}
+          itemTotal={itemsTotal}
+          cartItems={cartItems}
+          deliveryFee={deliveryFee}
+          discountAmount={discountAmount}
+          grandTotal={grandTotal}
+          customer={customer}
+        />
+      ).toBlob();
+
+      // Upload the PDF to Firebase
+      const pdfUrl = await uploadPDFToFirebase(pdfBlob);
+
+      // Update the order in the database with the PDF URL
+      await axios.put(`http://localhost:5000/customer/order/${orderId}`, {
+        pdfUrl,
       });
+
+      setShowSuccessPopup(true);
+      dispatch(removeAllItems());
+    } catch (error) {
+      console.error("Error placing order:", error);
+    }
   };
 
   const handleNavigateToMenu = () => {

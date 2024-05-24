@@ -32,7 +32,7 @@ const BillPDF = ({
       <View style={styles.section}>
         <Text style={styles.header}>Invoice</Text>
         <Text>Date: {order.date}</Text>
-        <Text>Order ID: {order.id}</Text>
+        <Text>Order ID: {order.orderId}</Text>
       </View>
       <View style={styles.section}>
         <Text style={styles.header}>Customer Information</Text>
