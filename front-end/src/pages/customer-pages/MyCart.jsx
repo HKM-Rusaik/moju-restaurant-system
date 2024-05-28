@@ -14,6 +14,10 @@ const MyCart = () => {
   const [deliveryFee, setDeliveryFee] = useState(200);
 
   const cartItems = useSelector((state) => state.selectedItems.cartItems);
+
+  if (cartItems.length < 1) {
+    navigate("/menu");
+  }
   const customerMembership = useSelector(
     (state) => state.customer.customer.membership
   ).toLowerCase();
@@ -60,6 +64,7 @@ const MyCart = () => {
           <div className="w-1/4 flex justify-center">Price</div>
           <div className="w-1/4 flex justify-center">Quantity</div>
           <div className="w-1/4 flex justify-center">Total</div>
+          <div className="w-1/4 flex justify-center">Actions</div>
         </div>
 
         {cartItems.map((cartItem) => (

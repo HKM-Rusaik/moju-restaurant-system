@@ -11,14 +11,11 @@ const AuthChecker = () => {
   useEffect(() => {
     const checkAuth = async () => {
       const token = localStorage.getItem("token");
-      console.log(token);
+      console.log("Token retrieved from localStorage:", token); // Add logging
       if (token) {
         try {
-          const response = await axios.get("customer/me", {
-            headers: {
-              "x-auth-token": token,
-            },
-          });
+          const response = await axios.get("/customer/me");
+          console.log("Response from /customer/me:", response.data); // Add logging
           dispatch(setCustomer(response.data.customer));
           dispatch(setToken(token));
         } catch (error) {
@@ -26,6 +23,8 @@ const AuthChecker = () => {
           localStorage.removeItem("token");
           navigate("/account");
         }
+      } else {
+        navigate("/account");
       }
     };
 

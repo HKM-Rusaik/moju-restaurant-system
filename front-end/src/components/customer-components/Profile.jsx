@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { FaRegEdit as EditIcon } from "react-icons/fa";
@@ -6,8 +6,10 @@ import { IoLogOut } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import DumImage from "../../assets/Images/Profile-dum.png";
 import { setCustomer, setToken } from "slices/customerSlice";
+import axios from "axios.js";
 
 function Profile(props) {
+  const [showConfirmationPop, setConfirmationPop] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const customer = useSelector((state) => state.customer.customer);
@@ -23,6 +25,7 @@ function Profile(props) {
   if (customerMembership === "platenium") borderColor = "border-[#E5E4E2]";
 
   const profileImage = props.profile || DumImage;
+  const firstNameFirstLetter = props.firstName.charAt(0).toUpperCase();
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -38,15 +41,51 @@ function Profile(props) {
     }
   };
 
+  const handleDeleteAccount = () => {
+    setConfirmationPop(true);
+  };
+
+  const handleCancel = () => {
+    setConfirmationPop(false);
+  };
+
+  const confirmDelete = async () => {
+    try {
+      const response = await axios.delete("/customer/deleteAccount");
+
+      if (response.status === 200) {
+        // Successfully deleted
+        handleLogout(); // Log out the user
+      } else {
+        console.error("Failed to delete account");
+      }
+    } catch (err) {
+      console.error("Error deleting account:", err);
+    } finally {
+      setConfirmationPop(false);
+    }
+  };
   return (
     <div>
       <h1 className="text-center font-bold text-3xl mt-10">My Profile</h1>
       <div className="flex items-center justify-center mt-8">
         <div className="profile-pic mr-4">
           <div
-            className={`w-[200px] h-[200px] rounded-full border-8 ${borderColor} bg-white overflow-hidden`}
+            className={`w-[200px] h-[200px] flex rounded-full border-8 ${borderColor} bg-white overflow-hidden`}
           >
-            <img src={props.image} alt="profile im" />
+            <div className="flex items-center mx-auto">
+              {props.profile ? (
+                <img
+                  src={props.image}
+                  alt={props.firstName}
+                  className="text-gray-600"
+                />
+              ) : (
+                <div className="text-[150px] text-center text-yellow-600">
+                  {firstNameFirstLetter}
+                </div>
+              )}
+            </div>
           </div>
           <p className="text-center text-xl font-semibold text-yellow-700">
             {" "}
@@ -117,11 +156,39 @@ function Profile(props) {
           </button>
           <br />
           <br />
-          <button className="bg-red-800 hover:bg-red-400 active:bg-red-800 p-2 rounded text-white">
+          <button
+            onClick={handleDeleteAccount}
+            className="bg-red-800 hover:bg-red-400 active:bg-red-800 p-2 rounded text-white"
+          >
             Delete Account
           </button>
         </div>
       </div>
+
+      {showConfirmationPop && (
+        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-75">
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <p className="text-xl font-bold mb-4">Delete your account</p>
+            <p className="mb-4">
+              Are you sure you want to delete your account?
+            </p>
+            <div className="flex justify-end">
+              <button
+                onClick={handleCancel}
+                className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded mr-2"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

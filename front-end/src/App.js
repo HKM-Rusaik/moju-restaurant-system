@@ -36,12 +36,15 @@ import { store } from "store";
 //custom components
 import ProtectedRoute from "components/ProtectedRoute";
 
+import PDFViewerComponent from "components/customer-components/PdfViewer";
+
 function App() {
   return (
     <div>
       <Provider store={store}>
         <Routes>
           <Route path="/" element={<Welcome />} />
+          {/* <Route path="/pdf" element={<PDFViewerComponent />} /> */}
           <Route path="account/registration" element={<RegisterAccount />} />
           {/* <Route path="account" element={<Account />} /> */}
           <Route path="menu" element={<Menu />} />

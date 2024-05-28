@@ -13,6 +13,7 @@ const RegisterAccount = () => {
     email: "",
     password: "",
     confirmPassword: "",
+    dateOfBirth: "",
   });
 
   const [errors, setErrors] = useState({});
@@ -41,6 +42,7 @@ const RegisterAccount = () => {
         );
 
         console.log(response.data);
+        window.alert("")
         navigate("/");
       } catch (error) {
         console.error("Error registering user:");
@@ -79,6 +81,9 @@ const RegisterAccount = () => {
 
     if (data.password !== data.confirmPassword) {
       errors.confirmPassword = "Passwords do not match";
+    }
+    if (!data.dateOfBirth.trim()) {
+      errors.dateOfBirth = "Date of Birth is required";
     }
 
     return errors;
@@ -159,6 +164,23 @@ const RegisterAccount = () => {
                 value={formData.city}
                 onChange={handleChange}
               />
+            </div>
+            <div className="form-group mt-3">
+              <div>
+                <label htmlFor="dateOfBirth" className="basis-1/2">
+                  Date of Birth <span className="text-red-500">*</span>
+                </label>
+              </div>
+              <input
+                type="date"
+                name="dateOfBirth"
+                placeholder="Enter Your Date of Birth"
+                value={formData.dateOfBirth}
+                onChange={handleChange}
+              />
+              {errors.dateOfBirth && (
+                <p className="text-red-500">{errors.dateOfBirth}</p>
+              )}
             </div>
             <div className="form-group mt-3">
               <div>

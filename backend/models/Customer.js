@@ -38,6 +38,10 @@ const Customer = sequelize.define("customer", {
   membership: {
     type: DataTypes.STRING,
   },
+  dateOfBirth: {
+    type: DataTypes.DATEONLY,
+    allowNull: false,
+  },
 });
 
 Customer.sync()

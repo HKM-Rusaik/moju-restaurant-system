@@ -2,6 +2,7 @@ import express from "express";
 
 import {
   createCustomer,
+  deleteAccount,
   loginCustomer,
 } from "../controllers/customer/CustomerAccountController.js";
 
@@ -14,7 +15,6 @@ import {
   getItemsOfOrder,
   updateBillUrl,
 } from "../controllers/customer/OrderController.js";
-
 
 import { updateMembership } from "../controllers/customer/CustomerAccountController.js";
 import auth from "../middlewares/auth.js";
@@ -29,7 +29,7 @@ router.get("/me", auth, async (req, res) => {
   try {
     console.log(req.customer.customerId);
     const customer = await Customer.findByPk(req.customer.customerId, {
-      attributes: { exclude: ["passwordHash"] }, // Exclude the password hash from the response
+      attributes: { exclude: ["passwordHash"] },
     });
     if (!customer) {
       return res.status(404).json({ message: "Customer not found" });
@@ -41,6 +41,7 @@ router.get("/me", auth, async (req, res) => {
   }
 });
 
+router.delete("/deleteAccount", auth, deleteAccount);
 router.put("/:customerId", auth, updateMembership);
 
 router.post("/orders", createOrder);
