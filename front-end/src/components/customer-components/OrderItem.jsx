@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "axios.js";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { addOrders } from "slices/ordersSlice";
@@ -9,26 +9,72 @@ import Order from "./Order";
 const OrderItem = (props) => {
   const [orders, setOrders] = useState([]);
   const customerId = useSelector((state) => state.customer.customer.customerId);
+  const [membership, setMembership] = useState(null);
   const dispatch = useDispatch();
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/customer/orders/${customerId}`)
+      .get(`/customer/orders/${customerId}`)
       .then((response) => {
         const ordersData = response.data.orders;
         setOrders(ordersData);
-        dispatch(addOrders(ordersData)); // Dispatch addOrders after setting ordersData
+        console.log(orders);
+        dispatch(addOrders(ordersData));
       })
       .catch((err) => {
         console.error("Error fetching orders:", err);
       });
   }, []);
 
+  const orderTotal = orders.reduce((accumulator, currenValue) => {
+    return accumulator + currenValue.orderTotal;
+  }, 0);
+
+  console.log(orderTotal);
+
+  useEffect(() => {
+    // Calculate membership based on orderTotal
+    let calculatedMembership = null;
+    if (orderTotal >= 75000) {
+      calculatedMembership = "platinum";
+    } else if (orderTotal >= 50000) {
+      calculatedMembership = "golden";
+    } else if (orderTotal >= 30000) {
+      calculatedMembership = "silver";
+    } else {
+      calculatedMembership = "new";
+    }
+
+    // Update membership state only if it has changed
+    if (membership !== calculatedMembership) {
+      setMembership(calculatedMembership);
+    }
+  }, [orderTotal]);
+
+  useEffect(() => {
+    // Update membership in the backend whenever it changes
+    const updateMembership = async () => {
+      try {
+        await axios.put(`/customer/update-membership/${customerId}`, {
+          membership,
+        });
+        console.log("Membership updated successfully");
+      } catch (err) {
+        console.log("Error in updating membership:", err);
+      }
+    };
+
+    // Call updateMembership function whenever membership changes
+    if (membership) {
+      updateMembership();
+    }
+  }, [membership, customerId]);
+
   useEffect(() => {
     const updateOrderStatus = async (orderId) => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/customer/order-order-status/${orderId}`
+          `/customer/order-order-status/${orderId}`
         );
 
         // Debugging: Log response data
@@ -49,7 +95,7 @@ const OrderItem = (props) => {
         }
 
         console.log("Before putting. Order ID:", orderId);
-        await axios.put(`http://localhost:5000/customer/order/${orderId}`, {
+        await axios.put(`/customer/order/${orderId}`, {
           orderStatus: orderStatus,
         });
         console.log("After putting. Order ID:", orderId);

@@ -69,7 +69,7 @@ function Profile(props) {
     <div>
       <h1 className="text-center font-bold text-3xl mt-10">My Profile</h1>
       <div className="flex items-center justify-center mt-8">
-        <div className="profile-pic mr-4">
+        <div className="profile-pic flex flex-col items-center mr-4">
           <div
             className={`w-[200px] h-[200px] flex rounded-full border-8 ${borderColor} bg-white overflow-hidden`}
           >
@@ -90,6 +90,10 @@ function Profile(props) {
           <p className="text-center text-xl font-semibold text-yellow-700">
             {" "}
             {props.name}
+          </p>
+          <p className="text-center text-xl font-semibold text-gray-500">
+            {" "}
+            {"you are a " + customerMembership + " member"}
           </p>
         </div>
 

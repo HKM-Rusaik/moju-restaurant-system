@@ -1,35 +1,34 @@
-// admin.js
+import sequelize from "../config/db.js";
+import { DataTypes } from "sequelize";
 
-"use strict";
-const { DataTypes, Model } = require("sequelize");
-
-module.exports = (sequelize) => {
-  class Admin extends Model {}
-
-  Admin.init(
-    {
-      username: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true, // Ensure usernames are unique
-      },
-      password: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
+const Admin = sequelize.define(
+  "admin",
+  {
+    adminId: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
     },
-    {
-      sequelize,
-      modelName: "Admin",
-      tableName: "admins", // Optional: Define the table name explicitly
-      timestamps: true, // Optional: Include timestamps (createdAt, updatedAt)
-      underscored: true, // Optional: Use underscored naming convention for columns
-    }
-  );
+    userName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+  },
+  {
+    timestamps: false,
+  }
+);
 
-  return Admin;
-};
+Admin.sync()
+  .then(() => {
+    console.log("Admin Table successfully created");
+  })
+  .catch((err) => {
+    console.log("error in syncing admin table", err);
+  });
+
+export default Admin;

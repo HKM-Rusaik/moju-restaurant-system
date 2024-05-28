@@ -1,5 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 
 //client pages
 import Welcome from "./pages/customer-pages/Welcome";
@@ -38,6 +40,10 @@ import ProtectedRoute from "components/ProtectedRoute";
 
 import PDFViewerComponent from "components/customer-components/PdfViewer";
 
+const stripePromise = loadStripe(
+  "pk_test_51PLTXRSBjdI4hLn04suEqiSoq0cjV9uuObDq2EmdYGCbCgg1ZOjCPlnitHrGmUbHdDzdoI1TfNQ5EVhPiFQcJGAh00bZCPwyR0"
+);
+
 function App() {
   return (
     <div>
@@ -62,8 +68,16 @@ function App() {
             />
             <Route
               path="menu/cart/checkout"
-              element={<ProtectedRoute element={Checkout} />}
+              element={
+                <Elements stripe={stripePromise}>
+                  <ProtectedRoute element={Checkout} />
+                </Elements>
+              }
             />
+            {/* <Route
+              path="menu/cart/checkout"
+              element={<ProtectedRoute element={Checkout} />}
+            /> */}
 
             <Route
               path="reservation"

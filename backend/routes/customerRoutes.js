@@ -42,7 +42,7 @@ router.get("/me", auth, async (req, res) => {
 });
 
 router.delete("/deleteAccount", auth, deleteAccount);
-router.put("/:customerId", auth, updateMembership);
+router.put("/update-membership/:customerId", auth, updateMembership);
 
 router.post("/orders", createOrder);
 router.get("/order/:orderId", getOrderByOrderId);

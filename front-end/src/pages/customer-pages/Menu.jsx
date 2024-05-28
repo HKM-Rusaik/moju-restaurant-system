@@ -9,12 +9,15 @@ import Layout from "layouts/CustomerLayout";
 import { IoSearchCircleSharp } from "react-icons/io5";
 import Marquee from "react-fast-marquee";
 import { FaRegHandPointRight } from "react-icons/fa";
+import MembershipPopup from "components/customer-components/MemebrshipPopUp";
+import { FaChevronCircleRight } from "react-icons/fa";
 
 const Menu = () => {
   const [categories, setCategories] = useState([]);
   const [items, setItems] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [viewPromotions, setViewPromotions] = useState(false);
+  const [showMembershipPopup, setShowMembershipPopup] = useState(false); // State to control the display of membership pop-up
   const selectedItems = useSelector((state) => state.selectedItems.cartItems);
   const navigate = useNavigate();
 
@@ -65,6 +68,10 @@ const Menu = () => {
     setViewPromotions(false);
   };
 
+  const handleMembershipClick = () => {
+    setShowMembershipPopup(true); // Show membership pop-up when clicked
+  };
+
   const sortedCategories = categories.slice().sort((a, b) => {
     if (a.categoryName < b.categoryName) return -1;
     if (a.categoryName > b.categoryName) return 1;
@@ -87,9 +94,21 @@ const Menu = () => {
         <div onClick={handleCartClick} style={{ cursor: "pointer" }}>
           <Cart textColor="text-yellow-500" bgColor="bg-black" />
         </div>
+        {showMembershipPopup && (
+          <MembershipPopup onClose={() => setShowMembershipPopup(false)} />
+        )}{" "}
         <p className="antialiased text-center text-2xl font-bold mb-4">
           {viewPromotions ? "Promotional Items" : "Menu Items"}
         </p>
+        <div className="flex items-center justify-end mt-8">
+          <FaChevronCircleRight />
+          <p
+            className="bg-black inline rounded text-white p-2 text-end cursor-pointer"
+            onClick={handleMembershipClick}
+          >
+            About Membership
+          </p>
+        </div>
         <Marquee>
           <div className=" text-red-500 p-2 rounded">
             Hello! Foodies, Make order on or above Rs.4000 and get free home

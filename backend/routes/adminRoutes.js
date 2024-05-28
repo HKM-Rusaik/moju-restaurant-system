@@ -30,6 +30,13 @@ import {
   updateAttendance,
 } from "../controllers/admin/AttendanceController.js";
 import { getReservations } from "../controllers/admin/AdminReservationController.js";
+import {
+  createAdmin,
+  loginAdmin,
+} from "../controllers/admin/AdminAccountController.js";
+
+router.post("/create-account", createAdmin);
+router.get("/account", loginAdmin);
 
 router.post("/categories", createCategory);
 router.get("/categories", getCategories);
@@ -51,6 +58,6 @@ router.post("/attendance/create-daily", createDailyAttendanceRecords);
 router.post("/update-attendance", updateAttendance);
 router.get("/attendance", getAttendance);
 
-router.get("/customer-reservations", getReservations)
+router.get("/customer-reservations", getReservations);
 
 export default router;

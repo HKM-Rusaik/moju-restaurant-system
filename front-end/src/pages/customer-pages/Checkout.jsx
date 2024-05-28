@@ -9,6 +9,7 @@ import BillPDF from "components/customer-components/BillPdf";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "firebase.js";
 import { pdf } from "@react-pdf/renderer";
+import PaymentForm from "components/customer-components/PaymentForm";
 
 const Checkout = () => {
   const uploadPDFToFirebase = async (pdfBlob) => {
@@ -103,7 +104,7 @@ const Checkout = () => {
     setPaymentMethod(selectedMethod);
   };
 
-  const handlePlaceOrder = async () => {
+  const handlePlaceOrder = async (paymentMethodId) => {
     const newOrder = {
       customerId,
       deliveryMethod,
@@ -112,6 +113,7 @@ const Checkout = () => {
         showTableNumber && atRestaurant ? tableNumber : deliveryAddress,
       paymentMethod,
       selectedItems,
+      paymentMethodId,
     };
 
     try {
@@ -146,6 +148,9 @@ const Checkout = () => {
     } catch (error) {
       console.error("Error placing order:", error);
     }
+  };
+  const handlePaymentSuccess = (paymentMethodId) => {
+    handlePlaceOrder(paymentMethodId);
   };
 
   const handleNavigateToMenu = () => {
@@ -300,6 +305,18 @@ const Checkout = () => {
             </div>
           )}
           <div className="flex flex-col sm:flex-row items-center mb-4">
+            <label htmlFor="cardNumber" className="mr-2 mb-2 w-[20%] sm:mb-0">
+              Grand Total
+            </label>
+            <input
+              type="text"
+              id="grandTotal"
+              readOnly
+              value={`Rs. ${grandTotal}`}
+              className="w-64 rounded border-gray-300 shadow-sm bg-blue-500 text-white focus:border-yellow-500 focus:ring focus:ring-yellow-500 focus:ring-opacity-50"
+            />
+          </div>
+          <div className="flex flex-col sm:flex-row items-center mb-4">
             <label
               htmlFor="paymentMethod"
               className="mr-2 mb-2 w-[20%] sm:mb-0"
@@ -319,39 +336,21 @@ const Checkout = () => {
               <option value="cod">Cash on Delivery (COD)</option>
             </select>
           </div>
+
           {paymentMethod === "card" && (
-            <div className="flex flex-col sm:flex-row items-center mb-4">
-              <label htmlFor="cardNumber" className="mr-2 mb-2 w-[20%] sm:mb-0">
-                Card Number
-              </label>
-              <input
-                type="text"
-                id="cardNumber"
-                value={cardNumber}
-                onChange={(e) => setCardNumber(e.target.value)}
-                className="w-64 rounded border-gray-300 shadow-sm focus:border-yellow-500 focus:ring focus:ring-yellow-500 focus:ring-opacity-50"
-              />
+            <div>
+              <PaymentForm onPaymentSuccess={handlePaymentSuccess} />
             </div>
           )}
 
-          <div className="flex flex-col sm:flex-row items-center mb-4">
-            <label htmlFor="cardNumber" className="mr-2 mb-2 w-[20%] sm:mb-0">
-              Grand Total
-            </label>
-            <input
-              type="number"
-              id="grandTotal"
-              readOnly
-              value={grandTotal}
-              className="w-64 rounded border-gray-300 shadow-sm bg-blue-500 text-white focus:border-yellow-500 focus:ring focus:ring-yellow-500 focus:ring-opacity-50"
-            />
-          </div>
-          <button
-            className="bg-green-500 transition delay-150 duration-300 ease-in-out hover:scale-110 active:bg-green-700 text-white py-2 px-4 rounded"
-            onClick={handlePlaceOrder}
-          >
-            Place Order
-          </button>
+          {paymentMethod !== "card" && (
+            <button
+              className="bg-green-500 transition delay-150 duration-300 ease-in-out hover:scale-110 active:bg-green-700 text-white py-2 px-4 rounded"
+              onClick={handlePlaceOrder}
+            >
+              Place Order
+            </button>
+          )}
 
           {showSuccessPopup && (
             <div className="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-50 flex items-center justify-center">
