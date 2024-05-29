@@ -89,7 +89,7 @@ export const loginCustomer = async (req, res) => {
     console.error("Error logging in:", error);
     res.status(500).json({ error: "Server Error" });
   }
-};        
+};
 
 export const updateMembership = async (req, res) => {
   const { customerId } = req.params;
@@ -138,5 +138,52 @@ export const deleteAccount = async (req, res) => {
     res.status(500).json({
       message: "An error occurred while trying to delete the account",
     });
+  }
+};
+
+export const updateAccount = async (req, res) => {
+  const { customerId } = req.params;
+  const { firstName, lastName, cityName, streetName, phoneNumber, email } =
+    req.body;
+
+  try {
+    // Retrieve the customer record from the database
+    const customer = await Customer.findByPk(customerId);
+
+    if (!customer) {
+      return res.status(404).json({ message: "Customer not found" });
+    }
+
+    // Check if the email is being updated and if it already exists
+    if (email && email !== customer.email) {
+      const existingCustomer = await Customer.findOne({ where: { email } });
+      if (existingCustomer) {
+        return res.status(400).json({ message: "Email already in use" });
+      }
+    }
+
+    // Update customer fields
+    if (firstName) customer.firstName = firstName;
+    if (lastName) customer.lastName = lastName;
+    if (streetName) customer.streetName = streetName;
+    if (cityName) customer.cityName = cityName;
+    if (phoneNumber) customer.phoneNumber = phoneNumber;
+    if (email) customer.email = email;
+
+    // // Update the password if provided
+    // if (password) {
+    //   const hashedPassword = await bcrypt.hash(password, saltRounds);
+    //   customer.passwordHash = hashedPassword;
+    // }
+
+    // Save changes to the database
+    await customer.save();
+
+    return res
+      .status(200)
+      .json({ message: "Account updated successfully", customer });
+  } catch (error) {
+    console.error("Error updating account:", error);
+    return res.status(500).json({ message: "Internal server error" });
   }
 };

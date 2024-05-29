@@ -9,7 +9,8 @@ const TableReservation = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [note, setNote] = useState("");
 
-  const customerId = useSelector((state) => state.customer.customerId);
+  const customerId = useSelector((state) => state.customer.customer.customerId);
+  console.log(customerId);
 
   const decreaseGuestCount = () => {
     if (guestCount > 1) {

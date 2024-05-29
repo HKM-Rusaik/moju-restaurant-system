@@ -17,6 +17,7 @@ const OrdersTable = () => {
       });
   }, []);
 
+  console.log(orders);
   const toggleStatus = async (orderId, statusType) => {
     try {
       await axios.put(
@@ -46,7 +47,7 @@ const OrdersTable = () => {
     <div className="overflow-x-auto">
       <table className="w-full mx-auto mt-8 border-collapse rounded-lg shadow-lg overflow-hidden">
         <thead>
-          <tr className="bg-gray-700 text-white">
+          <tr className="bg-red-400 text-white">
             <th className="border border-gray-800 px-4 py-2">Order ID</th>
             <th className="border border-gray-800 px-4 py-2">Customer Name</th>
             <th className="border border-gray-800 px-4 py-2">Order Details</th>

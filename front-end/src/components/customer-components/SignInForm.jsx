@@ -32,7 +32,7 @@ const SignInForm = () => {
 
       setTimeout(() => {
         navigate("/menu");
-      }, 3000);
+      }, 2000);
     } catch (error) {
       setLoading(false);
       if (error.response && error.response.status === 401) {

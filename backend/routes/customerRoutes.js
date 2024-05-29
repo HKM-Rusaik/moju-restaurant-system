@@ -4,6 +4,7 @@ import {
   createCustomer,
   deleteAccount,
   loginCustomer,
+  updateAccount,
 } from "../controllers/customer/CustomerAccountController.js";
 
 import {
@@ -43,6 +44,7 @@ router.get("/me", auth, async (req, res) => {
 
 router.delete("/deleteAccount", auth, deleteAccount);
 router.put("/update-membership/:customerId", auth, updateMembership);
+router.put("/updateProfile/:customerId", updateAccount);
 
 router.post("/orders", createOrder);
 router.get("/order/:orderId", getOrderByOrderId);
@@ -51,7 +53,7 @@ router.get("/orders/:customerId", getOrders);
 router.get("/order/:orderId/items", getItemsOfOrder);
 
 router.get("/order-order-status/:orderId", getOrderStatus);
-router.put("/order/:orderId", updateOrderStatus);
+// router.put("/order/:orderId", updateOrderStatus);
 
 router.post("/reservation", createReservation);
 export default router;

@@ -76,7 +76,7 @@ const Checkout = () => {
 
   useEffect(() => {
     setDeliveryAddress(address);
-  }, [address]);
+  }, [address,deliveryMethod]);
 
   useEffect(() => {
     if (itemsTotal > 4000) {
@@ -104,7 +104,7 @@ const Checkout = () => {
     setPaymentMethod(selectedMethod);
   };
 
-  const handlePlaceOrder = async (paymentMethodId) => {
+  const handlePlaceOrder = async () => {
     const newOrder = {
       customerId,
       deliveryMethod,
@@ -113,7 +113,6 @@ const Checkout = () => {
         showTableNumber && atRestaurant ? tableNumber : deliveryAddress,
       paymentMethod,
       selectedItems,
-      paymentMethodId,
     };
 
     try {
@@ -149,8 +148,8 @@ const Checkout = () => {
       console.error("Error placing order:", error);
     }
   };
-  const handlePaymentSuccess = (paymentMethodId) => {
-    handlePlaceOrder(paymentMethodId);
+  const handlePaymentSuccess = () => {
+    handlePlaceOrder();
   };
 
   const handleNavigateToMenu = () => {
@@ -176,6 +175,7 @@ const Checkout = () => {
     }
   };
 
+  console.log(deliveryAddress);
   return (
     <Layout>
       <div>

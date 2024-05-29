@@ -10,6 +10,7 @@ import axios from "axios.js";
 
 function Profile(props) {
   const [showConfirmationPop, setConfirmationPop] = useState(false);
+  const [showEditForm, setShowEditForm] = useState(false); // State to control the visibility of the edit form
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const customer = useSelector((state) => state.customer.customer);
@@ -65,6 +66,42 @@ function Profile(props) {
       setConfirmationPop(false);
     }
   };
+
+  const toggleEditForm = () => {
+    setShowEditForm(!showEditForm);
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    // Get form data
+    const formData = new FormData(event.target);
+
+    try {
+      const response = await axios.put(
+        `/customer/updateProfile/${customer.customerId}`,
+        {
+          firstName: formData.get("firstName"),
+          lastName: formData.get("lastName"),
+          street: formData.get("street"),
+          city: formData.get("city"),
+          phoneNumber: formData.get("phoneNumber"),
+          email: formData.get("email"),
+        }
+      );
+
+      if (response.status === 200) {
+        // Handle success
+        console.log("Profile updated successfully");
+        toggleEditForm(); // Hide edit form
+      } else {
+        console.error("Failed to update profile");
+      }
+    } catch (error) {
+      console.error("Error updating profile:", error);
+    }
+  };
+
   return (
     <div>
       <h1 className="text-center font-bold text-3xl mt-10">My Profile</h1>
@@ -95,6 +132,13 @@ function Profile(props) {
             {" "}
             {"you are a " + customerMembership + " member"}
           </p>
+          {/* Edit Profile Button */}
+          <button
+            onClick={toggleEditForm}
+            className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mt-4"
+          >
+            Edit Profile
+          </button>
         </div>
 
         <div className="bg-gray-300 p-4 rounded">
@@ -114,9 +158,6 @@ function Profile(props) {
               </div>
               <div className="deliveryAddress flex items-center mb-2">
                 <p className="mr-2 font-bold">Delivery Address:</p>
-              </div>
-              <div className="newPassword flex items-center mb-2">
-                <p className="mr-8 font-bold">New Password:</p>
               </div>
             </div>
             <div className="fields">
@@ -142,12 +183,6 @@ function Profile(props) {
                 <span className="profile-content-field">{props.address}</span>
                 <EditIcon className="text-2xl ml-2 hover:cursor-pointer hover:text-white active:text-black" />
               </div>
-              <div className="newPassword flex items-center mb-2">
-                <span className="profile-content-field">
-                  Enter New Password
-                </span>
-                <EditIcon className="text-2xl ml-2 hover:cursor-pointer hover:text-white active:text-black" />
-              </div>
             </div>
           </div>
 
@@ -169,6 +204,7 @@ function Profile(props) {
         </div>
       </div>
 
+      {/* Delete Account Confirmation Pop-up */}
       {showConfirmationPop && (
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-75">
           <div className="bg-white p-6 rounded-lg shadow-lg">
@@ -190,6 +226,121 @@ function Profile(props) {
                 Delete
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {showEditForm && (
+        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <p className="text-xl font-bold mb-4">Edit your profile</p>
+            <form onSubmit={handleSubmit}>
+              <div className="mb-4">
+                <label
+                  htmlFor="firstName"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  First Name
+                </label>
+                <input
+                  type="text"
+                  id="firstName"
+                  name="firstName"
+                  defaultValue={props.firstName}
+                  className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                />
+              </div>
+              <div className="mb-4">
+                <label
+                  htmlFor="lastName"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Last Name
+                </label>
+                <input
+                  type="text"
+                  id="lastName"
+                  name="lastName"
+                  defaultValue={props.lastName}
+                  className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                />
+              </div>
+              <div className="mb-4">
+                <label
+                  htmlFor="street"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Street Name
+                </label>
+                <input
+                  type="text"
+                  id="street"
+                  name="street"
+                  defaultValue={customer.streetName}
+                  className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                />
+              </div>
+              <div className="mb-4">
+                <label
+                  htmlFor="city"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  City Name
+                </label>
+                <input
+                  type="text"
+                  id="city"
+                  name="city"
+                  defaultValue={customer.cityName}
+                  className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                />
+              </div>
+              <div className="mb-4">
+                <label
+                  htmlFor="phoneNumber"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Phone Number
+                </label>
+                <input
+                  type="text"
+                  id="phoneNumber"
+                  name="phoneNumber"
+                  defaultValue={props.phoneNumber}
+                  className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                />
+              </div>
+              <div className="mb-4">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  defaultValue={props.email}
+                  className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                />
+              </div>
+              <div className="flex justify-end">
+                <button
+                  type="submit"
+                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-2"
+                >
+                  Submit
+                </button>
+                <button
+                  type="button"
+                  onClick={toggleEditForm}
+                  className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
