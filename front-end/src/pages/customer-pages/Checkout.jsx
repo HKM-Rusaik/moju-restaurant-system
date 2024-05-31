@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios.js";
 import Cart from "components/customer-components/Cart";
 import Layout from "layouts/CustomerLayout";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { removeAllItems } from "slices/cartItem";
 import BillPDF from "components/customer-components/BillPdf";
@@ -10,6 +10,7 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "firebase.js";
 import { pdf } from "@react-pdf/renderer";
 import PaymentForm from "components/customer-components/PaymentForm";
+import { addItemsTotalPrice } from "slices/cartItem";
 
 const Checkout = () => {
   const uploadPDFToFirebase = async (pdfBlob) => {
@@ -28,11 +29,13 @@ const Checkout = () => {
   const [tableNumber, setTableNumber] = useState("");
   const [cardNumber, setCardNumber] = useState("");
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
-  const [deliveryFee, setDeliveryFee] = useState(200);
+  const [deliveryFee, setDeliveryFee] = useState(0);
   const [isEditingAddress, setIsEditingAddress] = useState(false);
   const [atRestaurant, setAtRestaurant] = useState(null); // State to track if the customer is at the restaurant or outside
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  // const orderdCartItems = useSelector((state) => state.selectedItems.cartItems);
 
   let address = useSelector(
     (state) =>
@@ -76,20 +79,30 @@ const Checkout = () => {
 
   useEffect(() => {
     setDeliveryAddress(address);
-  }, [address,deliveryMethod]);
+  }, [address, deliveryMethod]);
 
   useEffect(() => {
-    if (itemsTotal > 4000) {
-      setDeliveryFee(0);
-    } else {
+    if (itemsTotal < 4000 && deliveryMethod === "delivery") {
       setDeliveryFee(200);
+    } else {
+      setDeliveryFee(0);
     }
-  }, [itemsTotal]);
+  }, [itemsTotal, deliveryMethod]);
 
   const discountAmount =
     (itemsTotal + deliveryFee) * (discountPercentage / 100);
 
-  const grandTotal = itemsTotal + deliveryFee - discountAmount;
+  let grandTotal;
+
+  if (deliveryMethod === "delivery") {
+    grandTotal = itemsTotal + deliveryFee - discountAmount;
+  } else {
+    grandTotal = itemsTotal - discountAmount;
+  }
+
+  useEffect(() => {
+    dispatch(addItemsTotalPrice(grandTotal));
+  }, [cartItems, dispatch, grandTotal]);
 
   const handleDeliveryMethodChange = (event) => {
     const selectedMethod = event.target.value;
@@ -306,6 +319,44 @@ const Checkout = () => {
           )}
           <div className="flex flex-col sm:flex-row items-center mb-4">
             <label htmlFor="cardNumber" className="mr-2 mb-2 w-[20%] sm:mb-0">
+              Orders Total Amount
+            </label>
+            <input
+              type="text"
+              id="grandTotal"
+              readOnly
+              value={`Rs. ${itemsTotal}`}
+              className="w-64 rounded border-gray-300 shadow-sm  focus:border-yellow-500 focus:ring focus:ring-yellow-500 focus:ring-opacity-50"
+            />
+          </div>
+          {deliveryMethod === "delivery" && (
+            <div className="flex flex-col sm:flex-row items-center mb-4">
+              <label htmlFor="cardNumber" className="mr-2 mb-2 w-[20%] sm:mb-0">
+                Delivery Fee{" "}
+              </label>
+              <input
+                type="text"
+                id="grandTotal"
+                readOnly
+                value={`Rs. ${deliveryFee}`}
+                className="w-64 rounded border-gray-300 shadow-s  focus:border-yellow-500 focus:ring focus:ring-yellow-500 focus:ring-opacity-50"
+              />
+            </div>
+          )}
+          <div className="flex flex-col sm:flex-row items-center mb-4">
+            <label htmlFor="cardNumber" className="mr-2 mb-2 w-[20%] sm:mb-0">
+              Membership Discount
+            </label>
+            <input
+              type="text"
+              id="grandTotal"
+              readOnly
+              value={`Rs. ${discountAmount}`}
+              className="w-64 rounded border-gray-300 shadow-sm  focus:border-yellow-500 focus:ring focus:ring-yellow-500 focus:ring-opacity-50"
+            />
+          </div>
+          <div className="flex flex-col sm:flex-row items-center mb-4">
+            <label htmlFor="cardNumber" className="mr-2 mb-2 w-[20%] sm:mb-0">
               Grand Total
             </label>
             <input
@@ -313,7 +364,7 @@ const Checkout = () => {
               id="grandTotal"
               readOnly
               value={`Rs. ${grandTotal}`}
-              className="w-64 rounded border-gray-300 shadow-sm bg-blue-500 text-white focus:border-yellow-500 focus:ring focus:ring-yellow-500 focus:ring-opacity-50"
+              className="w-64 rounded border-gray-300 shadow-sm text-white bg-blue-500 focus:border-yellow-500 focus:ring focus:ring-yellow-500 focus:ring-opacity-50"
             />
           </div>
           <div className="flex flex-col sm:flex-row items-center mb-4">

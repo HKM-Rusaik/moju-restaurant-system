@@ -1,6 +1,7 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
 import Category from "./category.js";
+import OrderItem from "./OrderItem.js";
 
 const Item = sequelize.define("item", {
   itemId: {
@@ -37,13 +38,14 @@ const Item = sequelize.define("item", {
 });
 
 Item.belongsTo(Category, { foreignKey: "categoryId" });
+// Item.hasMany(OrderItem, { foreignKey: "itemId" });
 
-Item.sync()
-  .then(() => {
-    console.log("Item Table synced successfully!");
-  })
-  .catch(() => {
-    console.log("Item Table is not synced!");
-  });
+// Item.sync()
+//   .then(() => {
+//     console.log("Item Table synced successfully!");
+//   })
+//   .catch(() => {
+//     console.log("Item Table is not synced!");
+//   });
 
 export default Item;

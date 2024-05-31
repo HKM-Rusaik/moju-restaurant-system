@@ -46,9 +46,9 @@ const MyCart = () => {
 
   const grandTotal = itemsTotal + deliveryFee - discountAmount;
 
-  useEffect(() => {
-    dispatch(addItemsTotalPrice(grandTotal));
-  }, [cartItems, dispatch, grandTotal]);
+  // useEffect(() => {
+  //   dispatch(addItemsTotalPrice(grandTotal));
+  // }, [cartItems, dispatch, grandTotal]);
 
   const handleShopMoreClick = () => {
     // Navigate to the main page when ShopMore button is clicked
@@ -84,7 +84,7 @@ const MyCart = () => {
           </div>
         </div>
 
-        <div className="flex w-4/5 mx-auto border-t-2 pt-2 text-red-500">
+        {/* <div className="flex w-4/5 mx-auto border-t-2 pt-2 text-red-500">
           <div className="flex w-3/4 justify-end font-bold ">
             {" "}
             Delivery Fee:{" "}
@@ -92,26 +92,15 @@ const MyCart = () => {
           <div className="flex w-1/4 justify-center font-bold">
             {deliveryFee}
           </div>
-        </div>
+        </div> */}
 
-        <div className="flex w-4/5 mx-auto border-t-2 pt-2">
-          <div className="flex w-3/4 justify-end font-bold">
-            {" "}
-            {customerMembership !== "newcustomer"
-              ? `${customerMembership} Membership Discount`
-              : null}
-            {/* {customerMembership + " Membership "}Discount{" "} */}
-          </div>
-          <div className="flex w-1/4 justify-center font-bold">
-            {customerMembership !== "newcustomer" ? `${discountAmount}` : null}
-          </div>
-        </div>
-        <div className="flex w-4/5 mx-auto border-t-2 pt-2 text-green-500">
+        
+        {/* <div className="flex w-4/5 mx-auto border-t-2 pt-2 text-green-500">
           <div className="flex w-3/4 justify-end font-bold"> Grand Total: </div>
           <div className="flex w-1/4 justify-center font-bold">
             {grandTotal}
           </div>
-        </div>
+        </div> */}
         <div className="flex w-4/5 mx-auto text-white pt-4">
           <div className="flex w-1/2 justify-start">
             <button

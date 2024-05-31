@@ -1,7 +1,7 @@
 import sequelize from "../config/db.js";
 import { DataTypes } from "sequelize";
 import Item from "./Item.js";
-
+// import Order from "./Order.js";
 const OrderItem = sequelize.define("order_item", {
   orderItemId: {
     type: DataTypes.INTEGER,
@@ -24,14 +24,15 @@ const OrderItem = sequelize.define("order_item", {
   },
 });
 
-OrderItem.belongsTo(Item, { foreignKey: "itemId" });
+// OrderItem.belongsTo(Item, { foreignKey: "itemId" });
+// OrderItem.belongsTo(Order, { foreignKey: "orderId" });
 
-OrderItem.sync()
-  .then(() => {
-    console.log("Order Item table synced successfully!");
-  })
-  .catch((error) => {
-    throw new Error("Error syncing Order table: " + error.message);
-  });
+// OrderItem.sync()
+//   .then(() => {
+//     console.log("Order Item table synced successfully!");
+//   })
+//   .catch((error) => {
+//     throw new Error("Error syncing Order table: " + error.message);
+//   });
 
 export default OrderItem;

@@ -34,6 +34,11 @@ import {
   createAdmin,
   loginAdmin,
 } from "../controllers/admin/AdminAccountController.js";
+import {
+  getOrdersCountByTypeDuration,
+  getOrdersByDuration,
+  getSoldItemsByDuration,
+} from "../controllers/admin/AdminBusinessReportController.js";
 
 router.post("/create-account", createAdmin);
 router.get("/account", loginAdmin);
@@ -59,5 +64,9 @@ router.post("/update-attendance", updateAttendance);
 router.get("/attendance", getAttendance);
 
 router.get("/customer-reservations", getReservations);
+
+router.get("/total-orders/:duration", getOrdersByDuration);
+router.get("/order-count-by-type/:duration", getOrdersCountByTypeDuration);
+router.get("/orders/sold-items/:duration", getSoldItemsByDuration);
 
 export default router;

@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const AttendanceReportPDF = ({ duration }) => (
+const AttendanceReport = ({ duration }) => (
   <Document>
     <Page style={styles.page}>
       <View style={styles.section}>
@@ -33,4 +33,4 @@ const AttendanceReportPDF = ({ duration }) => (
   </Document>
 );
 
-export default AttendanceReportPDF;
+export default AttendanceReport;

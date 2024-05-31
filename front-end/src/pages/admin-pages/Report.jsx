@@ -1,20 +1,93 @@
 import React, { useState } from "react";
-import { PDFViewer } from "@react-pdf/renderer";
 import Layout from "layouts/AdminLayouts";
-import BusinessReportPDF from "components/admin-components/BusinessReport";
-import AttendanceReportPDF from "components/admin-components/AttendaceReport";
-
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import BusinessReport from "components/admin-components/BusinessReport";
+import AttendanceReport from "components/admin-components/AttendaceReport";
 const Report = () => {
   const [reportType, setReportType] = useState("");
   const [duration, setDuration] = useState("");
   const [showPDF, setShowPDF] = useState(false);
+  const [imgData, setImgData] = useState(null); // State to store the image data
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     // Handle form submission logic
     console.log(`Report Type: ${reportType}, Duration: ${duration}`);
-    // You can add your logic here to generate the report based on the selected values
-    setShowPDF(true);
+
+    // If report type is "business" or "attendance", trigger download of respective report
+    if (reportType === "business" || reportType === "attendance") {
+      setShowPDF(true); // Set showPDF state to true to render the report section
+      setTimeout(() => {
+        captureImage(); // Capture image after a brief delay to ensure report section is rendered
+      }, 500);
+    }
+  };
+
+  const captureImage = () => {
+    // Set fixed width and height for the canvas
+    const canvasWidth = 800; // Adjust as needed
+    const canvasHeight = 600; // Adjust as needed
+
+    // Get the content of the report section
+    const reportSection = document.getElementById("report-section");
+
+    // Use html2canvas to capture the content as an image with fixed dimensions
+    html2canvas(reportSection, { width: canvasWidth, height: canvasHeight })
+      .then((canvas) => {
+        const imgData = canvas.toDataURL("image/png");
+        setImgData(imgData); // Store the image data in state
+        generatePDF(imgData); // Generate PDF with the captured image data
+      })
+      .catch((error) => {
+        console.error("Error capturing content as image:", error);
+      });
+  };
+  const generatePDF = () => {
+    // Initialize jsPDF
+    const pdf = new jsPDF("p", "mm", "a4");
+
+    // Get the content of the report section
+    const reportSection = document.getElementById("report-section");
+
+    // Use html2canvas to capture the content as an image with full dimensions
+    html2canvas(reportSection)
+      .then((canvas) => {
+        // Calculate width and height of the content
+        const contentWidth = canvas.width / 4; // Divide by 4 to convert pixels to mm
+        const contentHeight = canvas.height / 4; // Divide by 4 to convert pixels to mm
+
+        // Set PDF dimensions based on content size
+        pdf.internal.pageSize.setWidth(contentWidth);
+        pdf.internal.pageSize.setHeight(contentHeight);
+
+        // Convert canvas to image data URL
+        const imgData = canvas.toDataURL("image/png");
+
+        // Add image to PDF
+        pdf.addImage(imgData, "PNG", 0, 0);
+
+        // Save PDF
+        pdf.save("report.pdf");
+        // setShowPDF(false);
+      })
+      .catch((error) => {
+        console.error("Error capturing content as image:", error);
+      });
+  };
+
+
+  // Render the appropriate report component based on the selected report type
+  const renderReportComponent = () => {
+    switch (reportType) {
+      case "business":
+        return <BusinessReport duration={duration} />;
+      case "attendance":
+        return <AttendanceReport duration={duration} />;
+      default:
+        return null;
+    }
   };
 
   return (
@@ -52,8 +125,8 @@ const Report = () => {
                 type="radio"
                 id="sevenDays"
                 name="duration"
-                value="7days"
-                checked={duration === "7days"}
+                value="week"
+                checked={duration === "week"}
                 onChange={(e) => setDuration(e.target.value)}
                 className="mr-2 leading-tight"
               />
@@ -99,15 +172,16 @@ const Report = () => {
             </button>
           </div>
         </form>
-        {showPDF && (
-          <PDFViewer width="100%" height="600">
-            {reportType === "business" ? (
-              <BusinessReportPDF duration={duration} />
-            ) : (
-              <AttendanceReportPDF duration={duration} />
-            )}
-          </PDFViewer>
-        )}
+        {/* Report section */}
+        {showPDF ? (
+          <div
+            id="report-section"
+            className="h-842 flex items-center justify-center w-full bg-red-500 p-20"
+          >
+            {/* Render the selected report component */}
+            {renderReportComponent()}
+          </div>
+        ) : null}
       </div>
     </Layout>
   );

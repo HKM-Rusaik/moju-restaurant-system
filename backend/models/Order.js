@@ -42,6 +42,7 @@ const Order = sequelize.define("order", {
 });
 
 Order.hasMany(OrderItem, { foreignKey: "orderId" });
+OrderItem.belongsTo(Order, { foreignKey: "orderId" });
 Order.belongsTo(Customer, { foreignKey: "customerId" });
 Order.hasOne(OrderStatus, { foreignKey: "orderId" });
 
