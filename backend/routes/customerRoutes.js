@@ -21,6 +21,8 @@ import { updateMembership } from "../controllers/customer/CustomerAccountControl
 import auth from "../middlewares/auth.js";
 import Customer from "../models/Customer.js";
 import { createReservation } from "../controllers/customer/ReservationController.js";
+import { createFeedback } from "../controllers/customer/FeedbackController.js";
+import { createSupport } from "../controllers/customer/SupportController.js";
 
 const router = express.Router();
 router.post("/register", createCustomer);
@@ -53,7 +55,11 @@ router.get("/orders/:customerId", getOrders);
 router.get("/order/:orderId/items", getItemsOfOrder);
 
 router.get("/order-order-status/:orderId", getOrderStatus);
-// router.put("/order/:orderId", updateOrderStatus);
+router.put("/order/:orderId", updateOrderStatus);
 
 router.post("/reservation", createReservation);
+
+router.post("/feedback/:orderId", createFeedback);
+
+router.post("/support", createSupport);
 export default router;

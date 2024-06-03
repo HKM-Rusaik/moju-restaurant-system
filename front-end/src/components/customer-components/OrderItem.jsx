@@ -113,6 +113,7 @@ const OrderItem = (props) => {
 
   let finishedOrders = [];
   let pendingOrders = [];
+
   orders.forEach((order) => {
     if (order.orderStatus === "delivered") {
       finishedOrders.push(order);
@@ -120,6 +121,10 @@ const OrderItem = (props) => {
       pendingOrders.push(order);
     }
   });
+
+  // Sort both arrays in descending order based on orderId
+  finishedOrders.sort((a, b) => b.orderId - a.orderId);
+  pendingOrders.sort((a, b) => b.orderId - a.orderId);
 
   return (
     <div className="mt-8 table-auto border-collapse w-[80%] mx-auto">

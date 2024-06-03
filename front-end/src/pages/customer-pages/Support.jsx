@@ -7,8 +7,8 @@ import Layout from "layouts/CustomerLayout";
 const Support = () => {
   return (
     <Layout>
-      <div className="fade-enter-active">
-        <div className="text-center font-bold text-2xl mt-8">Support</div>
+      <div className="fade-enter-active mt-4">
+        {/* <div className="text-center font-bold text-2xl mt-8">Support</div> */}
         <ContactUs />
         <RestaurantAddress />{" "}
       </div>

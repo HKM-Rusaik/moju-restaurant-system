@@ -30,8 +30,7 @@ const Bill = () => {
   );
 
   return (
-    <Layout>
-      <div className="text-2xl font-bold m-4">Orders Management</div>
+    <div>
       <div className="flex items-center justify-end mb-4 mr-8">
         <FaSearch className="text-green-500 text-xl mr-2" />
         <input
@@ -43,6 +42,7 @@ const Bill = () => {
         />
       </div>
       <div className="overflow-x-auto">
+        <div className="text-2xl text-center font-bold ">Orders Management</div>
         <table className="w-[95%] mx-auto mt-8 border-collapse rounded-lg shadow-lg overflow-hidden">
           <thead>
             <tr className="bg-gray-700 text-white">
@@ -93,7 +93,7 @@ const Bill = () => {
           </tbody>
         </table>
       </div>
-    </Layout>
+    </div>
   );
 };
 

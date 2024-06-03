@@ -47,41 +47,45 @@ const AdminDashboard = () => {
 
   return (
     <Layout>
-      <div className="mt-2">
-        <div className="flex justify-end items-center text-2xl pr-8">
-          <span className="mr-4 font-semibold">Admin</span>
-          <IoMailUnreadOutline className="mr-4" /> <FaRegUserCircle />
-        </div>
-        <span className="font-bold text-xl  ml-2">Management Dashboard</span>
-        <div className="flex justify-around mt-2">
-          <div className=" ml-2 mt-4 bg-gray-500 w-[200px] h-[200px] flex flex-col items-center justify-center pb-8 text-white rounded">
-            <div className="mb-2 font-bold text-xl text-green-300">
-              Rs. {totalEarning ? totalEarning : 0}
+      <div className="m-4">
+        <div>
+          <div className="flex justify-end items-center text-2xl pr-8">
+            <span className="mr-4 font-semibold">Admin</span>
+            <IoMailUnreadOutline className="mr-4" /> <FaRegUserCircle />
+          </div>
+          <span className="text-3xl font-bold text-black mb-6">
+            Management Dashboard
+          </span>
+          <div className="flex justify-around mt-2">
+            <div className=" ml-2 mt-4 bg-gray-500 w-[200px] h-[200px] flex flex-col items-center justify-center pb-8 text-white rounded">
+              <div className="mb-2 font-bold text-xl text-green-300">
+                Rs. {totalEarning ? totalEarning : 0}
+              </div>
+              <div>Today Earnings </div>
             </div>
-            <div>Today Earnings </div>
-          </div>
-          <div className=" ml-2 mt-4 bg-gray-500 w-[200px] h-[200px] flex flex-col items-center justify-center  pb-8 text-white rounded">
-            <div className="font-bold text-xl text-green-300">
-              {countTodayAttendance}
-            </div>{" "}
-            <div className="">Today Attandances</div>
-          </div>
-          <div className=" ml-2 mt-4 bg-gray-500 w-[200px] h-[200px] flex flex-col justify-center items-center pb-8 text-white rounded">
-            <div className="font-bold text-xl text-green-300">
-              {countTodayOrders}
-            </div>{" "}
-            <div>Today Orders</div>
-          </div>
-          <div className=" ml-2 mt-4 bg-gray-500 w-[200px] h-[200px] flex justify-center items-center pb-8 text-white rounded">
-            Orders Completed
+            <div className=" ml-2 mt-4 bg-gray-500 w-[200px] h-[200px] flex flex-col items-center justify-center  pb-8 text-white rounded">
+              <div className="font-bold text-xl text-green-300">
+                {countTodayAttendance}
+              </div>{" "}
+              <div className="">Today Attandances</div>
+            </div>
+            <div className=" ml-2 mt-4 bg-gray-500 w-[200px] h-[200px] flex flex-col justify-center items-center pb-8 text-white rounded">
+              <div className="font-bold text-xl text-green-300">
+                {countTodayOrders}
+              </div>{" "}
+              <div>Today Orders</div>
+            </div>
+            <div className=" ml-2 mt-4 bg-gray-500 w-[200px] h-[200px] flex justify-center items-center pb-8 text-white rounded">
+              Orders Completed
+            </div>
           </div>
         </div>
-      </div>
-      <div className="mt-16">
-        <div className="flex items-center justify-between">
-          <Mychart />
-          <div className="">
-            <OrderTypePieChart />
+        <div className="mt-16">
+          <div className="flex items-center justify-between">
+            <Mychart />
+            <div className="">
+              <OrderTypePieChart />
+            </div>
           </div>
         </div>
       </div>

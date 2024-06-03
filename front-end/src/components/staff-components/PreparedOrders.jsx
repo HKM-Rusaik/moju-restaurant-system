@@ -3,7 +3,7 @@ import axios from "axios";
 import { MdCheckCircle, MdCancel } from "react-icons/md";
 import ItemList from "components/customer-components/ItemList";
 
-const OrdersTable = () => {
+const PreparedOrders = () => {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
@@ -44,10 +44,10 @@ const OrdersTable = () => {
   };
 
   const filteredOrders = orders.filter(
-    (order) => !order["order_status.prepared"]
+    (order) => order["order_status.prepared"]
   );
   return (
-    <div className="overflow-x-auto ">
+    <div className="overflow-x-auto">
       <table className="fade-enter-active w-full mx-auto mt-8 border-collapse rounded-lg shadow-lg overflow-hidden">
         <thead>
           <tr className="bg-red-400 text-white">
@@ -59,9 +59,9 @@ const OrdersTable = () => {
             <th className="border border-gray-800 px-4 py-2">
               Delivery Address
             </th>
-            <th className="border border-gray-800 px-4 py-2">Prepared</th>
-            {/* <th className="border border-gray-800 px-4 py-2">Picked</th>
-            <th className="border border-gray-800 px-4 py-2">Delivered</th> */}
+            {/* <th className="border border-gray-800 px-4 py-2">Prepared</th> */}
+            <th className="border border-gray-800 px-4 py-2">Picked</th>
+            <th className="border border-gray-800 px-4 py-2">Delivered</th>
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-800">
@@ -79,7 +79,7 @@ const OrdersTable = () => {
               </td>
               <td className="text-center py-3">{order.orderType}</td>
               <td className="text-center py-3">{order.deliveryAddress}</td>
-              <td className="text-center py-3">
+              {/* <td className="text-center py-3">
                 <button
                   className={`${
                     order["order_status.prepared"]
@@ -94,8 +94,8 @@ const OrdersTable = () => {
                     <MdCancel />
                   )}
                 </button>
-              </td>
-              {/* <td className="text-center py-3">
+              </td> */}
+              <td className="text-center py-3">
                 <button
                   className={`${
                     order["order_status.picked"] ? "bg-green-500" : "bg-red-500"
@@ -124,7 +124,7 @@ const OrdersTable = () => {
                     <MdCancel />
                   )}
                 </button>
-              </td> */}
+              </td>
             </tr>
           ))}
         </tbody>
@@ -133,4 +133,4 @@ const OrdersTable = () => {
   );
 };
 
-export default OrdersTable;
+export default PreparedOrders;

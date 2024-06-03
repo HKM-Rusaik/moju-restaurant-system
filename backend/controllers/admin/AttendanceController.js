@@ -110,25 +110,77 @@ export const getAttendance = async (req, res) => {
     attendance.forEach((record) => {
       const { NIC, comingIn, goingOut } = record;
       if (!workedHoursByNIC[NIC]) {
-        workedHoursByNIC[NIC] = 0;
+        workedHoursByNIC[NIC] = {
+          hours: 0,
+          minutes: 0,
+        };
       }
       if (comingIn && goingOut) {
         const startTime = new Date(`${currentDate}T${comingIn}`);
         const endTime = new Date(`${currentDate}T${goingOut}`);
-        const workedHours = (endTime - startTime) / (1000 * 60 * 60); // Convert milliseconds to hours
-        workedHoursByNIC[NIC] += workedHours;
+        const workedMilliseconds = endTime - startTime;
+        const workedHours = workedMilliseconds / (1000 * 60 * 60); // Convert milliseconds to hours
+        const hours = Math.floor(workedHours);
+        const minutes = Math.floor((workedHours - hours) * 60);
+        workedHoursByNIC[NIC].hours += hours;
+        workedHoursByNIC[NIC].minutes += minutes;
       }
     });
 
     // Merge worked hours with attendance records
-    const attendanceWithWorkedHours = attendance.map((record) => ({
-      ...record.toJSON(),
-      workedHours: workedHoursByNIC[record.NIC] || 0,
-    }));
+    const attendanceWithWorkedHours = attendance.map((record) => {
+      const { NIC } = record;
+      const { hours, minutes } = workedHoursByNIC[NIC] || {
+        hours: 0,
+        minutes: 0,
+      };
+      return {
+        ...record.toJSON(),
+        workedHours: `${hours} hours ${minutes} minutes`,
+      };
+    });
 
     res.status(200).json(attendanceWithWorkedHours);
   } catch (error) {
     console.error("Error fetching attendance records:", error);
     res.status(500).json({ error: "Server error" });
+  }
+};
+
+//create staff attendace of not in the attendance because he can be add for that day
+export const createStaffAttendance = async (req, res) => {
+  const { date, NIC, comingIn, goingOut, workedHours } = req.body;
+
+  if (!date || !NIC) {
+    return res.status(400).json({ error: "Date and NIC are required" });
+  }
+
+  try {
+    const [attendance, created] = await Attendance.findOrCreate({
+      where: {
+        date: date,
+        NIC: NIC,
+      },
+      defaults: {
+        date: date,
+        NIC: NIC,
+        comingIn: comingIn,
+        goingOut: goingOut,
+        workedHours: workedHours,
+      },
+    });
+
+    if (created) {
+      return res
+        .status(201)
+        .json({ message: "Attendance created", attendance });
+    } else {
+      return res
+        .status(200)
+        .json({ message: "Attendance already exists", attendance });
+    }
+  } catch (error) {
+    console.error("Error creating attendance:", error);
+    return res.status(500).json({ error: "Server error" });
   }
 };

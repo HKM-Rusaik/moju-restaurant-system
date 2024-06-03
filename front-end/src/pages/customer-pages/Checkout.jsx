@@ -32,11 +32,18 @@ const Checkout = () => {
   const [deliveryFee, setDeliveryFee] = useState(0);
   const [isEditingAddress, setIsEditingAddress] = useState(false);
   const [atRestaurant, setAtRestaurant] = useState(null); // State to track if the customer is at the restaurant or outside
+  const [tables, setTables] = useState([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const getTables = async () => {
+      const response = await axios.get("/admin/tables");
+      setTables(response.data);
+    };
+    getTables();
+  }, []);
   // const orderdCartItems = useSelector((state) => state.selectedItems.cartItems);
-
   let address = useSelector(
     (state) =>
       state.customer.customer.streetName +
@@ -309,12 +316,30 @@ const Checkout = () => {
               >
                 Table Number <span className="text-red-500">*</span>
               </label>
-              <input
+
+              <select
+                id="selectedTable"
+                value={tableNumber}
+                onChange={(e) => setTableNumber(e.target.value)}
+                className="w-64 rounded border-gray-300 shadow-sm focus:border-yellow-500 focus:ring focus:ring-yellow-500 focus:ring-opacity-50"
+                required
+              >
+                <option value="" disabled>
+                  Select a table
+                </option>
+                {tables.map((table) => (
+                  <option key={table.tableId} value={table.tableName}>
+                    {table.tableName}
+                  </option>
+                ))}
+              </select>
+
+              {/* <input
                 type="text"
                 id="tableNumber"
                 onChange={(e) => setTableNumber(e.target.value)}
                 className="w-64 rounded border-gray-300 shadow-sm focus:border-yellow-500 focus:ring focus:ring-yellow-500 focus:ring-opacity-50"
-              />
+              /> */}
             </div>
           )}
           <div className="flex flex-col sm:flex-row items-center mb-4">

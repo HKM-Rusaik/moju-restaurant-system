@@ -6,13 +6,20 @@ const MembershipPopup = ({ onClose }) => {
       <div className="bg-white p-6 rounded-lg max-w-md">
         <h2 className="text-2xl font-bold mb-4">Membership Details</h2>
         <p className="mb-4">
-          Silver Membership: Create a Account and Make orders above 30,000
+          <span className="bg-[#C0C0C0] px-2 rounded-md">
+            Silver Membership:
+          </span>{" "}
+          Create a Account and Make orders above <strong>Rs. 30,000</strong>
         </p>
         <p className="mb-4">
-          Gold Membership: Create a Account and Make orders above 50,000
+          <span className="bg-[#FFD700] px-2 rounded-md">Gold Membership:</span>{" "}
+          Create a Account and Make orders above <strong>Rs. 50,000</strong>
         </p>
         <p className="mb-4">
-          Platinum Membership: Create a Account and Make orders above 75,000
+          <span className="bg-[#E5E4E2] px-2 rounded-md">
+            Platinum Membership:
+          </span>{" "}
+          Create a Account and Make orders above <strong>Rs. 75,000</strong>
         </p>
         <button
           onClick={onClose}

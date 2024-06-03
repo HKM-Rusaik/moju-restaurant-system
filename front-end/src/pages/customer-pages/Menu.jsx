@@ -44,9 +44,13 @@ const Menu = () => {
       });
   }, []);
 
-  const filteredItems = items.filter((item) =>
-    item.itemName.toLowerCase().includes(searchText.toLowerCase())
+  const filteredItems = items.filter(
+    (item) =>
+      item.itemStatus &&
+      item.itemName.toLowerCase().includes(searchText.toLowerCase())
   );
+
+  console.log(filteredItems);
 
   const handleSearchInputChange = (event) => {
     setSearchText(event.target.value);

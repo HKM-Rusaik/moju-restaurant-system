@@ -14,7 +14,7 @@ const DeliveredOrders = () => {
   }, []);
   return (
     <div className="overflow-x-auto">
-      <table className="w-full mx-auto mt-8 border-collapse rounded-lg shadow-lg overflow-hidden">
+      <table className="fade-enter-active w-full mx-auto mt-8 border-collapse rounded-lg shadow-lg overflow-hidden">
         <thead>
           <tr className="bg-green-600 text-white">
             <th className="border border-gray-800 px-4 py-2">Order ID</th>

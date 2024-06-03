@@ -77,7 +77,6 @@ const Report = () => {
       });
   };
 
-
   // Render the appropriate report component based on the selected report type
   const renderReportComponent = () => {
     switch (reportType) {
@@ -176,7 +175,7 @@ const Report = () => {
         {showPDF ? (
           <div
             id="report-section"
-            className="h-842 flex items-center justify-center w-full bg-red-500 p-20"
+            className="h-842 flex items-center justify-center p-20"
           >
             {/* Render the selected report component */}
             {renderReportComponent()}

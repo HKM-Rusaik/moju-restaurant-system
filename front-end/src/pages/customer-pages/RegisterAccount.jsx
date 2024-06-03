@@ -42,11 +42,12 @@ const RegisterAccount = () => {
         );
 
         console.log(response.data);
-        window.alert("")
+        window.alert("Successfully Registered");
         navigate("/");
       } catch (error) {
         console.error("Error registering user:");
         setErrors(error.response.data);
+        console.log(errors);
       }
 
       // console.log("Form data submitted:", formData);
@@ -101,6 +102,9 @@ const RegisterAccount = () => {
         <div className="text-center text-2xl font-bold my-10 underline underline-offset-2">
           Register Your Account
         </div>
+        {errors.error && (
+          <div className="text-red-500 text-center">{errors.error}</div>
+        )}
         <div className="flex justify-center mt-12">
           <form onSubmit={handleSubmit} className="register">
             <div className="form-group">

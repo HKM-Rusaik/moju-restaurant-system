@@ -162,12 +162,16 @@ const BusinessReport = ({ duration }) => {
             </div>
           </div>
         </div>
-        <div className="mt-4 bg-green-700 text-center text-white rounded-lg">
+        <div className="mt-4 text-center text-green-600 rounded-lg">
           <div>
-            Most Sales Item is {maxItem.itemName} with {maxItem.totalQuantity}
+            Most Sales Item is{" "}
+            <span className="font-bold">{maxItem.itemName}</span> with{" "}
+            <span className="font-bold">{maxItem.totalQuantity}</span>
           </div>
           <div>
-            Least Sales Item is {minItem.itemName} with {minItem.totalQuantity}
+            Least Sales Item is{" "}
+            <span className="font-bold">{minItem.itemName}</span> with{" "}
+            <span className="font-bold">{minItem.totalQuantity}</span>
           </div>
         </div>
       </div>

@@ -34,12 +34,12 @@ const AdminSideNavBar = () => {
           </li>
           <li
             className={`p-4 ${
-              location.pathname === "/admin/bill" && "text-yellow-500"
+              location.pathname === "/admin/business" && "text-yellow-500"
             }`}
           >
-            <Link to="/admin/bill" className="block hover:text-[#FFEA2A]">
+            <Link to="/admin/business" className="block hover:text-[#FFEA2A]">
               <div className="flex items-center">
-                Bill <FaRegMoneyBillAlt className="ml-2" />
+                Business <FaRegMoneyBillAlt className="ml-2" />
               </div>
             </Link>
           </li>
@@ -105,7 +105,7 @@ const AdminSideNavBar = () => {
               className="block hover:text-[#FFEA2A]"
             >
               <div className="flex items-center">
-                Reservations <BiSolidReport className="ml-2" />
+                Tables & Reservations <BiSolidReport className="ml-2" />
               </div>
             </Link>
           </li>
@@ -117,6 +117,17 @@ const AdminSideNavBar = () => {
             <Link to="/admin/reports" className="block hover:text-[#FFEA2A]">
               <div className="flex items-center">
                 Reports <BiSolidReport className="ml-2" />
+              </div>
+            </Link>
+          </li>
+          <li
+            className={`p-4 ${
+              location.pathname === "/admin/feedbacks" && "text-yellow-500"
+            }`}
+          >
+            <Link to="/admin/feedbacks" className="block hover:text-[#FFEA2A]">
+              <div className="flex items-center">
+                feedbacks & supports <BiSolidReport className="ml-2" />
               </div>
             </Link>
           </li>

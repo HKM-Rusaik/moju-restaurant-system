@@ -5,6 +5,7 @@ import axios from "axios";
 import { storage } from "firebase.js";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage"; // Import getDownloadURL
 import { v4 } from "uuid";
+import LoadingPopUp from "components/customer-components/LoadingPopUp";
 
 const AddProducts = () => {
   const [productName, setProductName] = useState("");
@@ -13,8 +14,10 @@ const AddProducts = () => {
   const [productImage, setProductImage] = useState(null);
   const [price, setPrice] = useState("");
   const [availability, setAvailability] = useState("available");
-  const [imageURL, setImageURL] = useState(""); 
+  const [imageURL, setImageURL] = useState("");
   const [description, setDescription] = useState(""); // New state for description
+  const [addItem, setAddItem] = useState(false);
+  const [successItem, setSuccessItem] = useState(false);
 
   // const formData = {
   //   itemName: productName,
@@ -78,6 +81,7 @@ const AddProducts = () => {
   // Form submission handler
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setAddItem(true);
 
     // Perform form validation
     if (!productName || !selectedCategory || !price || !availability) {
@@ -110,7 +114,11 @@ const AddProducts = () => {
 
       await axios.post("http://localhost:5000/admin/items", formData);
 
-      alert("Product added successfully!");
+      setAddItem(false);
+      setSuccessItem(true);
+      setTimeout(() => {
+        setSuccessItem(false);
+      }, 3000);
 
       // Reset form fields
       setProductName("");
@@ -273,6 +281,14 @@ const AddProducts = () => {
           </form>
         </div>
       </div>
+
+      {addItem && <LoadingPopUp text={"Item is uploading successfully"} />}
+      {successItem && (
+        <LoadingPopUp
+          text={"Item was uploaded successfully"}
+          finishedLoad={true}
+        />
+      )}
     </Layout>
   );
 };

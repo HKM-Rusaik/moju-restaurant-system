@@ -4,7 +4,8 @@ import { FaSearch } from "react-icons/fa";
 import { IoMdAdd } from "react-icons/io";
 import { Link } from "react-router-dom";
 import axios from "axios";
-
+import LoadingPopUp from "components/customer-components/LoadingPopUp";
+import { MessageShowPopUp } from "components/customer-components/MessageShowPopUp";
 const AdminProduct = () => {
   const [items, setItems] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -13,6 +14,12 @@ const AdminProduct = () => {
   const [editedItemPrice, setEditedItemPrice] = useState("");
   const [editedItemCategory, setEditedItemCategory] = useState("");
   const [editedItemStatus, setEditedItemStatus] = useState(false);
+  const [editLoading, setEditLoading] = useState(false);
+  const [editSuccess, setEditSuccess] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [deleteSuccess, setDeleteSuccess] = useState(false);
+  const [priceError, setPriceError] = useState("");
+  const [showMessageBox, setShowMessageBox] = useState(false);
 
   useEffect(() => {
     // Fetch items when the component mounts
@@ -42,12 +49,25 @@ const AdminProduct = () => {
   }, []);
 
   const deleteItem = async (itemId) => {
+    setDeleteLoading(true);
     try {
       await axios.delete(`http://localhost:5000/admin/items/${itemId}`);
-      // Remove the deleted item from the items state
-      setItems(items.filter((item) => item.itemId !== itemId));
-      console.log("Item deleted successfully");
+      // Delay the state update and text change
+      setTimeout(() => {
+        // Remove the deleted item from the items state
+        setItems(items.filter((item) => item.itemId !== itemId));
+        setDeleteLoading(false);
+        setDeleteSuccess(true);
+
+        // Set a timeout to close the window after showing success message
+        setTimeout(() => {
+          setDeleteSuccess(false);
+          // Close the window or navigate away, e.g., history.push('/somewhere')
+          console.log("Item deleted successfully");
+        }, 1200); // Show success message for 2 seconds
+      }, 2000); // Initial delay (2 seconds)
     } catch (error) {
+      setDeleteLoading(false);
       console.error("Error deleting item:", error);
     }
   };
@@ -67,6 +87,15 @@ const AdminProduct = () => {
   };
 
   const handleSaveEdit = async () => {
+    // Check if the price is greater than 0
+    if (parseFloat(editedItemPrice) <= 0) {
+      setPriceError("Price must be greater than 0");
+      setShowMessageBox(true);
+      console.error("Price must be greater than 0");
+      return;
+    }
+
+    setEditLoading(true);
     try {
       await axios.put(`http://localhost:5000/admin/items/${editItemId}`, {
         itemName: editedItemName,
@@ -87,13 +116,23 @@ const AdminProduct = () => {
         }
         return item;
       });
-      setItems(updatedItems);
-      setEditItemId(null); // Reset editItemId
-      setEditedItemName(""); // Reset editedItemName
-      setEditedItemPrice(""); // Reset editedItemPrice
-      setEditedItemCategory(""); // Reset editedItemCategory
-      setEditedItemStatus(false); // Reset editedItemStatus
-      console.log("Item edited successfully");
+      // Delay the state update and text change
+      setTimeout(() => {
+        setItems(updatedItems);
+        setEditItemId(null); // Reset editItemId
+        setEditedItemName(""); // Reset editedItemName
+        setEditedItemPrice(""); // Reset editedItemPrice
+        setEditedItemCategory(""); // Reset editedItemCategory
+        setEditedItemStatus(false); // Reset editedItemStatus
+        setEditLoading(false);
+        setEditSuccess(true);
+
+        // Set a timeout to close the window after showing success message
+        setTimeout(() => {
+          setEditSuccess(false);
+          console.log("Item edited successfully");
+        }, 1200); // Show success message for 2 seconds
+      }, 2000);
     } catch (error) {
       console.error("Error editing item:", error);
     }
@@ -101,9 +140,10 @@ const AdminProduct = () => {
 
   return (
     <Layout>
-      <div className="p-2">
-        <p className="text-2xl font-bold">Products Management</p>
-
+      <div className="m-4">
+        <p className="text-3xl font-bold text-black mb-6">
+          Products Management
+        </p>
         <div className="flex justify-around ml-[40%] mt-8">
           <div className="relative flex items-center w-80 border rounded-md bg-white shadow-md">
             <FaSearch className="text-gray-400 ml-2" />
@@ -245,6 +285,30 @@ const AdminProduct = () => {
           </table>
         </div>
       </div>
+      {showMessageBox && (
+        <MessageShowPopUp
+          onClose={() => setShowMessageBox(false)}
+          message={"Price is must be in a number that is greater than zero"}
+        />
+      )}
+      {editLoading && (
+        <LoadingPopUp text={"Item is being updated"} finishedLoad={false} />
+      )}
+      {editSuccess && (
+        <LoadingPopUp
+          text={"Item was updated successfully"}
+          finishedLoad={true}
+        />
+      )}
+      {deleteLoading && (
+        <LoadingPopUp text={"Item is being deleted"} finishedLoad={false} />
+      )}
+      {deleteSuccess && (
+        <LoadingPopUp
+          text={"Item was deleted successfully"}
+          finishedLoad={true}
+        />
+      )}
     </Layout>
   );
 };

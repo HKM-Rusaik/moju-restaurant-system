@@ -24,7 +24,7 @@ export const createItem = async (req, res) => {
       itemPicURL: itemPicURL,
       itemStatus: itemStatus,
       categoryId: categoryId,
-      itemDescription: itemDescription, 
+      itemDescription: itemDescription,
     });
 
     res.status(201).json(newItem);
@@ -69,7 +69,7 @@ export const deleteItem = async (req, res) => {
     console.error("Error deleting item: ", error);
     res.status(500).json({ error: "Error deleting item" });
   }
-};
+};  
 
 //new one has to be checked carefully
 export const updateItem = async (req, res) => {

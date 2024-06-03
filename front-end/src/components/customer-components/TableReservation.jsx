@@ -32,8 +32,8 @@ const TableReservation = () => {
   };
 
   const handleBookTable = async () => {
-    if (!selectedDate) {
-      alert("Please select a date and time.");
+    if (!selectedDate || selectedDate <= new Date()) {
+      alert("Please select a future date and time.");
       return;
     }
 
@@ -54,7 +54,7 @@ const TableReservation = () => {
 
       setGuestCount(1);
       setNote("");
-      setSelectedDate("");
+      setSelectedDate(null); // Clear selected date after successful reservation
     } catch (error) {
       console.error("Error making reservation:", error);
       alert("There was an error making the reservation. Please try again.");
@@ -125,9 +125,9 @@ const TableReservation = () => {
         </div>
       </div>
 
-      <div className="flex justify-center mt-2">
+      <div className="flex justify-center mt-2 ml-16">
         <button
-          className="bg-blue-800 p-2 rounded text-white hover:bg-blue-500 active:bg-blue-800"
+          className="bg-blue-800 text-white px-6 py-3 rounded-lg hover:bg-blue-600 focus:outline-none"
           onClick={handleBookTable}
         >
           Book Table

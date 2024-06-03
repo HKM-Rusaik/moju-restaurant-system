@@ -19,19 +19,19 @@ const TrackOrder = () => {
     <Layout>
       <div className="fade-enter-active ">
         <p className="text-center font-bold text-2xl mt-8">My Orders</p>
-        <div className="mt-8 flex justify-around bg-white text-black rounded">
+        <div className="mt-4 flex justify-center space-x-4">
           <div
-            className={`hover:cursor-pointer text-center hover:bg-gray-600 hover:font-bold ${
-              isToReceive ? "bg-gray-600 font-bold text-white" : ""
-            } w-full rounded`}
+            className={`p-2 cursor-pointer text-center  text-white font-bold rounded-md transition duration-300 ${
+              isToReceive ? "bg-blue-600" : "bg-blue-400"
+            }`}
             onClick={handleToReceiveClick}
           >
             To Receive
           </div>
           <div
-            className={`hover:cursor-pointer text-center hover:bg-gray-600 hover:font-bold ${
-              isCompleted ? "bg-gray-600 font-bold text-white" : ""
-            } w-full rounded`}
+            className={`p-2 cursor-pointer text-center  text-white font-bold rounded-md transition duration-300 ${
+              isCompleted ? "bg-blue-600" : "bg-blue-400"
+            }`}
             onClick={handleCompletedClick}
           >
             Completed

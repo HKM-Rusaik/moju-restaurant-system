@@ -79,3 +79,20 @@ export const getOrderCountsByType = async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 };
+
+// New method to get orders by a specific date
+export const getOrdersByDate = async (req, res) => {
+  const { date } = req.params; // Expected format: YYYY-MM-DD
+  try {
+    const orders = await Order.findAll({
+      where: Sequelize.where(
+        Sequelize.fn("DATE", Sequelize.col("orderDate")),
+        date
+      ),
+    });
+    res.status(200).json(orders);
+  } catch (error) {
+    console.error("Error fetching orders by date:", error);
+    res.status(500).json({ error: "Could not fetch orders by date." });
+  }
+};

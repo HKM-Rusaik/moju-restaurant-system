@@ -24,8 +24,10 @@ import AddProducts from "pages/admin-pages/AddProducts";
 import EmployeeDetails from "pages/admin-pages/EmployeeDetails";
 import Attendence from "pages/admin-pages/Attendence";
 import Report from "pages/admin-pages/Report";
-import Bill from "pages/admin-pages/Bill";
+// import Bill from "pages/admin-pages/Bill";
 import AdminReservation from "pages/admin-pages/Reservation";
+import CustomerRelations from "pages/admin-pages/CustomerRelations";
+import Business from "pages/admin-pages/Business";
 
 //staff pages
 import Login from "pages/staff-pages/Login";
@@ -56,6 +58,7 @@ function App() {
           <Route path="menu" element={<Menu />} />
           {/* <Route path="reservation" element={<Reservation />} /> */}
 
+          <Route path="support" element={<Support />} />
           {/* Customer routes wrapped in AuthChecker */}
           <Route element={<AuthChecker />}>
             <Route
@@ -83,10 +86,7 @@ function App() {
               path="reservation"
               element={<ProtectedRoute element={Reservation} />}
             />
-            <Route
-              path="support"
-              element={<ProtectedRoute element={Support} />}
-            />
+
             <Route
               path="track-order"
               element={<ProtectedRoute element={TrackOrder} />}
@@ -103,9 +103,10 @@ function App() {
           <Route path="/admin/categories" element={<ProductsCategory />} />
           <Route path="/admin/employee-details" element={<EmployeeDetails />} />
           <Route path="/admin/attendance-record" element={<Attendence />} />
-          <Route path="/admin/bill" element={<Bill />} />
+          <Route path="/admin/business" element={<Business />} />
           <Route path="/admin/reports" element={<Report />} />
           <Route path="/admin/reservation" element={<AdminReservation />} />
+          <Route path="/admin/feedbacks" element={<CustomerRelations />} />
 
           <Route path="/staff" element={<Login />} />
           <Route path="/staff/deliver-order" element={<Home />} />
