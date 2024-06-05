@@ -3,22 +3,23 @@ import { useState } from "react";
 import axios from "axios";
 import { RiAdminLine } from "react-icons/ri";
 import { GrUserWorker } from "react-icons/gr";
-
+import { useNavigate } from "react-router-dom";
 const StaffWelcome = () => {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
-  const formData = { email: email, password: password };
+  const formData = { phoneNumber: username, NIC: password };
+  const navigate = useNavigate();
 
   const handleSignIn = async (e) => {
     e.preventDefault();
-    // Add your sign-in logic here
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/admin/login",
+        "http://localhost:5000/staff/login",
         formData
       );
+      navigate("/staff/deliver-order");
       console.log(response.data);
 
       alert(response.data.message);
@@ -34,23 +35,23 @@ const StaffWelcome = () => {
       </div>
       <div>
         <div className="mt-10 flex items-center justify-center font-semibold text-2xl">
-          Sign in as Admin <GrUserWorker className="ml-2"/>
+          Sign in as Admin <GrUserWorker className="ml-2" />
         </div>
         <div className="max-w-md mx-auto mt-8 p-6 border rounded bg-white">
           <form onSubmit={handleSignIn}>
             <div className="mb-4">
               <label
-                htmlFor="email"
+                htmlFor="username"
                 className="block text-sm font-medium text-gray-600"
               >
-                Email <span className="text-red-500">*</span>
+                User Name <span className="text-red-500">*</span>
               </label>
               <input
-                type="email"
-                id="email"
-                name="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                type="number"
+                id="username"
+                name="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 className="mt-1 p-2 w-full border rounded"
                 required
               />

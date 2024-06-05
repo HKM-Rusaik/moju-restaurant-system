@@ -8,6 +8,9 @@ import {
   updatePicked,
   updatePrepared,
 } from "../controllers/staff/OrderController.js";
+import { login } from "../controllers/admin/StaffController.js";
+
+router.post("/login", login);
 
 router.get("/orders", getUndeliveredOrders);
 router.get("/delivered-orders", getDeliveredOrders);

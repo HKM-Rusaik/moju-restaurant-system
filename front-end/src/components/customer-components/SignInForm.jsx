@@ -140,7 +140,7 @@ const SignInForm = () => {
         </button>
         <hr className="mb-2 border-t-2 mt-2 border-gray-800" />
         <div>
-          <p>Do not have an account?</p>
+          <p className="font-bold">Do not have an account?</p>
         </div>
         <button
           type="button"

@@ -19,6 +19,10 @@ const Staff = sequelize.define("staff", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  passwordHash: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
 });
 
 Staff.sync()

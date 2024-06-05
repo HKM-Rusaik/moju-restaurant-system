@@ -1,7 +1,9 @@
 import { where } from "sequelize";
 import bcrypt from "bcrypt";
-import Admin from "../../models/admin.js";
+import Admin from "../../models/Admin.js";
 import jwt from "jsonwebtoken";
+
+const jwtSecret = "your_jwt_secret";
 
 export const createAdmin = async (req, res) => {
   const { userName, password } = req.body;
@@ -73,7 +75,7 @@ export const loginAdmin = async (req, res) => {
     // Generate a JWT token
     const token = jwt.sign(
       { id: admin.adminId, userName: admin.userName },
-      process.env.JWT_SECRET,
+      jwtSecret,
       { expiresIn: "1h" }
     );
 

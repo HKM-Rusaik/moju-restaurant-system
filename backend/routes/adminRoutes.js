@@ -65,9 +65,13 @@ import {
   getAllSummaries,
   getSummary,
 } from "../controllers/admin/DailySummaryController.js";
+import {
+  getCountsByRole,
+  getWorkedEmployees,
+} from "../controllers/admin/AdminAttendanceReport.js";
 
 router.post("/create-account", createAdmin);
-router.get("/account", loginAdmin);
+router.post("/login", loginAdmin);
 
 router.post("/categories", createCategory);
 router.get("/categories", getCategories);
@@ -112,5 +116,8 @@ router.delete("/customer/support/:suppportId", deleteSupport);
 
 router.post("/orders/today/summary", createTodaySummary);
 router.get("/orders/daily-summary", getAllSummaries);
+
+router.get("/staff/counts-by-role/:duration", getCountsByRole);
+router.get("/staff/attended/:duration", getWorkedEmployees);
 
 export default router;

@@ -2,12 +2,17 @@ import React from "react";
 import { useState } from "react";
 import axios from "axios";
 import { RiAdminLine } from "react-icons/ri";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setToken } from "slices/customerSlice";
 
 const AdminWelcome = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
-  const formData = { email: email, password: password };
+  const formData = { userName: email, password: password };
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleSignIn = async (e) => {
     e.preventDefault();
@@ -15,11 +20,14 @@ const AdminWelcome = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/staff/login",
+        "http://localhost:5000/admin/login",
         formData
       );
       console.log(response.data);
-
+      localStorage.setItem("adminToken", response.data.token);
+      dispatch(setToken(response.data.token));
+      
+      navigate("/admin/dashboard");
       alert(response.data.message);
     } catch (error) {
       console.log("Error when sign", error);

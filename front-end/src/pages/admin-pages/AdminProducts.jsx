@@ -20,6 +20,7 @@ const AdminProduct = () => {
   const [deleteSuccess, setDeleteSuccess] = useState(false);
   const [priceError, setPriceError] = useState("");
   const [showMessageBox, setShowMessageBox] = useState(false);
+  const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
     // Fetch items when the component mounts
@@ -138,6 +139,14 @@ const AdminProduct = () => {
     }
   };
 
+  const handleItemSearch = (e) => {
+    setSearchText(e.target.value);
+  };
+
+  const filteredItems = items.filter((item) =>
+    item.itemName.toLowerCase().includes(searchText.toLowerCase())
+  );
+
   return (
     <Layout>
       <div className="m-4">
@@ -150,7 +159,9 @@ const AdminProduct = () => {
             <input
               type="text"
               className="flex-grow p-2 pl-8 border-0 rounded"
-              placeholder="Search..."
+              placeholder="Search by item name..."
+              value={searchText}
+              onChange={handleItemSearch}
             />
           </div>
           <div>
@@ -176,7 +187,7 @@ const AdminProduct = () => {
               </tr>
             </thead>
             <tbody>
-              {items.map((item) => (
+              {filteredItems.map((item) => (
                 <tr key={item.itemId} className="border-t">
                   <td className="p-2 border text-center align-middle">
                     {item.itemId}

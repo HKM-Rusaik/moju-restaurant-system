@@ -7,7 +7,7 @@ import Order from "../../models/Order.js";
 const saltRounds = 10;
 
 // Secret key for JWT
-const jwtSecret = "your_jwt_secret"; // Store this in environment variables in production
+const jwtSecret = "your_jwt_secret"; 
 
 export const createCustomer = async (req, res) => {
   const {

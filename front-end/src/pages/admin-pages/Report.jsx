@@ -4,6 +4,7 @@ import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import BusinessReport from "components/admin-components/BusinessReport";
 import AttendanceReport from "components/admin-components/AttendaceReport";
+
 const Report = () => {
   const [reportType, setReportType] = useState("");
   const [duration, setDuration] = useState("");
@@ -62,11 +63,15 @@ const Report = () => {
         pdf.internal.pageSize.setWidth(contentWidth);
         pdf.internal.pageSize.setHeight(contentHeight);
 
+        // Calculate image width and height based on A4 dimensions (adjust for margins if needed)
+        const imageWidth = pdf.internal.pageSize.getWidth() - 20; // Adjust for margins (20mm each side)
+        const imageHeight = (imageWidth / contentWidth) * contentHeight;
+
         // Convert canvas to image data URL
         const imgData = canvas.toDataURL("image/png");
 
         // Add image to PDF
-        pdf.addImage(imgData, "PNG", 0, 0);
+        pdf.addImage(imgData, "PNG", 10, 10, imageWidth, imageHeight);
 
         // Save PDF
         pdf.save("report.pdf");
@@ -175,7 +180,7 @@ const Report = () => {
         {showPDF ? (
           <div
             id="report-section"
-            className="h-842 flex items-center justify-center p-20"
+            className="flex w-fit items-center justify-center p-20"
           >
             {/* Render the selected report component */}
             {renderReportComponent()}

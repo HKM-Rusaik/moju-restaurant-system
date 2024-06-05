@@ -124,7 +124,7 @@ export const getSoldItemsByDuration = async (req, res) => {
       const itemDetails = await Item.findByPk(orderItem.itemId);
       return {
         itemId: orderItem.itemId,
-        itemName: itemDetails.itemName, // Ensure you use the correct attribute name
+        itemName: itemDetails.itemName, 
         totalQuantity: orderItem.getDataValue("totalQuantity"),
       };
     });

@@ -1,19 +1,16 @@
-import { where } from "sequelize";
+import { where, fn, col } from "sequelize";
 import Staff from "../../models/Staff.js";
 import Attendance from "../../models/Attendance.js";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+
 
 export const createStaff = async (req, res) => {
   try {
     const { NIC, staffName, mobileNo, role } = req.body;
 
-    // Check if a staff member with the same NIC already exists
-    const existingStaff = await Staff.findOne({ where: { NIC } });
-    if (existingStaff) {
-      return res.status(400).json({
-        success: false,
-        message: "A staff member with this NIC already exists",
-      });
-    }
+    // Encrypt the NIC to use as password
+    const encryptedPassword = await bcrypt.hash(NIC, 10);
 
     // Create staff in the database
     const newStaff = await Staff.create({
@@ -21,6 +18,7 @@ export const createStaff = async (req, res) => {
       staffName,
       mobileNo,
       role,
+      passwordHash: encryptedPassword, // Assuming there is a password field in your Staff model
     });
 
     // Return success response with the created staff object
@@ -35,6 +33,37 @@ export const createStaff = async (req, res) => {
       success: false,
       message: "An error occurred while creating staff",
     });
+  }
+};
+
+export const login = async (req, res) => {
+  try {
+    const { NIC, password } = req.body;
+
+    // Find the staff member in the database
+    const staff = await Staff.findOne({ where: { NIC } });
+    if (!staff) {
+      return res.status(404).json({ message: "Staff not found" });
+    }
+
+    // Validate the password
+    const passwordMatch = await bcrypt.compare(password, staff.passwordHash);
+    if (!passwordMatch) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    // Generate a JWT token
+    const token = jwt.sign(
+      { NIC: staff.NIC, role: staff.role }, // Payload
+      process.env.JWT_SECRET, // Secret key
+      { expiresIn: "1h" } // Expiration time
+    );
+
+    // Return the token as part of the response
+    res.status(200).json({ token });
+  } catch (err) {
+    console.error("Error logging in:", err);
+    res.status(500).json({ message: "Error logging in" });
   }
 };
 
@@ -95,3 +124,4 @@ export const updateStaff = async (req, res) => {
     res.status(500).json({ message: "Error in updating staff" });
   }
 };
+

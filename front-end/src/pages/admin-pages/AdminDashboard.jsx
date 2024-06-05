@@ -7,6 +7,7 @@ import axios from "axios.js";
 import { useState } from "react";
 import Mychart from "components/admin-components/OrderBarChart";
 import OrderTypePieChart from "components/admin-components/OrderTypePieChart";
+import StaffPieChart from "components/admin-components/StaffPieChart";
 
 const AdminDashboard = () => {
   const [totalEarning, setTotalEarning] = useState(0);
@@ -88,6 +89,7 @@ const AdminDashboard = () => {
             </div>
           </div>
         </div>
+        {/* <StaffPieChart /> */}
       </div>
     </Layout>
   );

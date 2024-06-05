@@ -21,4 +21,19 @@ axiosInstance.interceptors.request.use(
   }
 );
 
+// Add a request interceptor for admin token
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const adminToken = localStorage.getItem("adminToken");
+    if (adminToken) {
+      config.headers.Authorization = `Bearer ${adminToken}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+
 export default axiosInstance;

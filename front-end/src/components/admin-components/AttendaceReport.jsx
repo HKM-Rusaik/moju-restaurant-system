@@ -1,36 +1,18 @@
-// src/components/AttendanceReportPDF.js
 import React from "react";
-import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
+import StaffPieChart from "./StaffPieChart";
+import AttendanceBarChart from "./AttendanceBarChart";
 
-const styles = StyleSheet.create({
-  page: {
-    padding: 30,
-  },
-  section: {
-    margin: 10,
-    padding: 10,
-    flexGrow: 1,
-  },
-  title: {
-    fontSize: 18,
-    marginBottom: 10,
-  },
-  text: {
-    fontSize: 12,
-    marginBottom: 5,
-  },
-});
+const AttendaceReport = ({ duration }) => {
+  return (
+    <div className="bg-white p-10 rounded-lg shadow-lg">
+      <div className="font-bold text-center text-2xl mb-6">
+        {duration} Attendance Report
+      </div>
+      <StaffPieChart />
+      <hr class="mt-4 text-black hr-bold" />
+      <AttendanceBarChart duration={duration} />
+    </div>
+  );
+};
 
-const AttendanceReport = ({ duration }) => (
-  <Document>
-    <Page style={styles.page}>
-      <View style={styles.section}>
-        <Text style={styles.title}>Attendance Report</Text>
-        <Text style={styles.text}>Duration: {duration}</Text>
-        {/* Add more attendance report details here */}
-      </View>
-    </Page>
-  </Document>
-);
-
-export default AttendanceReport;
+export default AttendaceReport;

@@ -21,6 +21,7 @@ export default function OrderBarChart() {
     getDailyTotal();
   }, []);
 
+  console.log(dailyTotals);
   return (
     <div className="text-center">
       <div className="bg-black  mb-2 rounded-md px-2 mx-auto w-fit flex justify-center">
