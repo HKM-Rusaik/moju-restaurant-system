@@ -45,7 +45,7 @@ const ProductsCategory = () => {
   return (
     <Layout>
       <div>
-        <div className="flex font-bold text-2xl justify-center">
+        <div className="flex font-bold text-3xl ml-4 mb-8">
           Products Category Management
         </div>
         <div className="flex items-center text-xl mt-4">

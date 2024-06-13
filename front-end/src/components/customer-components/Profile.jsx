@@ -4,16 +4,17 @@ import { useNavigate } from "react-router-dom";
 import { FaRegEdit as EditIcon } from "react-icons/fa";
 import { IoLogOut } from "react-icons/io5";
 import { useSelector } from "react-redux";
-import DumImage from "../../assets/Images/Profile-dum.png";
 import { setCustomer, setToken } from "slices/customerSlice";
 import axios from "axios.js";
 
 function Profile(props) {
   const [showConfirmationPop, setConfirmationPop] = useState(false);
-  const [showEditForm, setShowEditForm] = useState(false); // State to control the visibility of the edit form
+  const [showEditForm, setShowEditForm] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const customer = useSelector((state) => state.customer.customer);
+
   const customerMembership = useSelector((state) => {
     const customer = state.customer.customer;
     return customer ? customer.membership.toLowerCase() : "";
@@ -25,7 +26,6 @@ function Profile(props) {
   if (customerMembership === "golden") borderColor = "border-[#FFD700]";
   if (customerMembership === "platenium") borderColor = "border-[#E5E4E2]";
 
-  const profileImage = props.profile || DumImage;
   const firstNameFirstLetter = props.firstName.charAt(0).toUpperCase();
 
   const handleLogout = () => {
@@ -83,8 +83,8 @@ function Profile(props) {
         {
           firstName: formData.get("firstName"),
           lastName: formData.get("lastName"),
-          street: formData.get("street"),
-          city: formData.get("city"),
+          streetName: formData.get("street"),
+          cityName: formData.get("city"),
           phoneNumber: formData.get("phoneNumber"),
           email: formData.get("email"),
         }
@@ -118,7 +118,7 @@ function Profile(props) {
                   className="text-gray-600"
                 />
               ) : (
-                <div className="text-[150px] text-center text-yellow-600">
+                <div className={`text-[150px] text-center$ {borderColor}`}>
                   {firstNameFirstLetter}
                 </div>
               )}
@@ -130,7 +130,11 @@ function Profile(props) {
           </p>
           <p className="text-center text-xl font-semibold text-gray-500">
             {" "}
-            {"you are a " + customerMembership + " member"}
+            {customer.email === "mojoadmin@gmail.com" ? (
+              <div>You are admin</div>
+            ) : (
+              <div>{"you are a " + customerMembership + " member"}</div>
+            )}
           </p>
           {/* Edit Profile Button */}
           <button
@@ -322,6 +326,7 @@ function Profile(props) {
                   id="email"
                   name="email"
                   defaultValue={props.email}
+                  readOnly
                   className="mt-1 p-2 border border-gray-300 rounded-md w-full"
                 />
               </div>

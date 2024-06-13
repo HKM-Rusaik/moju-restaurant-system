@@ -7,7 +7,7 @@ import Order from "../../models/Order.js";
 const saltRounds = 10;
 
 // Secret key for JWT
-const jwtSecret = "your_jwt_secret"; 
+const jwtSecret = "your_jwt_secret";
 
 export const createCustomer = async (req, res) => {
   const {
@@ -32,6 +32,12 @@ export const createCustomer = async (req, res) => {
       return res
         .status(400)
         .json({ error: "Email already exists. Try logging in." });
+    }
+
+    // Check if email already exists
+    const countMobileUsers = await Customer.count({ where: { phoneNumber } });
+    if (countMobileUsers > 0) {
+      return res.status(400).json({ error: "Phone Number is Already exists" });
     }
 
     // Create new customer
@@ -154,13 +160,13 @@ export const updateAccount = async (req, res) => {
       return res.status(404).json({ message: "Customer not found" });
     }
 
-    // Check if the email is being updated and if it already exists
-    if (email && email !== customer.email) {
-      const existingCustomer = await Customer.findOne({ where: { email } });
-      if (existingCustomer) {
-        return res.status(400).json({ message: "Email already in use" });
-      }
-    }
+    // // Check if the email is being updated and if it already exists
+    // if (email && email !== customer.email) {
+    //   const existingCustomer = await Customer.findOne({ where: { email } });
+    //   if (existingCustomer) {
+    //     return res.status(400).json({ message: "Email already in use" });
+    //   }
+    // }
 
     // Update customer fields
     if (firstName) customer.firstName = firstName;
@@ -170,13 +176,6 @@ export const updateAccount = async (req, res) => {
     if (phoneNumber) customer.phoneNumber = phoneNumber;
     if (email) customer.email = email;
 
-    // // Update the password if provided
-    // if (password) {
-    //   const hashedPassword = await bcrypt.hash(password, saltRounds);
-    //   customer.passwordHash = hashedPassword;
-    // }
-
-    // Save changes to the database
     await customer.save();
 
     return res

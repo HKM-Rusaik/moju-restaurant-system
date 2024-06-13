@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { CgProfile } from "react-icons/cg";
 import { MdDashboard } from "react-icons/md";
 import { BiCategory } from "react-icons/bi";
@@ -8,9 +8,20 @@ import { MdInventory } from "react-icons/md";
 import { BiSolidReport } from "react-icons/bi";
 import { GrUserWorker } from "react-icons/gr";
 import { Link, useLocation } from "react-router-dom";
+import { IoMdLogOut } from "react-icons/io";
+import LogoutPopUp from "./LogoutPopUp";
+import { useNavigate } from "react-router-dom";
 
 const AdminSideNavBar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const [showLogoutPopUp, setShowLogoutPopUp] = useState(false);
+
+  const handleLogout = () => {
+    localStorage.removeItem("adminToken");
+    navigate("/admin");
+    setShowLogoutPopUp(false);
+  };
 
   return (
     <div className="fixed top-0 left-0 h-full bg-gray-900 text-white w-1/5">
@@ -133,6 +144,27 @@ const AdminSideNavBar = () => {
           </li>
         </ul>
       </div>
+      <div className="flex justify-center bottom-0 py-4">
+        <button
+          className="text-lg text-[#FFEA2A] flex items-center hover:text-yellow-500"
+          onClick={() => setShowLogoutPopUp(true)}
+        >
+          Logout <IoMdLogOut />
+        </button>
+      </div>
+      {/* <div>
+        <a href="/" target="_blank">
+          <div className=" bg-green-500 rounded-lg p-2 hover:bg-green-700 active:bg-green-300 text-white">
+            Login as Customer
+          </div>
+        </a>
+      </div> */}
+      {showLogoutPopUp && (
+        <LogoutPopUp
+          onCancel={() => setShowLogoutPopUp(false)}
+          onLogout={handleLogout}
+        />
+      )}
     </div>
   );
 };

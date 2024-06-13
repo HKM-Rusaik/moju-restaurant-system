@@ -22,7 +22,7 @@ const ItemList = ({ orderId }) => {
   }, [orderId]);
   return (
     <div>
-      <ul>
+      <ul className="ml-2 flex flex-col items-start">
         {items.map((item) => (
           <li key={item.itemId}>
             {toPascalCase(item.item.itemName)} -{item.quantity}

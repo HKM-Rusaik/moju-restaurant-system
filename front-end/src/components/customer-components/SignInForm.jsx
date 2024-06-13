@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { setCustomer, setToken } from "slices/customerSlice";
 import { useDispatch } from "react-redux";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { setCustomer, setToken } from "slices/customerSlice";
 import axios from "axios.js";
 
 const SignInForm = () => {
@@ -12,6 +13,7 @@ const SignInForm = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const formData = { email: email, password: password };
 
@@ -75,7 +77,7 @@ const SignInForm = () => {
             required
           />
         </div>
-        <div className="mb-4">
+        <div className="mb-4 relative">
           <label
             htmlFor="password"
             className="block text-sm font-medium text-gray-600"
@@ -83,7 +85,7 @@ const SignInForm = () => {
             Password <span className="text-red-500">*</span>
           </label>
           <input
-            type="password"
+            type={showPassword ? "text" : "password"}
             id="password"
             name="password"
             value={password}
@@ -91,6 +93,16 @@ const SignInForm = () => {
             className="mt-1 p-2 w-full border rounded"
             required
           />
+          <div
+            className="absolute inset-y-0 right-0 pr-3 flex items-center mt-6 cursor-pointer"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? (
+              <FaEyeSlash className="text-gray-500" />
+            ) : (
+              <FaEye className="text-gray-500" />
+            )}
+          </div>
         </div>
         <div className="mb-4 flex items-center">
           <input

@@ -5,7 +5,7 @@ const Table = sequelize.define(
   "table",
   {
     tableId: {
-      type: DataTypes.INTEGER, // Use INTEGER for auto-increment primary key
+      type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
       autoIncrement: true,
@@ -13,19 +13,25 @@ const Table = sequelize.define(
     tableName: {
       type: DataTypes.STRING,
       allowNull: false,
-      primaryKey: true, // Make tableName also a primary key
+      primaryKey: true,
     },
     noOfGuests: {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
-        min: 1, // Minimum 1 guest
-        max: 20, // Maximum 20 guests
+        min: 1,
+        max: 20,
       },
+    },
+    orderDateTime: {
+      type: DataTypes.DATE,
+    },
+    reservationDateTime: {
+      type: DataTypes.DATE,
     },
   },
   {
-    tableName: "tables", // Set the table name
+    tableName: "table",
     timestamps: false,
   }
 );

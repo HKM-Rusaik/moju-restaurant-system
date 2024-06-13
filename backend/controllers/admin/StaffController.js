@@ -4,24 +4,30 @@ import Attendance from "../../models/Attendance.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+// Secret key for JWT
+const jwtSecret = "your_jwt_secret";
 
 export const createStaff = async (req, res) => {
   try {
     const { NIC, staffName, mobileNo, role } = req.body;
+    const existingStaffByNIC = await Staff.findOne({ where: { NIC } });
+    const existingStaffByPhone = await Staff.findOne({ where: { mobileNo } });
+    if (existingStaffByNIC || existingStaffByPhone) {
+      res
+        .status(400)
+        .json({ message: "The NIC or Phone Number is already exist" });
+    }
 
-    // Encrypt the NIC to use as password
     const encryptedPassword = await bcrypt.hash(NIC, 10);
 
-    // Create staff in the database
     const newStaff = await Staff.create({
       NIC,
       staffName,
       mobileNo,
       role,
-      passwordHash: encryptedPassword, // Assuming there is a password field in your Staff model
+      passwordHash: encryptedPassword,
     });
 
-    // Return success response with the created staff object
     return res.status(201).json({
       success: true,
       message: "Staff created successfully",
@@ -38,16 +44,14 @@ export const createStaff = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
-    const { NIC, password } = req.body;
+    const { NIC, phoneNumber } = req.body;
 
-    // Find the staff member in the database
     const staff = await Staff.findOne({ where: { NIC } });
     if (!staff) {
       return res.status(404).json({ message: "Staff not found" });
     }
 
-    // Validate the password
-    const passwordMatch = await bcrypt.compare(password, staff.passwordHash);
+    const passwordMatch = await bcrypt.compare(NIC, staff.passwordHash);
     if (!passwordMatch) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
@@ -55,12 +59,12 @@ export const login = async (req, res) => {
     // Generate a JWT token
     const token = jwt.sign(
       { NIC: staff.NIC, role: staff.role }, // Payload
-      process.env.JWT_SECRET, // Secret key
+      jwtSecret, // Secret key
       { expiresIn: "1h" } // Expiration time
     );
 
     // Return the token as part of the response
-    res.status(200).json({ token });
+    res.status(200).json({ token, staff });
   } catch (err) {
     console.error("Error logging in:", err);
     res.status(500).json({ message: "Error logging in" });
@@ -124,4 +128,3 @@ export const updateStaff = async (req, res) => {
     res.status(500).json({ message: "Error in updating staff" });
   }
 };
-

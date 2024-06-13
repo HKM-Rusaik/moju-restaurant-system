@@ -8,11 +8,11 @@ const TrackOrder = () => {
 
   const handleToReceiveClick = () => {
     setIsToReceive(true);
-    setIsCompleted(false); // Reset isCompleted to false when To Receive is clicked
+    setIsCompleted(false);
   };
 
   const handleCompletedClick = () => {
-    setIsToReceive(false); // Reset isToReceive to false when Completed is clicked
+    setIsToReceive(false);
     setIsCompleted(true);
   };
   return (

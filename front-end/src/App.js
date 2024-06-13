@@ -24,12 +24,15 @@ import AddProducts from "pages/admin-pages/AddProducts";
 import EmployeeDetails from "pages/admin-pages/EmployeeDetails";
 import Attendence from "pages/admin-pages/Attendence";
 import Report from "pages/admin-pages/Report";
+import AdminAuthChecker from "components/admin-components/AdminAuthChecker";
+
 // import Bill from "pages/admin-pages/Bill";
 import AdminReservation from "pages/admin-pages/Reservation";
 import CustomerRelations from "pages/admin-pages/CustomerRelations";
 import Business from "pages/admin-pages/Business";
 
 //staff pages
+import StaffAuthChecker from "components/staff-components/StaffAuthChecker";
 import Login from "pages/staff-pages/Login";
 import Home from "pages/staff-pages/Home";
 
@@ -39,8 +42,6 @@ import { store } from "store";
 
 //custom components
 import ProtectedRoute from "components/ProtectedRoute";
-
-import PDFViewerComponent from "components/customer-components/PdfViewer";
 
 const stripePromise = loadStripe(
   "pk_test_51PLTXRSBjdI4hLn04suEqiSoq0cjV9uuObDq2EmdYGCbCgg1ZOjCPlnitHrGmUbHdDzdoI1TfNQ5EVhPiFQcJGAh00bZCPwyR0"
@@ -52,11 +53,8 @@ function App() {
       <Provider store={store}>
         <Routes>
           <Route path="/" element={<Welcome />} />
-          {/* <Route path="/pdf" element={<PDFViewerComponent />} /> */}
           <Route path="account/registration" element={<RegisterAccount />} />
-          {/* <Route path="account" element={<Account />} /> */}
           <Route path="menu" element={<Menu />} />
-          {/* <Route path="reservation" element={<Reservation />} /> */}
 
           <Route path="support" element={<Support />} />
           {/* Customer routes wrapped in AuthChecker */}
@@ -93,23 +91,32 @@ function App() {
             />
           </Route>
 
+          {/* {admin routes} */}
           <Route path="/admin" element={<AdminWelcome />} />
-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
-          <Route path="/admin/products" element={<AdminProducts />} />
-          <Route
-            path="/admin/products/add-products"
-            element={<AddProducts />}
-          />
-          <Route path="/admin/categories" element={<ProductsCategory />} />
-          <Route path="/admin/employee-details" element={<EmployeeDetails />} />
-          <Route path="/admin/attendance-record" element={<Attendence />} />
-          <Route path="/admin/business" element={<Business />} />
-          <Route path="/admin/reports" element={<Report />} />
-          <Route path="/admin/reservation" element={<AdminReservation />} />
-          <Route path="/admin/feedbacks" element={<CustomerRelations />} />
+          <Route element={<AdminAuthChecker />}>
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route path="/admin/products" element={<AdminProducts />} />
+            <Route
+              path="/admin/products/add-products"
+              element={<AddProducts />}
+            />
+            <Route path="/admin/categories" element={<ProductsCategory />} />
+            <Route
+              path="/admin/employee-details"
+              element={<EmployeeDetails />}
+            />
+            <Route path="/admin/attendance-record" element={<Attendence />} />
+            <Route path="/admin/business" element={<Business />} />
+            <Route path="/admin/reports" element={<Report />} />
+            <Route path="/admin/reservation" element={<AdminReservation />} />
+            <Route path="/admin/feedbacks" element={<CustomerRelations />} />
+          </Route>
 
-          <Route path="/staff" element={<Login />} />
-          <Route path="/staff/deliver-order" element={<Home />} />
+          {/* {staff routes} */}
+          <Route path="/staff/login" element={<Login />} />
+          <Route element={<StaffAuthChecker />}>
+            <Route path="/staff/deliver-order" element={<Home />} />
+          </Route>
         </Routes>
       </Provider>
     </div>

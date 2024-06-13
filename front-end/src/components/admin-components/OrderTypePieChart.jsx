@@ -50,7 +50,7 @@ export default function OrderTypePieChart() {
         <h1 className=" text-yellow-500">Orders Made in Each Category</h1>
       </div>
 
-      <PieChart width={400} height={300}>
+      <PieChart width={400} height={300} className="z-[-1]">
         <Pie
           data={ordersByType}
           cx="50%"

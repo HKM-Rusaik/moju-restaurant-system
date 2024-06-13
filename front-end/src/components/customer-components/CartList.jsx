@@ -25,8 +25,8 @@ const CartList = (props) => {
 
   return (
     <div className="flex mt-6 w-4/5 font-bold p-2 rounded mx-auto">
-      <div className="w-1/4 flex justify-center items-center">
-        <img className="w-16 h-16" src={props.itemImage} alt="" />
+      <div className="w-1/4 flex justify-start items-center">
+        <img className="w-16 h-16 rounded-lg" src={props.itemImage} alt="" />
         <p className="ml-2">{props.itemName}</p>
       </div>
       <div className="w-1/4 flex justify-center items-center">

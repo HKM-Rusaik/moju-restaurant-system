@@ -4,8 +4,7 @@ import axios from "axios";
 import { RiAdminLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setToken } from "slices/customerSlice";
-
+import { setAdminToken } from "slices/adminSlice";
 const AdminWelcome = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -25,8 +24,8 @@ const AdminWelcome = () => {
       );
       console.log(response.data);
       localStorage.setItem("adminToken", response.data.token);
-      dispatch(setToken(response.data.token));
-      
+      dispatch(setAdminToken(response.data.token));
+
       navigate("/admin/dashboard");
       alert(response.data.message);
     } catch (error) {

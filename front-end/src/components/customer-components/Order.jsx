@@ -8,6 +8,8 @@ import { useSelector } from "react-redux";
 const Order = (props) => {
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
   const [feedback, setFeedback] = useState("");
+  const [cancelOrderId, setCancelOrderId] = useState(null);
+  const [showCancelOrderForm, setShowCancelOrderForm] = useState(false);
   const customerId = useSelector((state) => state.customer.customer.customerId);
 
   const handleFeedbackClick = () => {
@@ -34,6 +36,34 @@ const Order = (props) => {
 
   const handleCloseFeedback = () => {
     setIsFeedbackOpen(false);
+  };
+  const isWithin5Minutes = () => {
+    const orderDate = new Date(props.orderDate);
+    const now = new Date();
+    const differenceInMinutes = (now - orderDate) / (1000 * 60);
+    return differenceInMinutes <= 5 && differenceInMinutes >= 0;
+  };
+
+  const handleCancelOrder = (orderId) => {
+    setCancelOrderId(orderId);
+    setShowCancelOrderForm(true);
+  };
+
+  const confirmCancelOrder = async () => {
+    try {
+      await axios.delete(`/customer/order/cancel/${cancelOrderId}`);
+      console.log(`Order ${cancelOrderId} cancelled successfully`);
+      setShowCancelOrderForm(false);
+      setCancelOrderId(null);
+    } catch (err) {
+      console.log("Error cancelling order", err);
+      setShowCancelOrderForm(false);
+    }
+  };
+
+  const closeCancelOrderForm = () => {
+    setShowCancelOrderForm(false);
+    setCancelOrderId(null);
   };
 
   return (
@@ -62,7 +92,37 @@ const Order = (props) => {
           <FcFeedback className="mr-2" />
           Give Feedback
         </div>
+        {isWithin5Minutes() && (
+          <div
+            className="mt-2 flex items-center text-red-500 hover:text-red-700 cursor-pointer"
+            onClick={() => handleCancelOrder(props.orderId)}
+          >
+            Cancel order
+          </div>
+        )}
       </div>
+      {showCancelOrderForm && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-4 rounded-lg shadow-lg">
+            <h2 className="text-xl font-bold mb-2">Confirm Cancellation</h2>
+            <p>Are you sure you want to cancel this order?</p>
+            <div className="flex justify-end mt-2">
+              <button
+                className="bg-gray-500 text-white px-4 py-2 rounded mr-2"
+                onClick={closeCancelOrderForm}
+              >
+                No
+              </button>
+              <button
+                className="bg-red-500 text-white px-4 py-2 rounded"
+                onClick={confirmCancelOrder}
+              >
+                Yes, Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {isFeedbackOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">

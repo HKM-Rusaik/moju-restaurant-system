@@ -15,6 +15,7 @@ import {
   updateOrderStatus,
   getItemsOfOrder,
   updateBillUrl,
+  cancelorder,
 } from "../controllers/customer/OrderController.js";
 
 import { updateMembership } from "../controllers/customer/CustomerAccountController.js";
@@ -53,6 +54,7 @@ router.get("/order/:orderId", getOrderByOrderId);
 router.put("/order/:orderId", updateBillUrl);
 router.get("/orders/:customerId", getOrders);
 router.get("/order/:orderId/items", getItemsOfOrder);
+router.delete("/order/cancel/:orderId", cancelorder);
 
 router.get("/order-order-status/:orderId", getOrderStatus);
 router.put("/order/:orderId", updateOrderStatus);

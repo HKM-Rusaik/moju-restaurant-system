@@ -19,10 +19,9 @@ const StaffWelcome = () => {
         "http://localhost:5000/staff/login",
         formData
       );
+      localStorage.setItem("staffToken", response.data.token);
       navigate("/staff/deliver-order");
       console.log(response.data);
-
-      alert(response.data.message);
     } catch (error) {
       console.log("Error when sign", error);
     }
@@ -35,7 +34,7 @@ const StaffWelcome = () => {
       </div>
       <div>
         <div className="mt-10 flex items-center justify-center font-semibold text-2xl">
-          Sign in as Admin <GrUserWorker className="ml-2" />
+          Sign in as Staff <GrUserWorker className="ml-2" />
         </div>
         <div className="max-w-md mx-auto mt-8 p-6 border rounded bg-white">
           <form onSubmit={handleSignIn}>
@@ -47,7 +46,7 @@ const StaffWelcome = () => {
                 User Name <span className="text-red-500">*</span>
               </label>
               <input
-                type="number"
+                type="text"
                 id="username"
                 name="username"
                 value={username}

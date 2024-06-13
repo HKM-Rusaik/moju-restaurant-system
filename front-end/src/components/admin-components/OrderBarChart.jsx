@@ -28,6 +28,7 @@ export default function OrderBarChart() {
         <h1 className=" text-yellow-500">Daily Business Total</h1>
       </div>
       <BarChart
+        className="z-[-1]"
         width={500}
         height={300}
         data={dailyTotals}

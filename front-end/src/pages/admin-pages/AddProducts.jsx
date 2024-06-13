@@ -81,32 +81,34 @@ const AddProducts = () => {
   // Form submission handler
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setAddItem(true);
 
-    // Perform form validation
-    if (!productName || !selectedCategory || !price || !availability) {
+    if (
+      !productName ||
+      !selectedCategory ||
+      !price ||
+      !availability ||
+      !productImage
+    ) {
       alert("Please fill out all fields.");
       return;
     }
 
     if (productImage == null) return;
+    setAddItem(true);
 
     const imageRef = ref(storage, `images/${productImage.name + v4()}`);
 
     try {
       await uploadBytes(imageRef, productImage);
 
-      // Once uploaded, get the download URL
       const url = await getDownloadURL(imageRef);
 
-      // Set the URL to state
       setImageURL(url);
 
-      // Now you can proceed with form submission using the updated imageURL
       const formData = {
         itemName: productName,
         itemPrice: price,
-        itemPicURL: url, // Use the URL obtained from Firebase
+        itemPicURL: url,
         itemStatus: availability === "available",
         categoryId: selectedCategory,
         itemDescription: description,
@@ -115,10 +117,10 @@ const AddProducts = () => {
       await axios.post("http://localhost:5000/admin/items", formData);
 
       setAddItem(false);
-      setSuccessItem(true);
       setTimeout(() => {
-        setSuccessItem(false);
+        setSuccessItem(true);
       }, 3000);
+      setSuccessItem(false);
 
       // Reset form fields
       setProductName("");

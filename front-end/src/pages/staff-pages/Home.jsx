@@ -8,26 +8,47 @@ import PreparedOrders from "components/staff-components/PreparedOrders";
 const Home = () => {
   const [isToReceive, setIsToReceive] = useState(false);
   const [isCompleted, setIsCompleted] = useState(true);
-  const [isPrepared, setIsPrepared] = useState(false);
+  const [isDineInPrepared, setIsDineInPrepared] = useState(false);
+  const [isDeliveryPrepared, setIsDeliveryPrepared] = useState(false);
+  const [isTakeawayePrepared, setIsTakeawayPrepared] = useState(false);
 
   const handleToReceiveClick = () => {
+    setIsDineInPrepared(false);
     setIsToReceive(true);
+    setIsDeliveryPrepared(false);
+    setIsTakeawayPrepared(false);
     setIsCompleted(false);
-    setIsPrepared(false);
   };
 
   const handleCompletedClick = () => {
+    setIsDineInPrepared(false);
     setIsToReceive(false);
+    setIsDeliveryPrepared(false);
+    setIsTakeawayPrepared(false);
     setIsCompleted(true);
-    setIsPrepared(false);
   };
 
-  const handlePreparedClick = () => {
-    setIsPrepared(true);
+  const handleDineInPrepared = () => {
+    setIsDineInPrepared(true);
     setIsToReceive(false);
+    setIsDeliveryPrepared(false);
+    setIsTakeawayPrepared(false);
     setIsCompleted(false);
   };
-
+  const handleDeliveryPrepared = () => {
+    setIsDineInPrepared(false);
+    setIsToReceive(false);
+    setIsDeliveryPrepared(true);
+    setIsTakeawayPrepared(false);
+    setIsCompleted(false);
+  };
+  const handleTakeawayPrepared = () => {
+    setIsDineInPrepared(false);
+    setIsToReceive(false);
+    setIsDeliveryPrepared(false);
+    setIsTakeawayPrepared(true);
+    setIsCompleted(false);
+  };
   return (
     <div className="">
       <Header />
@@ -49,13 +70,33 @@ const Home = () => {
             </div>
             <div
               className={`p-4 cursor-pointer text-center rounded-lg shadow-md transition duration-300 ease-in-out transform ${
-                isPrepared
+                isDineInPrepared
                   ? "bg-gray-600 text-white scale-105"
                   : "bg-white text-gray-600 hover:bg-gray-200"
               } w-full max-w-xs`}
-              onClick={handlePreparedClick}
+              onClick={handleDineInPrepared}
             >
-              Prepared Orders
+              Prepared Dine-in Orders
+            </div>
+            <div
+              className={`p-4 cursor-pointer text-center rounded-lg shadow-md transition duration-300 ease-in-out transform ${
+                isDeliveryPrepared
+                  ? "bg-gray-600 text-white scale-105"
+                  : "bg-white text-gray-600 hover:bg-gray-200"
+              } w-full max-w-xs`}
+              onClick={handleDeliveryPrepared}
+            >
+              Prepared Delivery Orders
+            </div>
+            <div
+              className={`p-4 cursor-pointer text-center rounded-lg shadow-md transition duration-300 ease-in-out transform ${
+                isTakeawayePrepared
+                  ? "bg-gray-600 text-white scale-105"
+                  : "bg-white text-gray-600 hover:bg-gray-200"
+              } w-full max-w-xs`}
+              onClick={handleTakeawayPrepared}
+            >
+              Prepared takeaway Orders
             </div>
             <div
               className={`p-4 cursor-pointer text-center rounded-lg shadow-md transition duration-300 ease-in-out transform ${
@@ -72,7 +113,9 @@ const Home = () => {
         <div className="mt-8">
           {isToReceive && <OrdersTable />}
           {isCompleted && <DeliveredOrders />}
-          {isPrepared && <PreparedOrders />}
+          {isDeliveryPrepared && <PreparedOrders type="delivery" />}
+          {isDineInPrepared && <PreparedOrders type="dine-in" />}
+          {isTakeawayePrepared && <PreparedOrders type="takeaway" />}
         </div>
       </div>
     </div>

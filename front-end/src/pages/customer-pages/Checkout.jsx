@@ -33,6 +33,7 @@ const Checkout = () => {
   const [isEditingAddress, setIsEditingAddress] = useState(false);
   const [atRestaurant, setAtRestaurant] = useState(null); // State to track if the customer is at the restaurant or outside
   const [tables, setTables] = useState([]);
+  const [errors, setErrors] = useState({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -43,7 +44,7 @@ const Checkout = () => {
     };
     getTables();
   }, []);
-  // const orderdCartItems = useSelector((state) => state.selectedItems.cartItems);
+
   let address = useSelector(
     (state) =>
       state.customer.customer.streetName +
@@ -78,6 +79,7 @@ const Checkout = () => {
   if (customerMembership === "silver") discountPercentage = 5;
   if (customerMembership === "golden") discountPercentage = 10;
   if (customerMembership === "platenium") discountPercentage = 20;
+  if (customer.email === "mojoadmin@gmail.com") discountPercentage = 0;
 
   const itemsTotal = cartItems.reduce(
     (acc, curr) => acc + curr.price * curr.quantity,
@@ -96,8 +98,9 @@ const Checkout = () => {
     }
   }, [itemsTotal, deliveryMethod]);
 
-  const discountAmount =
-    (itemsTotal + deliveryFee) * (discountPercentage / 100);
+  const discountAmount = Math.round(
+    (itemsTotal + deliveryFee) * (discountPercentage / 100)
+  );
 
   let grandTotal;
 
@@ -116,7 +119,7 @@ const Checkout = () => {
     setDeliveryMethod(selectedMethod);
     setShowDeliveryDetails(selectedMethod === "delivery");
     setShowTableNumber(selectedMethod === "dine-in");
-    setAtRestaurant(null); // Reset the dine-in sub-option when delivery method changes
+    setAtRestaurant(null);
   };
 
   const handlePaymentMethodChange = (event) => {
@@ -124,24 +127,45 @@ const Checkout = () => {
     setPaymentMethod(selectedMethod);
   };
 
+  const validateFields = () => {
+    const newErrors = {};
+    if (!fullName) newErrors.customerName = "Customer name is required";
+    if (!deliveryMethod)
+      newErrors.deliveryMethod = "Delivery method is required";
+    if (deliveryMethod === "delivery" && !deliveryAddress)
+      newErrors.deliveryAddress = "Delivery address is required";
+    if (deliveryMethod === "dine-in" && atRestaurant && !tableNumber)
+      newErrors.tableNumber = "Table number is required";
+    if (!paymentMethod) newErrors.paymentMethod = "Payment method is required";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handlePlaceOrder = async () => {
+    if (!validateFields()) return;
+    let addressToUse = deliveryAddress;
+    if (deliveryMethod === "takeaway") {
+      addressToUse = "";
+    } else if (showTableNumber && atRestaurant) {
+      addressToUse = tableNumber;
+    }
     const newOrder = {
       customerId,
       deliveryMethod,
       orderTotal,
-      deliveryAddress:
-        showTableNumber && atRestaurant ? tableNumber : deliveryAddress,
+      deliveryAddress: addressToUse,
       paymentMethod,
       selectedItems,
     };
 
     try {
+      console.log(newOrder);
       const response = await axios.post("customer/orders", newOrder);
       const createdOrder = response.data.newOrder;
-      console.log(newOrder);
-      const orderId = createdOrder.orderId; // Assuming the order ID is returned in the response
+      console.log(createdOrder);
+      const orderId = createdOrder.orderId;
 
-      // Generate the PDF with the order ID included
+      // Generate the PDF
       const pdfBlob = await pdf(
         <BillPDF
           order={createdOrder}
@@ -158,9 +182,16 @@ const Checkout = () => {
       const pdfUrl = await uploadPDFToFirebase(pdfBlob);
 
       // Update the order in the database with the PDF URL
-      await axios.put(`http://localhost:5000/customer/order/${orderId}`, {
+      await axios.put(`/customer/order/${orderId}`, {
         pdfUrl,
       });
+
+      if (tableNumber !== "") {
+        await axios.put(`/admin/tables/update/${tableNumber}`, {
+          orderId,
+        });
+        setTableNumber("");
+      }
 
       setShowSuccessPopup(true);
       dispatch(removeAllItems());
@@ -168,6 +199,7 @@ const Checkout = () => {
       console.error("Error placing order:", error);
     }
   };
+
   const handlePaymentSuccess = () => {
     handlePlaceOrder();
   };
@@ -217,6 +249,9 @@ const Checkout = () => {
               onChange={(e) => setCustomerName(e.target.value)}
               className="w-64 rounded border-gray-300 shadow-sm focus:border-yellow-500 focus:ring focus:ring-yellow-500 focus:ring-opacity-50"
             />
+            {errors.customerName && (
+              <span className="text-red-500">{errors.customerName}</span>
+            )}
           </div>
 
           <div className="flex flex-col sm:flex-row items-center mb-4">
@@ -239,6 +274,9 @@ const Checkout = () => {
               <option value="takeaway">Takeaway</option>
               <option value="delivery">Delivery</option>
             </select>
+            {errors.deliveryMethod && (
+              <span className="text-red-500">{errors.deliveryMethod}</span>
+            )}
           </div>
           {deliveryMethod === "dine-in" && (
             <div className="flex flex-col sm:flex-row items-center mb-4">
@@ -271,6 +309,9 @@ const Checkout = () => {
                 />
                 <label htmlFor="outsideRestaurant">No</label>
               </div>
+              {errors.deliveryAddress && (
+                <span className="text-red-500">{errors.deliveryAddress}</span>
+              )}
             </div>
           )}
           {showDeliveryDetails && (
@@ -306,6 +347,9 @@ const Checkout = () => {
                   </button>
                 )}
               </div>
+              {errors.deliveryAddress && (
+                <span className="text-red-500">{errors.deliveryAddress}</span>
+              )}
             </div>
           )}
           {atRestaurant && showTableNumber && (
@@ -333,13 +377,9 @@ const Checkout = () => {
                   </option>
                 ))}
               </select>
-
-              {/* <input
-                type="text"
-                id="tableNumber"
-                onChange={(e) => setTableNumber(e.target.value)}
-                className="w-64 rounded border-gray-300 shadow-sm focus:border-yellow-500 focus:ring focus:ring-yellow-500 focus:ring-opacity-50"
-              /> */}
+              {errors.tableNumber && (
+                <span className="text-red-500">{errors.tableNumber}</span>
+              )}
             </div>
           )}
           <div className="flex flex-col sm:flex-row items-center mb-4">
@@ -411,6 +451,9 @@ const Checkout = () => {
               <option value="card">Card</option>
               <option value="cod">Cash on Delivery (COD)</option>
             </select>
+            {errors.paymentMethod && (
+              <span className="text-red-500">{errors.paymentMethod}</span>
+            )}
           </div>
 
           {paymentMethod === "card" && (

@@ -86,7 +86,7 @@ const TableReservation = () => {
                 -
               </button>
               <input
-                className="rounded drop-shadow w-16 text-center"
+                className="rounded drop-shadow border-gray-300  w-16 text-center"
                 type="number"
                 value={guestCount}
                 min="1"
@@ -102,12 +102,13 @@ const TableReservation = () => {
           </div>
           <div className="flex items-center mb-2">
             <DatePicker
-              className="rounded drop-shadow w-64 text-center"
+              className="rounded drop-shadow w-64 text-center border border-gray-300 px-3 py-2"
               selected={selectedDate}
               onChange={handleDateChange}
               dateFormat="MMMM d, yyyy h:mm aa"
               placeholderText="Select a date"
               showTimeSelect
+              timeIntervals={15} // Set the time intervals to 15 minutes
               minDate={new Date()}
               minTime={new Date(new Date().setHours(12, 0, 0, 0))}
               maxTime={new Date(new Date().setHours(22, 0, 0, 0))}
@@ -115,7 +116,7 @@ const TableReservation = () => {
           </div>
           <div className="flex items-center">
             <input
-              className="rounded drop-shadow w-64"
+              className="rounded drop-shadow w-64 text-center border border-gray-300 px-3 py-2"
               type="text"
               value={note}
               onChange={handleNoteChange}

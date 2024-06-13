@@ -96,3 +96,28 @@ export const getOrdersByDate = async (req, res) => {
     res.status(500).json({ error: "Could not fetch orders by date." });
   }
 };
+
+// New method to retrieve total business amount by payment method type
+export const getTotalAmountByPaymentMethod = async (req, res) => {
+  try {
+    const paymentMethodTotals = await Order.findAll({
+      attributes: [
+        "paymentMethod",
+        [Sequelize.fn("SUM", Sequelize.col("orderTotal")), "totalAmount"],
+      ],
+      group: ["paymentMethod"],
+    });
+
+    const formattedResults = paymentMethodTotals.map((record) => ({
+      paymentMethod: record.getDataValue("paymentMethod"),
+      totalAmount: record.getDataValue("totalAmount"),
+    }));
+
+    res.status(200).json(formattedResults);
+  } catch (error) {
+    console.error("Error fetching total amount by payment method:", error);
+    res
+      .status(500)
+      .json({ error: "Could not fetch total amount by payment method." });
+  }
+};

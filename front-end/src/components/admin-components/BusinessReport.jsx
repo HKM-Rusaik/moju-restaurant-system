@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { BusinessBarChart, OrderTypePieChart } from "./BusinessChart";
 import axios from "axios.js";
+import { toPascalCase } from "utils";
 
 const BusinessReport = ({ duration }) => {
   const [ordersByType, setOrdersByType] = useState([]);
@@ -8,6 +9,7 @@ const BusinessReport = ({ duration }) => {
   const [soldItems, setSoldItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const formattedDuration = toPascalCase(duration);
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -95,7 +97,7 @@ const BusinessReport = ({ duration }) => {
   return (
     <div className="bg-white p-10 rounded-lg shadow-lg">
       <div className="font-bold text-center text-2xl mb-6">
-        {duration} Business Report
+        {formattedDuration} Business Report
       </div>
       <BusinessBarChart duration={duration} />
       <div className="mt-6">

@@ -79,7 +79,7 @@ const OrderItem = (props) => {
 
         // Debugging: Log response data
         console.log(orderId);
-        console.log(response);
+        console.log(response.data);
 
         let orderStatus = "processing";
         if (response.data.order.prepared) {
@@ -114,8 +114,9 @@ const OrderItem = (props) => {
   let finishedOrders = [];
   let pendingOrders = [];
 
+  console.log(orders);
   orders.forEach((order) => {
-    if (order.orderStatus === "delivered") {
+    if (order.orderStatus === "Delivered") {
       finishedOrders.push(order);
     } else {
       pendingOrders.push(order);
@@ -136,6 +137,7 @@ const OrderItem = (props) => {
               orderTotal={order.orderTotal}
               orderStatus={order.orderStatus}
               billUrl={order.billUrl}
+              orderDate={order.orderDate}
             />
           ))
         : finishedOrders.map((order) => (
@@ -144,6 +146,7 @@ const OrderItem = (props) => {
               orderId={order.orderId}
               orderTotal={order.orderTotal}
               orderStatus={order.orderStatus}
+              billUrl={order.billUrl}
             />
           ))}
     </div>

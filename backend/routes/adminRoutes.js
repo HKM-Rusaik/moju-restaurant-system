@@ -26,6 +26,7 @@ import {
   getDailyTotalOrders,
   getOrderCountsByType,
   getOrdersByDate,
+  getTotalAmountByPaymentMethod,
 } from "../controllers/admin/AdminOrderController.js";
 
 import {
@@ -51,6 +52,11 @@ import {
   createTable,
   deleteTable,
   getAllTables,
+  getAvailableTables,
+  updateOrderTimeToNull,
+  updateReserveDateTime,
+  updateReserveDateTimeToNull,
+  updateTable,
 } from "../controllers/admin/TableController.js";
 import {
   deleteFeedback,
@@ -92,6 +98,10 @@ router.get("/orders/today-earnings", getTotalEarnings);
 router.get("/daily-total-orders", getDailyTotalOrders);
 router.get("/order-counts-by-type", getOrderCountsByType);
 router.get("/orders/day/:date", getOrdersByDate);
+router.get(
+  "/orders/businessAmount-by-payment-type",
+  getTotalAmountByPaymentMethod
+);
 
 router.post("/attendance/create-daily", createDailyAttendanceRecords);
 router.post("/update-attendance", updateAttendance);
@@ -106,8 +116,13 @@ router.get("/order-count-by-type/:duration", getOrdersCountByTypeDuration);
 router.get("/orders/sold-items/:duration", getSoldItemsByDuration);
 
 router.post("/table", createTable);
-router.get("/tables", getAllTables);
+router.get("/tables", getAvailableTables);
+router.get("/all-tables", getAllTables);
 router.delete("/table/:tableId", deleteTable);
+router.put("/tables/update/:tableName", updateTable);
+router.put("/table/clear-table/:tableName", updateOrderTimeToNull);
+router.put("/table/update-reserve-time/:tableName", updateReserveDateTime);
+router.put("/table/clear-reservation/:tableName", updateReserveDateTimeToNull);
 
 router.get("/customer/feedbacks", getFeedback);
 router.get("/customer/supports", getSupports);

@@ -21,7 +21,9 @@ const startServer = async () => {
   try {
     // Connect to the database
     await sequelize.authenticate();
-    console.log('Connection to the database has been established successfully.');
+    console.log(
+      "Connection to the database has been established successfully."
+    );
 
     // Synchronize the models
     await syncModels();

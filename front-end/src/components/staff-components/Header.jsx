@@ -1,7 +1,13 @@
 import React from "react";
 import { FaSignOutAlt } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
+  const naviagte = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem("staffToken");
+    naviagte("/staff/login");
+  };
   return (
     <div>
       <div className="sticky top-0 z-50 mx-[5%] ">
@@ -13,7 +19,9 @@ const Header = () => {
             <li>Staff Interface</li>
           </div>
           <div className="flex items-center text-white text-xl border-l pl-4 cursor-pointer hover:text-yellow-500">
-            <div className="mr-2">Sign out</div>
+            <div className="mr-2" onClick={handleLogout}>
+              Sign out
+            </div>
             <div>
               <FaSignOutAlt />
             </div>

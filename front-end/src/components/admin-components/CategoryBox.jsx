@@ -26,7 +26,7 @@ const CategoryBox = (props) => {
         updatedCategory
       );
       console.log("Category updated successfully");
-      setEditMode(false); // Exit edit mode after successful update
+      setEditMode(false);
     } catch (error) {
       console.error("Error updating category: ", error);
     }
@@ -46,30 +46,34 @@ const CategoryBox = (props) => {
           {props.name}
         </span>
       )}
-      {editMode ? (
-        <button
-          type="button"
-          className="transition delay-150 duration-300 ease-in-out hover:scale-110 bg-blue-500 text-white p-1 w-24 rounded hover:bg-blue-600"
-          onClick={handleEditCategory}
-        >
-          Save
-        </button>
-      ) : (
-        <button
-          type="button"
-          className="transition delay-150 duration-300 ease-in-out hover:scale-110 bg-green-500 text-white p-1 w-24 rounded hover:bg-green-600"
-          onClick={() => setEditMode(true)}
-        >
-          Edit
-        </button>
+      {props.name !== "PROMOTION" && (
+        <>
+          {editMode ? (
+            <button
+              type="button"
+              className="transition delay-150 duration-300 ease-in-out hover:scale-110 bg-blue-500 text-white p-1 w-24 rounded hover:bg-blue-600"
+              onClick={handleEditCategory}
+            >
+              Save
+            </button>
+          ) : (
+            <button
+              type="button"
+              className="transition delay-150 duration-300 ease-in-out hover:scale-110 bg-green-500 text-white p-1 w-24 rounded hover:bg-green-600"
+              onClick={() => setEditMode(true)}
+            >
+              Edit
+            </button>
+          )}
+          <button
+            type="button"
+            className="transition delay-150 duration-300 ease-in-out hover:scale-110 bg-red-500 text-white p-1 w-24 rounded hover:bg-red-600"
+            onClick={handleDeleteCategory}
+          >
+            Delete
+          </button>
+        </>
       )}
-      <button
-        type="button"
-        className="transition delay-150 duration-300 ease-in-out hover:scale-110 bg-red-500 text-white p-1 w-24 rounded hover:bg-red-600"
-        onClick={handleDeleteCategory}
-      >
-        Delete
-      </button>
     </div>
   );
 };

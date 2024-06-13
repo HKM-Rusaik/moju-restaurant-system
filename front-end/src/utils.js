@@ -9,14 +9,13 @@ export function toPascalCase(str) {
 
 export function toCamelCase(str) {
   return str
-    .toLowerCase() // Convert the entire string to lowercase
-    .split(" ") // Split the string into words by spaces
+    .toLowerCase()
+    .split(" ")
     .map((word, index) => {
-      // For each word, if it's not the first word, capitalize the first letter
       if (index === 0) {
-        return word; // Do not capitalize the first word
+        return word;
       }
       return word.charAt(0).toUpperCase() + word.slice(1);
     })
-    .join(""); // Join the words back together without spaces
+    .join("");
 }

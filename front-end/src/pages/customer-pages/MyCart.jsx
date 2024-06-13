@@ -70,7 +70,7 @@ const MyCart = () => {
         {cartItems.map((cartItem) => (
           <CartList
             key={cartItem.itemId}
-            itemImage={sampleImage}
+            itemImage={cartItem.itemImage}
             itemName={cartItem.name}
             itemPrice={cartItem.price}
             quantity={cartItem.quantity}
@@ -94,7 +94,6 @@ const MyCart = () => {
           </div>
         </div> */}
 
-        
         {/* <div className="flex w-4/5 mx-auto border-t-2 pt-2 text-green-500">
           <div className="flex w-3/4 justify-end font-bold"> Grand Total: </div>
           <div className="flex w-1/4 justify-center font-bold">

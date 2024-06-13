@@ -2,6 +2,62 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Layout from "layouts/CustomerLayout";
+import {
+  FaUser,
+  FaEnvelope,
+  FaLock,
+  FaPhone,
+  FaMapMarkerAlt,
+  FaCity,
+  FaCalendarAlt,
+} from "react-icons/fa";
+import styled from "styled-components";
+
+const FormContainer = styled.div`
+  background-color: #f8f9fa;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+`;
+
+const FormGroup = styled.div`
+  margin-bottom: 1rem;
+`;
+
+const Label = styled.label`
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+`;
+
+const Input = styled.input`
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  &:focus {
+    border-color: #80bdff;
+    outline: none;
+  }
+`;
+
+const ErrorMessage = styled.p`
+  color: red;
+  margin-top: 0.25rem;
+`;
+
+const RegisterButton = styled.button`
+  background-color: #007bff;
+  color: white;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  &:hover {
+    background-color: #0056b3;
+  }
+`;
 
 const RegisterAccount = () => {
   const [formData, setFormData] = useState({
@@ -29,12 +85,10 @@ const RegisterAccount = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Perform form validation before submitting
     const validationErrors = validateForm(formData);
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length === 0) {
-      //submitting form
       try {
         const response = await axios.post(
           "http://localhost:5000/customer/register",
@@ -45,19 +99,15 @@ const RegisterAccount = () => {
         window.alert("Successfully Registered");
         navigate("/");
       } catch (error) {
-        console.error("Error registering user:");
-        setErrors(error.response.data);
-        console.log(errors);
+        console.error("Error registering user:", error.response.data.error);
+        setErrors({ error: error.response.data.error });
       }
-
-      // console.log("Form data submitted:", formData);
     } else {
       console.log("Form contains errors. Please fix them.");
     }
   };
 
   const validateForm = (data) => {
-    //simple validation
     const errors = {};
 
     if (!data.firstName.trim()) {
@@ -66,6 +116,20 @@ const RegisterAccount = () => {
 
     if (!data.lastName.trim()) {
       errors.lastName = "Last Name is required";
+    }
+
+    if (!data.street.trim()) {
+      errors.street = "Street is required";
+    }
+
+    if (!data.city.trim()) {
+      errors.city = "City is required";
+    }
+
+    if (!data.phoneNumber.trim()) {
+      errors.phoneNumber = "Phone Number is required";
+    } else if (!isValidPhoneNumber(data.phoneNumber)) {
+      errors.phoneNumber = "Invalid Phone Number format";
     }
 
     if (!data.email.trim()) {
@@ -83,37 +147,63 @@ const RegisterAccount = () => {
     if (data.password !== data.confirmPassword) {
       errors.confirmPassword = "Passwords do not match";
     }
+
     if (!data.dateOfBirth.trim()) {
       errors.dateOfBirth = "Date of Birth is required";
+    } else if (!isValidDateOfBirth(data.dateOfBirth)) {
+      errors.dateOfBirth = "You must be at least 15 years old";
     }
 
     return errors;
   };
 
   const isValidEmail = (email) => {
-    // Simple email validation using a regular expression
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
 
+  const isValidPhoneNumber = (phoneNumber) => {
+    const phoneNUmberRegex = /^\d{10}$/;
+    return phoneNUmberRegex.test(phoneNumber);
+  };
+
+  const isValidDateOfBirth = (dateOfBirth) => {
+    const today = new Date();
+    const dob = new Date(dateOfBirth);
+    const age = today.getFullYear() - dob.getFullYear();
+    const monthDifference = today.getMonth() - dob.getMonth();
+    const dayDifference = today.getDate() - dob.getDate();
+
+    // Check if the user's age is less than 15
+    if (age < 15) {
+      return false;
+    } else if (age === 15) {
+      // Check if the user's age is exactly 15, ensure they have had their birthday this year
+      if (monthDifference < 0 || (monthDifference === 0 && dayDifference < 0)) {
+        return false;
+      }
+    }
+
+    return true;
+  };
+
   return (
     <Layout>
-      <div>
-        <div className="text-center text-2xl font-bold my-10 underline underline-offset-2">
-          Register Your Account
-        </div>
-        {errors.error && (
-          <div className="text-red-500 text-center">{errors.error}</div>
-        )}
-        <div className="flex justify-center mt-12">
-          <form onSubmit={handleSubmit} className="register">
-            <div className="form-group">
-              <div>
-                <label htmlFor="firstName" className="">
-                  First Name <span className="text-red-500">*</span>
-                </label>
-              </div>
-              <input
+      <div className="bg-gray-100 min-h-screen flex items-center justify-center">
+        <FormContainer>
+          <div className="text-center text-2xl font-bold mb-6">
+            Register Your Account
+          </div>
+          {errors.error && (
+            <div className="text-red-500 text-center">{errors.error}</div>
+          )}
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <FormGroup>
+              <Label htmlFor="firstName">
+                <FaUser className="mr-2" /> First Name{" "}
+                <span className="text-red-500">*</span>
+              </Label>
+              <Input
                 type="text"
                 name="firstName"
                 placeholder="Enter Your First Name"
@@ -121,16 +211,16 @@ const RegisterAccount = () => {
                 onChange={handleChange}
               />
               {errors.firstName && (
-                <p className="text-red-500">{errors.firstName}</p>
+                <ErrorMessage>{errors.firstName}</ErrorMessage>
               )}
-            </div>
-            <div className=" form-group mt-3">
-              <div>
-                <label htmlFor="lastName" className="basis-1/2">
-                  Last Name <span className="text-red-500">*</span>
-                </label>
-              </div>
-              <input
+            </FormGroup>
+
+            <FormGroup>
+              <Label htmlFor="lastName">
+                <FaUser className="mr-2" /> Last Name{" "}
+                <span className="text-red-500">*</span>
+              </Label>
+              <Input
                 type="text"
                 name="lastName"
                 placeholder="Enter Your Last Name"
@@ -138,90 +228,94 @@ const RegisterAccount = () => {
                 onChange={handleChange}
               />
               {errors.lastName && (
-                <p className="text-red-500">{errors.lastName}</p>
+                <ErrorMessage>{errors.lastName}</ErrorMessage>
               )}
-            </div>
-            <div className="form-group mt-3">
-              <div>
-                <label htmlFor="street" className="basis-1/2">
-                  Street <span className="text-red-500">*</span>
-                </label>
-              </div>
-              <input
+            </FormGroup>
+
+            <FormGroup>
+              <Label htmlFor="street">
+                <FaMapMarkerAlt className="mr-2" /> Street{" "}
+                <span className="text-red-500">*</span>
+              </Label>
+              <Input
                 type="text"
                 name="street"
                 placeholder="Street Name"
                 value={formData.street}
                 onChange={handleChange}
               />
-            </div>
-            <div className="form-group mt-3">
-              <div>
-                <label htmlFor="city" className="basis-1/2">
-                  City <span className="text-red-500">*</span>
-                </label>
-              </div>
-              <input
+              {errors.street && <ErrorMessage>{errors.street}</ErrorMessage>}
+            </FormGroup>
+
+            <FormGroup>
+              <Label htmlFor="city">
+                <FaCity className="mr-2" /> City{" "}
+                <span className="text-red-500">*</span>
+              </Label>
+              <Input
                 type="text"
                 name="city"
                 placeholder="City"
                 value={formData.city}
                 onChange={handleChange}
               />
-            </div>
-            <div className="form-group mt-3">
-              <div>
-                <label htmlFor="dateOfBirth" className="basis-1/2">
-                  Date of Birth <span className="text-red-500">*</span>
-                </label>
-              </div>
-              <input
+              {errors.city && <ErrorMessage>{errors.city}</ErrorMessage>}
+            </FormGroup>
+
+            <FormGroup>
+              <Label htmlFor="dateOfBirth">
+                <FaCalendarAlt className="mr-2" /> Date of Birth{" "}
+                <span className="text-red-500">*</span>
+              </Label>
+              <Input
                 type="date"
                 name="dateOfBirth"
-                placeholder="Enter Your Date of Birth"
                 value={formData.dateOfBirth}
                 onChange={handleChange}
               />
               {errors.dateOfBirth && (
-                <p className="text-red-500">{errors.dateOfBirth}</p>
+                <ErrorMessage>{errors.dateOfBirth}</ErrorMessage>
               )}
-            </div>
-            <div className="form-group mt-3">
-              <div>
-                <label htmlFor="phoneNumber" className="basis-1/2">
-                  Phone Number <span className="text-red-500">*</span>
-                </label>
-              </div>
-              <input
+            </FormGroup>
+
+            <FormGroup>
+              <Label htmlFor="phoneNumber">
+                <FaPhone className="mr-2" /> Phone Number{" "}
+                <span className="text-red-500">*</span>
+              </Label>
+              <Input
                 type="tel"
                 name="phoneNumber"
-                placeholder="Enter your phone number..."
+                placeholder="Enter Your Phone Number"
                 value={formData.phoneNumber}
                 onChange={handleChange}
               />
-            </div>
-            <div className="form-group mt-3">
-              <div>
-                <label htmlFor="email" className="basis-1/2">
-                  Email <span className="text-red-500">*</span>
-                </label>
-              </div>
-              <input
+              {errors.phoneNumber && (
+                <ErrorMessage>{errors.phoneNumber}</ErrorMessage>
+              )}
+            </FormGroup>
+
+            <FormGroup>
+              <Label htmlFor="email">
+                <FaEnvelope className="mr-2" /> Email{" "}
+                <span className="text-red-500">*</span>
+              </Label>
+              <Input
                 type="email"
                 name="email"
                 placeholder="Enter Your Email"
                 value={formData.email}
                 onChange={handleChange}
               />
-              {errors.email && <p className="text-red-500">{errors.email}</p>}
-            </div>
-            <div className="form-group mt-3">
-              <div>
-                <label htmlFor="password" className="basis-1/2">
-                  Password <span className="text-red-500">*</span>
-                </label>
-              </div>
-              <input
+              {errors.email && <ErrorMessage>{errors.email}</ErrorMessage>}
+            </FormGroup>
+
+            <FormGroup>
+              <Label htmlFor="password">
+                <FaLock className="mr-2" /> Password{" "}
+                <span className="text-red-500">*</span>
+              </Label>
+              <Input
                 type="password"
                 name="password"
                 placeholder="Enter Your Password"
@@ -229,16 +323,16 @@ const RegisterAccount = () => {
                 onChange={handleChange}
               />
               {errors.password && (
-                <p className="text-red-500">{errors.password}</p>
+                <ErrorMessage>{errors.password}</ErrorMessage>
               )}
-            </div>
-            <div className="form-group mt-3">
-              <div>
-                <label htmlFor="confirmPassword" className="basis-1/2">
-                  Confirm Password <span className="text-red-500">*</span>
-                </label>
-              </div>
-              <input
+            </FormGroup>
+
+            <FormGroup>
+              <Label htmlFor="confirmPassword">
+                <FaLock className="mr-2" /> Confirm Password{" "}
+                <span className="text-red-500">*</span>
+              </Label>
+              <Input
                 type="password"
                 name="confirmPassword"
                 placeholder="Confirm Password"
@@ -246,17 +340,13 @@ const RegisterAccount = () => {
                 onChange={handleChange}
               />
               {errors.confirmPassword && (
-                <p className="text-red-500">{errors.confirmPassword}</p>
+                <ErrorMessage>{errors.confirmPassword}</ErrorMessage>
               )}
-            </div>
-            <button
-              type="submit"
-              className="mt-3 bg-blue-500 p-2 rounded text-white shadow-md hover:bg-blue-700"
-            >
-              Register Your Account
-            </button>
+            </FormGroup>
+
+            <RegisterButton type="submit">Register Your Account</RegisterButton>
           </form>
-        </div>
+        </FormContainer>
       </div>
     </Layout>
   );

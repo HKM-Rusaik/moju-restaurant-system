@@ -12,6 +12,8 @@ const DeliveredOrders = () => {
 
     getDeliveredOrders();
   }, []);
+  console.log(deliveredOrders);
+  const filterOrders = deliveredOrders.sort((a, b) => b.orderId - a.orderId);
   return (
     <div className="overflow-x-auto">
       <table className="fade-enter-active w-full mx-auto mt-8 border-collapse rounded-lg shadow-lg overflow-hidden">
@@ -28,7 +30,7 @@ const DeliveredOrders = () => {
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-800">
-          {deliveredOrders.map((order) => (
+          {filterOrders.map((order) => (
             <tr key={order.orderId}>
               <td className="text-center py-3">{order.orderId}</td>
               <td className="text-center py-3">
