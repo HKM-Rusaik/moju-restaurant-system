@@ -38,8 +38,7 @@ const AdminSideNavBar = () => {
           >
             <Link to="/admin/dashboard" className="block hover:text-[#FFEA2A]">
               <div className="flex items-center">
-                Dashboard
-                <MdDashboard className="ml-2" />
+                <MdDashboard className="mr-2" /> Dashboard
               </div>
             </Link>
           </li>
@@ -50,7 +49,7 @@ const AdminSideNavBar = () => {
           >
             <Link to="/admin/business" className="block hover:text-[#FFEA2A]">
               <div className="flex items-center">
-                Business <FaRegMoneyBillAlt className="ml-2" />
+                <FaRegMoneyBillAlt className="mr-2" /> Business
               </div>
             </Link>
           </li>
@@ -61,7 +60,7 @@ const AdminSideNavBar = () => {
           >
             <Link to="/admin/products" className="block hover:text-[#FFEA2A]">
               <div className="flex items-center">
-                Products <MdInventory className="ml-2" />
+                <MdInventory className="mr-2" /> Products
               </div>
             </Link>
           </li>
@@ -72,7 +71,7 @@ const AdminSideNavBar = () => {
           >
             <Link to="/admin/categories" className="block hover:text-[#FFEA2A]">
               <div className="flex items-center">
-                Categories <BiCategory className="ml-2" />
+                <BiCategory className="mr-2" /> Categories
               </div>
             </Link>
           </li>
@@ -87,7 +86,7 @@ const AdminSideNavBar = () => {
               className="block hover:text-[#FFEA2A]"
             >
               <div className="flex items-center">
-                Employee Details <CgDetailsMore className="ml-2" />
+                <CgDetailsMore className="mr-2" /> Employee Details
               </div>
             </Link>
           </li>
@@ -102,7 +101,7 @@ const AdminSideNavBar = () => {
               className="block hover:text-[#FFEA2A]"
             >
               <div className="flex items-center">
-                Attendance Record <GrUserWorker className="ml-2" />
+                <GrUserWorker className="mr-2" /> Attendance Record
               </div>
             </Link>
           </li>
@@ -116,7 +115,8 @@ const AdminSideNavBar = () => {
               className="block hover:text-[#FFEA2A]"
             >
               <div className="flex items-center">
-                Tables & Reservations <BiSolidReport className="ml-2" />
+                <BiSolidReport className="mr-2" />
+                Tables & Reservations
               </div>
             </Link>
           </li>
@@ -127,7 +127,7 @@ const AdminSideNavBar = () => {
           >
             <Link to="/admin/reports" className="block hover:text-[#FFEA2A]">
               <div className="flex items-center">
-                Reports <BiSolidReport className="ml-2" />
+                <BiSolidReport className="mr-2" /> Reports
               </div>
             </Link>
           </li>
@@ -138,7 +138,8 @@ const AdminSideNavBar = () => {
           >
             <Link to="/admin/feedbacks" className="block hover:text-[#FFEA2A]">
               <div className="flex items-center">
-                feedbacks & supports <BiSolidReport className="ml-2" />
+                <BiSolidReport className="mr-2" />
+                feedbacks & supports
               </div>
             </Link>
           </li>

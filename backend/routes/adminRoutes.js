@@ -38,6 +38,7 @@ import {
 import {
   deleteReservation,
   getReservations,
+  getReservationsByCustomerId,
 } from "../controllers/admin/AdminReservationController.js";
 import {
   createAdmin,
@@ -110,6 +111,7 @@ router.post("/create/attendance", createStaffAttendance);
 
 router.get("/customer-reservations", getReservations);
 router.delete("/delete/reservation/:reservationId", deleteReservation);
+router.get("/reservations/:customerId", getReservationsByCustomerId);
 
 router.get("/total-orders/:duration", getOrdersByDuration);
 router.get("/order-count-by-type/:duration", getOrdersCountByTypeDuration);

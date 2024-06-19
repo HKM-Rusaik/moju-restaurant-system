@@ -64,6 +64,12 @@ const TableReservation = () => {
   return (
     <div className="">
       <p className="text-center text-2xl font-bold my-10">Table Reservation</p>
+
+      <div className="flex justify-center">
+        <div className="flex justify-center text-center font-bold mb-4 p-2 text-white rounded w-fit bg-green-500">
+          Make Reservation
+        </div>
+      </div>
       <div className="flex justify-center">
         <div className="flex flex-col justify-around">
           <label htmlFor="total-guest" className="">

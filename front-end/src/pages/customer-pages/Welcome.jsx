@@ -36,13 +36,13 @@ const Welcome = () => {
             <div className="w-64 bg-gray-400 mx-auto ordering font-bold rounded p-2 mb-6 text-2xl">
               <h2 className="text-center ">Start Ordering</h2>
             </div>
-            <div className=" flex place-content-center text-white text-xl drop-shadow-2xl">
-              <p className="border-r pr-4 border-white cursor-pointer text-blue-500 font-bold">
+            <div className=" flex place-content-center text-white text-2xl drop-shadow-2xl">
+              <p className=" pr-4  cursor-pointer text-blue-500 font-bold">
                 Sign in
               </p>
-              <p className="ml-4 cursor-pointer hover:text-blue-400">
+              {/* <p className="ml-4 cursor-pointer hover:text-blue-400">
                 Guest Order
-              </p>
+              </p> */}
             </div>
             <SignInForm />
           </div>

@@ -97,7 +97,7 @@ const Order = (props) => {
             className="mt-2 flex items-center text-red-500 hover:text-red-700 cursor-pointer"
             onClick={() => handleCancelOrder(props.orderId)}
           >
-            Cancel order
+            Cancel order within 5minutes
           </div>
         )}
       </div>

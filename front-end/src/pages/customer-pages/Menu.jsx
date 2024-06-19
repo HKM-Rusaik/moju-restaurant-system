@@ -161,7 +161,7 @@ const Menu = () => {
                 <CategoryBox
                   type={promotionCategory.categoryName.toUpperCase()}
                 />
-                <div className="grid grid-cols-4 my-4">
+                <div className="grid grid-cols-4 gap-4">
                   {filteredItems
                     .filter(
                       (item) => item.categoryId === promotionCategory.categoryId

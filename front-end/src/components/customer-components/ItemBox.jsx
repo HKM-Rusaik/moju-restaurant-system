@@ -23,7 +23,7 @@ function ItemBox(props) {
   return (
     <div
       key={props.itemId}
-      className="w-56 h-88 mx-32 bg-gray-100 drop-shadow-lg p-2 rounded-lg"
+      className="w-56 h-88 mx-32 mt-4 bg-gray-100 drop-shadow-lg p-2 rounded-lg"
     >
       <img
         src={props.itemImage}
@@ -31,7 +31,7 @@ function ItemBox(props) {
         alt=""
       />
       <p className="font-bold mt-2">{toPascalCase(props.name)}</p>
-      <p className="h-16">{truncateDescription(props.itemDescription, 25)}</p>
+      <p className="h-16">{truncateDescription(props.itemDescription, 30)}</p>
       <div className="flex flex-col items-center justify-end mt-4">
         <p>Rs. {props.price}</p>
         <FaCartPlus

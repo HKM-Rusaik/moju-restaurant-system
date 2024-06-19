@@ -126,6 +126,7 @@ const AdminReservation = () => {
                 <th className="border border-gray-300 px-4 py-2">
                   Customer Name
                 </th>
+                <th className="border border-gray-300 px-4 py-2">Contact No</th>
                 <th className="border border-gray-300 px-4 py-2">
                   Reserved Date
                 </th>
@@ -144,6 +145,9 @@ const AdminReservation = () => {
                     {record.customer["firstName"] +
                       " " +
                       record.customer["lastName"]}
+                  </td>
+                  <td className="text-center py-3">
+                    {record.customer["phoneNumber"]}
                   </td>
                   <td className="text-center py-3">
                     {formatDateTime(record.reservationDate)}
@@ -206,4 +210,3 @@ const AdminReservation = () => {
 };
 
 export default AdminReservation;
-  

@@ -83,7 +83,7 @@ const AdminDashboard = () => {
               </a>
             </div>
           </div>
-          <div className="grid grid-cols-4">
+          <div className="grid grid-cols-3 gap-3 ">
             <div className=" ml-2 mt-4 bg-gray-500 w-[200px] h-[200px] flex flex-col items-center justify-center pb-8 text-white rounded">
               <div className="mb-2 font-bold text-xl text-green-300">
                 Rs. {totalEarning ? totalEarning : 0}

@@ -17,17 +17,18 @@ const Bill = () => {
 
     getAllOrders();
   }, []);
-
-  const filteredOrders = allOrders.filter(
-    (order) =>
-      order.orderId.toString().includes(searchTerm) ||
-      order["customer.firstName"]
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase()) ||
-      order["customer.lastName"]
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase())
-  );
+  const filteredOrders = allOrders
+    .filter(
+      (order) =>
+        order.orderId.toString().includes(searchTerm) ||
+        order["customer.firstName"]
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        order["customer.lastName"]
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase())
+    )
+    .sort((a, b) => b.orderId - a.orderId); // Sort by orderId in descending order
 
   return (
     <div>

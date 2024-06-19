@@ -12,7 +12,7 @@ const AddProducts = () => {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [productImage, setProductImage] = useState(null);
-  const [price, setPrice] = useState("");
+  const [price, setPrice] = useState(1);
   const [availability, setAvailability] = useState("available");
   const [imageURL, setImageURL] = useState("");
   const [description, setDescription] = useState(""); // New state for description
@@ -58,7 +58,13 @@ const AddProducts = () => {
   };
 
   const handlePriceChange = (event) => {
-    setPrice(event.target.value);
+    const value = event.target.value;
+    if (value < 0) {
+      alert("Please enter positive value");
+      setPrice(1);
+    } else {
+      setPrice(value);
+    }
   };
 
   const handleProductImageChange = (event) => {
@@ -115,12 +121,12 @@ const AddProducts = () => {
       };
 
       await axios.post("http://localhost:5000/admin/items", formData);
-
+      alert("Product createad");
       setAddItem(false);
-      setTimeout(() => {
-        setSuccessItem(true);
-      }, 3000);
-      setSuccessItem(false);
+      // setTimeout(() => {
+      //   setSuccessItem(false);
+      // }, 3000);
+      setSuccessItem(true);
 
       // Reset form fields
       setProductName("");
@@ -130,6 +136,7 @@ const AddProducts = () => {
       setAvailability("available");
       setImageURL("");
       setDescription("");
+      setSuccessItem(false);
     } catch (error) {
       console.error("Error during image upload or product save:", error);
       alert("An error occurred while saving the product. Please try again.");
@@ -246,6 +253,8 @@ const AddProducts = () => {
                       onChange={handlePriceChange}
                       placeholder="enter price..."
                       className="border rounded p-2 w-full"
+                      min="1"
+                      step="1"
                     />
                   </td>
                 </tr>
